@@ -72,6 +72,11 @@ export default function PublicBookingPage({
   // Cart
   const [cart, setCart] = useState<Record<string, number>>({});
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [successBooking, setSuccessBooking] = useState<{
+    booking_number: string;
+    whatsapp_url: string | null;
+    store_name: string;
+  } | null>(null);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerNotes, setCustomerNotes] = useState("");
@@ -201,12 +206,11 @@ export default function PublicBookingPage({
         return;
       }
 
-      toast.success("Booking berhasil dicatat! Membuka WhatsApp toko...");
+      toast.success("Pesanan sewa berhasil dikirim!");
       setShowCheckoutModal(false);
-
-      if (json.whatsapp_url) {
-        window.location.href = json.whatsapp_url;
-      }
+      setSuccessBooking(json);
+      setCart({});
+      setCustomerNotes("");
     } catch {
       toast.error("Terjadi kesalahan jaringan.");
     } finally {
@@ -512,22 +516,73 @@ export default function PublicBookingPage({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-md transition disabled:opacity-60"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs sm:text-sm font-bold shadow-md transition disabled:opacity-60 active:scale-[0.98]"
                 >
                   {submitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Menghubungkan ke WhatsApp...</span>
+                      <span>Menyimpan Pesanan...</span>
                     </>
                   ) : (
                     <>
-                      <MessageCircle className="w-4 h-4" />
-                      <span>Kirim Booking via WhatsApp</span>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Kirim Pesanan Sewa</span>
                     </>
                   )}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Success Booking Modal ── */}
+      {successBooking && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in"
+          onClick={() => setSuccessBooking(null)}
+        >
+          <div
+            className="w-full max-w-md bg-white rounded-2xl border border-[#e2e8f0] shadow-xl overflow-hidden p-6 sm:p-7 text-center space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-8 h-8" />
+            </div>
+
+            <div>
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-[#0051d5] border border-blue-100 mb-1.5 font-mono">
+                {successBooking.booking_number}
+              </span>
+              <h3 className="text-lg sm:text-xl font-bold text-[#0b1c30]">
+                Pesanan Sewa Berhasil Dikirim!
+              </h3>
+              <p className="text-xs sm:text-sm text-[#64748b] mt-1.5 leading-relaxed">
+                Pesanan Anda telah langsung tercatat di sistem kami. Tim toko akan segera menyiapkan ketersediaan unit untuk Anda.
+              </p>
+            </div>
+
+            <div className="pt-2 flex flex-col gap-2.5">
+              {successBooking.whatsapp_url && (
+                <a
+                  href={successBooking.whatsapp_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition active:scale-[0.98]"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Chat Toko via WhatsApp (Opsional)</span>
+                </a>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setSuccessBooking(null)}
+                className="w-full py-2.5 px-4 rounded-xl border border-[#e2e8f0] bg-white hover:bg-slate-50 text-[#0b1c30] text-xs sm:text-sm font-medium transition active:scale-[0.98]"
+              >
+                Selesai &amp; Kembali ke Katalog
+              </button>
+            </div>
           </div>
         </div>
       )}

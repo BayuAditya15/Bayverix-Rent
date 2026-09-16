@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentBusiness } from "@/lib/auth/getCurrentBusiness";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/types/database.types";
 
 export async function PUT(req: NextRequest) {
   try {
@@ -21,12 +22,20 @@ export async function PUT(req: NextRequest) {
 
     const supabase = await createClient();
 
-    // Prepare update payload (slug is permanent and not editable by user)
-    const updatePayload = {
+    // Prepare update payload (slug is generated if missing)
+    const updatePayload: Database["public"]["Tables"]["businesses"]["Update"] = {
       name: name.trim(),
       phone: phone ? String(phone).trim() : null,
       address: address ? String(address).trim() : null,
     };
+
+    if (!ctx.business?.slug) {
+      updatePayload.slug = name
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    }
 
     const { data: updatedBusiness, error } = await supabase
       .from("businesses")

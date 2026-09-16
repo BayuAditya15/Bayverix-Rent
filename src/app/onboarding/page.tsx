@@ -37,6 +37,19 @@ export default function OnboardingPage() {
         return;
       }
 
+      // Auto-generate clean slug for public store link
+      if (newBusinessId) {
+        const cleanSlug = businessName
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+        await supabase
+          .from("businesses")
+          .update({ slug: cleanSlug || "store" })
+          .eq("id", newBusinessId);
+      }
+
       toast.success("Toko berhasil dibuat! Selamat datang di Bayverix-Rent.");
       router.push("/dashboard");
       router.refresh();
