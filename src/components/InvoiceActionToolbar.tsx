@@ -111,7 +111,7 @@ export function InvoiceActionToolbar({
     }
   };
 
-  const handleUpdateStatus = async (newStatus: "ONGOING" | "COMPLETED" | "CANCELLED") => {
+  const handleUpdateStatus = async (newStatus: "CONFIRMED" | "ONGOING" | "COMPLETED" | "CANCELLED") => {
     if (newStatus === "CANCELLED" && !confirm("Yakin ingin membatalkan transaksi booking ini?")) {
       return;
     }
@@ -182,6 +182,19 @@ export function InvoiceActionToolbar({
       <div className="w-full space-y-2">
         {/* Main Status Actions (Primary row) */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Konfirmasi Booking (For PENDING from online form) */}
+          {currentStatus === "PENDING" && (
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => handleUpdateStatus("CONFIRMED")}
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition disabled:opacity-60"
+            >
+              <CheckCircle className="w-4 h-4" />
+              <span>Konfirmasi Booking</span>
+            </button>
+          )}
+
           {/* Serah Terima Unit */}
           {currentStatus === "CONFIRMED" && (
             <button

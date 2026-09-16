@@ -22,7 +22,7 @@ export function BookingActionButtons({ bookingId, currentStatus, amountDue }: Ac
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [paymentRef, setPaymentRef] = useState("");
 
-  const handleUpdateStatus = async (newStatus: "ONGOING" | "COMPLETED" | "CANCELLED") => {
+  const handleUpdateStatus = async (newStatus: "CONFIRMED" | "ONGOING" | "COMPLETED" | "CANCELLED") => {
     if (newStatus === "CANCELLED" && !confirm("Yakin ingin membatalkan booking ini?")) {
       return;
     }
@@ -91,6 +91,19 @@ export function BookingActionButtons({ bookingId, currentStatus, amountDue }: Ac
   return (
     <>
       <div className="flex flex-wrap items-center gap-2">
+        {/* Konfirmasi Booking (For PENDING from online form) */}
+        {currentStatus === "PENDING" && (
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleUpdateStatus("CONFIRMED")}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition disabled:opacity-60"
+          >
+            <CheckCircle className="w-4 h-4" />
+            <span>Konfirmasi Booking</span>
+          </button>
+        )}
+
         {/* Record Payment Button */}
         {amountDue > 0 && currentStatus !== "CANCELLED" && (
           <button

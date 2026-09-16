@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, use } from "react";
+import { useEffect, useState, useMemo, use, useRef } from "react";
 import {
   Package,
   Calendar,
@@ -12,11 +12,18 @@ import {
   Loader2,
   CheckCircle2,
   Store,
-  ShoppingCart,
+  CreditCard,
+  Banknote,
+  Upload,
   X,
   Sparkles,
+  AlertCircle,
+  Image as ImageIcon,
+  Copy,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
+import { uploadToSupabaseStorage } from "@/lib/supabase/storage";
 
 interface Business {
   id: string;
@@ -41,6 +48,7 @@ interface Item {
   price_unit: string;
   deposit_amount: number;
   total_quantity: number;
+  available_quantity?: number;
   image_url: string | null;
   description: string | null;
 }
@@ -50,6 +58,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  available_quantity: number;
 }
 
 export default function PublicBookingPage({
@@ -63,24 +72,34 @@ export default function PublicBookingPage({
   const [categories, setCategories] = useState<Category[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingStock, setLoadingStock] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   // Dates
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
 
-  // Cart
+  // Cart & Modals
   const [cart, setCart] = useState<Record<string, number>>({});
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [successBooking, setSuccessBooking] = useState<{
     booking_number: string;
     whatsapp_url: string | null;
     store_name: string;
+    payment_method?: string;
   } | null>(null);
+
+  // Form inputs
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerNotes, setCustomerNotes] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"BAYAR_NANTI" | "TRANSFER">("BAYAR_NANTI");
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [proofPreview, setProofPreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [copiedBank, setCopiedBank] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Set default dates (today 09:00 to tomorrow 17:00)
   useEffect(() => {
@@ -93,17 +112,38 @@ export default function PublicBookingPage({
     setEndAt(`${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}T17:00`);
   }, []);
 
-  // Fetch Store Catalog
+  // Fetch Store Catalog and Real-Time Stock whenever slug or dates change
   useEffect(() => {
     if (!slug) return;
 
-    fetch(`/api/public/book/${slug}`)
+    let url = `/api/public/book/${slug}`;
+    if (startAt && endAt) {
+      url += `?start_at=${encodeURIComponent(new Date(startAt).toISOString())}&end_at=${encodeURIComponent(new Date(endAt).toISOString())}`;
+    }
+
+    setLoadingStock(true);
+    fetch(url)
       .then((res) => res.json())
       .then((json) => {
         if (json.business) {
           setBusiness(json.business);
           setCategories(json.categories || []);
           setItems(json.items || []);
+
+          // Auto-adjust cart if booked items exceed newly computed availability
+          if (json.items) {
+            setCart((prevCart) => {
+              const updatedCart: Record<string, number> = {};
+              for (const [itemId, qty] of Object.entries(prevCart)) {
+                const fetchedItem = (json.items as Item[]).find((i) => i.id === itemId);
+                const maxAvail = fetchedItem ? (fetchedItem.available_quantity ?? fetchedItem.total_quantity) : 0;
+                if (maxAvail > 0) {
+                  updatedCart[itemId] = Math.min(qty, maxAvail);
+                }
+              }
+              return updatedCart;
+            });
+          }
         } else {
           toast.error(json.error || "Toko tidak ditemukan.");
         }
@@ -113,8 +153,9 @@ export default function PublicBookingPage({
       })
       .finally(() => {
         setLoading(false);
+        setLoadingStock(false);
       });
-  }, [slug]);
+  }, [slug, startAt, endAt]);
 
   // Duration in days
   const rentalDays = useMemo(() => {
@@ -125,6 +166,9 @@ export default function PublicBookingPage({
   }, [startAt, endAt]);
 
   const handleUpdateQuantity = (itemId: string, delta: number) => {
+    const item = items.find((i) => i.id === itemId);
+    const maxAvail = item ? (item.available_quantity ?? item.total_quantity) : 999;
+
     setCart((prev) => {
       const current = prev[itemId] || 0;
       const next = current + delta;
@@ -132,6 +176,10 @@ export default function PublicBookingPage({
         const copy = { ...prev };
         delete copy[itemId];
         return copy;
+      }
+      if (next > maxAvail) {
+        toast.warning(`Maksimal ${maxAvail} unit tersedia untuk periode tanggal ini.`);
+        return { ...prev, [itemId]: maxAvail };
       }
       return { ...prev, [itemId]: next };
     });
@@ -147,6 +195,7 @@ export default function PublicBookingPage({
           name: itm.name,
           price: Number(itm.price),
           quantity: qty,
+          available_quantity: itm.available_quantity ?? itm.total_quantity,
         };
       })
       .filter(Boolean) as CartItem[];
@@ -167,6 +216,35 @@ export default function PublicBookingPage({
     return items.filter((i) => i.category_id === selectedCategory);
   }, [items, selectedCategory]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Ukuran file maksimal 5MB.");
+        return;
+      }
+      setProofFile(file);
+      const reader = new FileReader();
+      reader.onload = () => setProofPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleClearProof = () => {
+    setProofFile(null);
+    setProofPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleCopyBank = () => {
+    navigator.clipboard.writeText("BCA 7310892831 a/n Bayverix Rental");
+    setCopiedBank(true);
+    toast.success("Info rekening bank berhasil disalin!");
+    setTimeout(() => setCopiedBank(false), 2000);
+  };
+
   const handleSubmitBooking = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -180,9 +258,22 @@ export default function PublicBookingPage({
       return;
     }
 
+    if (paymentMethod === "TRANSFER" && !proofFile) {
+      toast.error("Mohon unggah foto bukti transfer pembayaran.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
+      let uploadedProofUrl: string | undefined = undefined;
+
+      if (paymentMethod === "TRANSFER" && proofFile) {
+        toast.loading("Mengunggah bukti pembayaran...", { id: "upload-proof" });
+        uploadedProofUrl = await uploadToSupabaseStorage(proofFile, "proofs");
+        toast.dismiss("upload-proof");
+      }
+
       const res = await fetch(`/api/public/book/${slug}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -192,6 +283,8 @@ export default function PublicBookingPage({
           start_at: new Date(startAt).toISOString(),
           end_at: new Date(endAt).toISOString(),
           notes: customerNotes.trim() || null,
+          payment_method: paymentMethod,
+          payment_proof_url: uploadedProofUrl,
           items: cartList.map((c) => ({
             rental_item_id: c.id,
             quantity: c.quantity,
@@ -211,6 +304,7 @@ export default function PublicBookingPage({
       setSuccessBooking(json);
       setCart({});
       setCustomerNotes("");
+      handleClearProof();
     } catch {
       toast.error("Terjadi kesalahan jaringan.");
     } finally {
@@ -249,7 +343,7 @@ export default function PublicBookingPage({
             </div>
             <div>
               <h1 className="text-lg sm:text-2xl font-bold text-[#0b1c30]">{business.name}</h1>
-              <p className="text-xs text-[#64748b]">Katalog &amp; Reservasi Sewa Online</p>
+              <p className="text-xs text-[#64748b]">Katalog &amp; Reservasi Sewa Online Real-Time</p>
             </div>
           </div>
 
@@ -274,36 +368,44 @@ export default function PublicBookingPage({
       <main className="max-w-3xl mx-auto p-4 space-y-6">
         {/* Date Selector Card */}
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#e2e8f0] shadow-xs space-y-3">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-[#0051d5]" />
-            <h2 className="text-xs font-bold uppercase tracking-wider text-[#0b1c30]">
-              Tentukan Waktu Sewa
-            </h2>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#0051d5]" />
+              <h2 className="text-xs font-bold uppercase tracking-wider text-[#0b1c30]">
+                Tentukan Waktu Sewa
+              </h2>
+            </div>
+            {loadingStock && (
+              <span className="inline-flex items-center gap-1 text-[11px] text-[#0051d5]">
+                <Loader2 className="w-3 h-3 animate-spin" />
+                <span>Cek Stok...</span>
+              </span>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
-              <label className="block text-[#64748b] mb-1">Mulai Sewa (Pickup):</label>
+              <label className="block text-[#64748b] mb-1 font-medium">Mulai Sewa (Pickup):</label>
               <input
                 type="datetime-local"
                 value={startAt}
                 onChange={(e) => setStartAt(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#e2e8f0] bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#e2e8f0] bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 font-sans"
               />
             </div>
             <div>
-              <label className="block text-[#64748b] mb-1">Selesai Sewa (Return):</label>
+              <label className="block text-[#64748b] mb-1 font-medium">Selesai Sewa (Return):</label>
               <input
                 type="datetime-local"
                 value={endAt}
                 onChange={(e) => setEndAt(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#e2e8f0] bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#e2e8f0] bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 font-sans"
               />
             </div>
           </div>
 
           <p className="text-[11px] text-[#64748b]">
-            Durasi sewa dihitung: <strong>{rentalDays} Hari</strong>
+            Durasi sewa dihitung: <strong>{rentalDays} Hari</strong> &bull; Stok dihitung otomatis berdasarkan tanggal di atas.
           </p>
         </div>
 
@@ -343,11 +445,17 @@ export default function PublicBookingPage({
         <div className="space-y-3">
           {filteredItems.map((item) => {
             const qtyInCart = cart[item.id] || 0;
+            const available = item.available_quantity ?? item.total_quantity;
+            const isOutOfStock = available <= 0;
 
             return (
               <div
                 key={item.id}
-                className="p-4 rounded-2xl bg-white border border-[#e2e8f0] shadow-xs flex items-center justify-between gap-3 hover:border-[#0051d5]/40 transition"
+                className={`p-4 rounded-2xl bg-white border transition ${
+                  isOutOfStock
+                    ? "border-slate-200 opacity-75"
+                    : "border-[#e2e8f0] hover:border-[#0051d5]/40 shadow-xs"
+                } flex items-center justify-between gap-3`}
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-[#eff4ff] border border-[#dce9ff] flex items-center justify-center shrink-0">
@@ -366,10 +474,24 @@ export default function PublicBookingPage({
                     <h3 className="font-bold text-xs sm:text-sm text-[#0b1c30] truncate">
                       {item.name}
                     </h3>
-                    <p className="font-extrabold text-xs sm:text-sm text-[#0051d5] mt-0.5">
-                      Rp {Number(item.price).toLocaleString("id-ID")}{" "}
-                      <span className="text-[10px] font-normal text-[#64748b]">/ hari</span>
-                    </p>
+
+                    <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                      <p className="font-extrabold text-xs sm:text-sm text-[#0051d5]">
+                        Rp {Number(item.price).toLocaleString("id-ID")}{" "}
+                        <span className="text-[10px] font-normal text-[#64748b]">/ hari</span>
+                      </p>
+
+                      {isOutOfStock ? (
+                        <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+                          Stok Habis
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                          Tersedia: {available} unit
+                        </span>
+                      )}
+                    </div>
+
                     {item.description && (
                       <p className="text-[11px] text-[#64748b] truncate mt-0.5">
                         {item.description}
@@ -380,7 +502,15 @@ export default function PublicBookingPage({
 
                 {/* Quantity Controls */}
                 <div className="flex items-center gap-2 shrink-0">
-                  {qtyInCart > 0 ? (
+                  {isOutOfStock ? (
+                    <button
+                      type="button"
+                      disabled
+                      className="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-400 text-xs font-medium cursor-not-allowed"
+                    >
+                      Habis
+                    </button>
+                  ) : qtyInCart > 0 ? (
                     <div className="flex items-center gap-1.5 bg-[#eff4ff] p-1 rounded-xl border border-[#dce9ff]">
                       <button
                         type="button"
@@ -394,8 +524,9 @@ export default function PublicBookingPage({
                       </span>
                       <button
                         type="button"
+                        disabled={qtyInCart >= available}
                         onClick={() => handleUpdateQuantity(item.id, 1)}
-                        className="p-1 rounded-lg bg-white text-[#0051d5] hover:bg-slate-50 transition"
+                        className="p-1 rounded-lg bg-white text-[#0051d5] hover:bg-slate-50 transition disabled:opacity-40"
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
@@ -404,7 +535,7 @@ export default function PublicBookingPage({
                     <button
                       type="button"
                       onClick={() => handleUpdateQuantity(item.id, 1)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-semibold shadow-xs transition"
+                      className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-semibold shadow-xs transition active:scale-95"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Sewa</span>
@@ -433,10 +564,9 @@ export default function PublicBookingPage({
             <button
               type="button"
               onClick={() => setShowCheckoutModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs sm:text-sm font-semibold shadow-md transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs sm:text-sm font-semibold shadow-md transition active:scale-95"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>Booking via WhatsApp</span>
+              <span>Lanjut Pemesanan</span>
             </button>
           </div>
         </div>
@@ -444,12 +574,12 @@ export default function PublicBookingPage({
 
       {/* ── Checkout Modal ── */}
       {showCheckoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
-          <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-[#e2e8f0] p-6 space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-[#e2e8f0] p-5 sm:p-6 space-y-4 my-8 animate-in zoom-in-95 duration-150">
             <div className="flex justify-between items-center pb-2 border-b border-[#e2e8f0]">
               <div>
-                <h3 className="text-base font-bold text-[#0b1c30]">Data Pemesan</h3>
-                <p className="text-xs text-[#64748b]">Konfirmasi pemesanan sewa ke {business.name}</p>
+                <h3 className="text-base font-bold text-[#0b1c30]">Formulir Pemesanan Sewa</h3>
+                <p className="text-xs text-[#64748b]">Konfirmasi data dan metode pembayaran ke {business.name}</p>
               </div>
               <button
                 type="button"
@@ -460,52 +590,187 @@ export default function PublicBookingPage({
               </button>
             </div>
 
-            <form onSubmit={handleSubmitBooking} className="space-y-3.5">
-              <div>
-                <label className="block text-xs font-medium text-[#0b1c30] mb-1">
-                  Nama Lengkap Anda <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="cth. Budi Santoso"
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
-                />
+            <form onSubmit={handleSubmitBooking} className="space-y-4">
+              {/* Customer Info */}
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-[#0b1c30] mb-1">
+                    Nama Lengkap Anda <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="cth. Budi Santoso"
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-[#0b1c30] mb-1">
+                    Nomor WhatsApp Anda <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    placeholder="cth. 08123456789"
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-[#0b1c30] mb-1">
+                    Catatan Tambahan (Opsional)
+                  </label>
+                  <input
+                    type="text"
+                    value={customerNotes}
+                    onChange={(e) => setCustomerNotes(e.target.value)}
+                    placeholder="cth. Ambil pagi jam 09.00 ya kak."
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-[#0b1c30] mb-1">
-                  Nomor WhatsApp Anda <span className="text-red-500">*</span>
+              {/* Payment Method Selector (2 Options: Bayar Nanti vs Transfer) */}
+              <div className="space-y-2 pt-1">
+                <label className="block text-xs font-bold text-[#0b1c30]">
+                  Pilihan Metode Pembayaran <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="tel"
-                  required
-                  value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="cth. 08123456789"
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
-                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {/* Option 1: Bayar Nanti */}
+                  <label
+                    className={`flex items-start gap-3 p-3 rounded-2xl border cursor-pointer transition ${
+                      paymentMethod === "BAYAR_NANTI"
+                        ? "border-[#0051d5] bg-[#eff4ff] ring-1 ring-[#0051d5]"
+                        : "border-[#e2e8f0] hover:bg-slate-50"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      value="BAYAR_NANTI"
+                      checked={paymentMethod === "BAYAR_NANTI"}
+                      onChange={() => setPaymentMethod("BAYAR_NANTI")}
+                      className="mt-0.5 text-[#0051d5] focus:ring-[#0051d5]"
+                    />
+                    <div className="text-xs">
+                      <div className="flex items-center gap-1.5 font-bold text-[#0b1c30]">
+                        <Banknote className="w-4 h-4 text-[#0051d5]" />
+                        <span>Bayar di Toko</span>
+                      </div>
+                      <p className="text-[11px] text-[#64748b] mt-0.5">
+                        Bayar tunai / QRIS saat ambil unit rental di toko.
+                      </p>
+                    </div>
+                  </label>
+
+                  {/* Option 2: Transfer Bank */}
+                  <label
+                    className={`flex items-start gap-3 p-3 rounded-2xl border cursor-pointer transition ${
+                      paymentMethod === "TRANSFER"
+                        ? "border-[#0051d5] bg-[#eff4ff] ring-1 ring-[#0051d5]"
+                        : "border-[#e2e8f0] hover:bg-slate-50"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      value="TRANSFER"
+                      checked={paymentMethod === "TRANSFER"}
+                      onChange={() => setPaymentMethod("TRANSFER")}
+                      className="mt-0.5 text-[#0051d5] focus:ring-[#0051d5]"
+                    />
+                    <div className="text-xs">
+                      <div className="flex items-center gap-1.5 font-bold text-[#0b1c30]">
+                        <CreditCard className="w-4 h-4 text-[#0051d5]" />
+                        <span>Transfer Bank</span>
+                      </div>
+                      <p className="text-[11px] text-[#64748b] mt-0.5">
+                        Transfer bank &amp; unggah bukti transfer.
+                      </p>
+                    </div>
+                  </label>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-[#0b1c30] mb-1">
-                  Catatan Tambahan (Opsional)
-                </label>
-                <input
-                  type="text"
-                  value={customerNotes}
-                  onChange={(e) => setCustomerNotes(e.target.value)}
-                  placeholder="cth. Ambil pagi jam 09.00 ya kak."
-                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#e2e8f0] focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
-                />
-              </div>
+              {/* Transfer Details & Proof Upload Section */}
+              {paymentMethod === "TRANSFER" && (
+                <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 animate-in fade-in">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] text-[#64748b]">Rekening Resmi Toko:</p>
+                      <p className="text-xs font-bold text-[#0b1c30]">BCA: 7310892831</p>
+                      <p className="text-[11px] text-[#64748b]">a/n {business.name}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCopyBank}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-white border border-[#e2e8f0] hover:bg-slate-50 text-[#0b1c30] transition"
+                    >
+                      {copiedBank ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-[#64748b]" />}
+                      <span>{copiedBank ? "Tersalin" : "Salin"}</span>
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-[#0b1c30] mb-1.5">
+                      Unggah Bukti Transfer <span className="text-red-500">*</span>
+                    </label>
+
+                    {proofPreview ? (
+                      <div className="relative rounded-xl border border-slate-200 bg-white p-2 flex items-center gap-3">
+                        <img
+                          src={proofPreview}
+                          alt="Bukti Transfer Preview"
+                          className="w-16 h-16 object-cover rounded-lg border border-slate-100"
+                        />
+                        <div className="flex-1 min-w-0 text-xs">
+                          <p className="font-semibold text-[#0b1c30] truncate">{proofFile?.name}</p>
+                          <p className="text-[11px] text-emerald-600 flex items-center gap-1 mt-0.5">
+                            <CheckCircle2 className="w-3 h-3" /> Foto siap dikirim
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleClearProof}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div
+                        onClick={() => fileInputRef.current?.click()}
+                        className="border-2 border-dashed border-[#dce9ff] hover:border-[#0051d5] bg-white rounded-xl p-3.5 text-center cursor-pointer transition flex flex-col items-center justify-center gap-1"
+                      >
+                        <Upload className="w-5 h-5 text-[#0051d5]" />
+                        <p className="text-xs font-medium text-[#0b1c30]">
+                          Klik untuk pilih foto bukti transfer
+                        </p>
+                        <p className="text-[10px] text-[#64748b]">JPG, PNG, atau Screenshot (Maks 5MB)</p>
+                      </div>
+                    )}
+
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Order Summary */}
               <div className="p-3 bg-[#f8f9ff] rounded-xl border border-slate-100 text-xs space-y-1">
                 <div className="flex justify-between text-[#64748b]">
-                  <span>Total Sewa ({rentalDays} Hari):</span>
+                  <span>Total Biaya Sewa ({rentalDays} Hari):</span>
                   <span className="font-bold text-[#0051d5]">
                     Rp {totalEstimate.toLocaleString("id-ID")}
                   </span>
@@ -521,7 +786,7 @@ export default function PublicBookingPage({
                   {submitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Menyimpan Pesanan...</span>
+                      <span>Memproses Pesanan...</span>
                     </>
                   ) : (
                     <>
@@ -558,7 +823,7 @@ export default function PublicBookingPage({
                 Pesanan Sewa Berhasil Dikirim!
               </h3>
               <p className="text-xs sm:text-sm text-[#64748b] mt-1.5 leading-relaxed">
-                Pesanan Anda telah langsung tercatat di sistem kami. Tim toko akan segera menyiapkan ketersediaan unit untuk Anda.
+                Status pesanan Anda saat ini adalah <strong className="text-amber-700 font-semibold">PENDING</strong>. Tim toko akan segera mengonfirmasi ketersediaan unit dan pembayaran Anda.
               </p>
             </div>
 
@@ -589,3 +854,4 @@ export default function PublicBookingPage({
     </div>
   );
 }
+

@@ -87,6 +87,8 @@ export default async function BookingDetailPage({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
+      case "PENDING":
+        return <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">PENDING</span>;
       case "CONFIRMED":
         return <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-[#0051d5] border border-blue-100 whitespace-nowrap">CONFIRMED</span>;
       case "ONGOING":

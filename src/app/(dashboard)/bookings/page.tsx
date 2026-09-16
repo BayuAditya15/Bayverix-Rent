@@ -48,6 +48,7 @@ export default async function BookingsPage({
 
   const statuses = [
     { label: "Semua", value: "" },
+    { label: "Pending", value: "PENDING" },
     { label: "Confirmed", value: "CONFIRMED" },
     { label: "Ongoing", value: "ONGOING" },
     { label: "Completed", value: "COMPLETED" },

@@ -38,6 +38,8 @@ export function BookingListWithPagination({ bookings }: BookingListWithPaginatio
 
   const getStatusBadge = (status: string) => {
     switch (status) {
+      case "PENDING":
+        return <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">PENDING</span>;
       case "CONFIRMED":
         return <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-[#0051d5]">CONFIRMED</span>;
       case "ONGOING":
@@ -47,7 +49,7 @@ export function BookingListWithPagination({ bookings }: BookingListWithPaginatio
       case "CANCELLED":
         return <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-red-50 text-red-700">CANCELLED</span>;
       case "OVERDUE":
-        return <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700">OVERDUE</span>;
+        return <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 text-rose-700">OVERDUE</span>;
       default:
         return <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">{status}</span>;
     }

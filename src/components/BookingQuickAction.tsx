@@ -28,17 +28,19 @@ export function BookingQuickAction({
 
   const handleUpdateStatus = async (
     e: React.MouseEvent,
-    newStatus: "ONGOING" | "COMPLETED"
+    newStatus: "CONFIRMED" | "ONGOING" | "COMPLETED"
   ) => {
     e.preventDefault();
     e.stopPropagation();
 
     const actionName =
-      newStatus === "ONGOING"
+      newStatus === "CONFIRMED"
+        ? "Konfirmasi Pesanan Booking"
+        : newStatus === "ONGOING"
         ? "Serah Terima Unit (Mulai Sewa)"
         : "Unit Dikembalikan (Selesai Sewa)";
 
-    if (!confirm(`Konfirmasi ${actionName} untuk booking #${bookingNumber}?`)) {
+    if (!confirm(`Lakukan ${actionName} untuk booking #${bookingNumber}?`)) {
       return;
     }
 
@@ -57,7 +59,9 @@ export function BookingQuickAction({
       }
 
       toast.success(
-        newStatus === "ONGOING"
+        newStatus === "CONFIRMED"
+          ? `Booking #${bookingNumber} berhasil dikonfirmasi!`
+          : newStatus === "ONGOING"
           ? `Unit sewa #${bookingNumber} berhasil diserah-terimakan!`
           : `Booking #${bookingNumber} selesai dan unit telah dikembalikan.`
       );
@@ -71,6 +75,23 @@ export function BookingQuickAction({
 
   return (
     <div className={`flex items-center gap-1.5 ${className}`} onClick={(e) => e.stopPropagation()}>
+      {currentStatus === "PENDING" && (
+        <button
+          type="button"
+          disabled={loading}
+          onClick={(e) => handleUpdateStatus(e, "CONFIRMED")}
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold transition active:scale-95 shadow-xs disabled:opacity-50"
+          title="Klik untuk konfirmasi pesanan booking dari form online"
+        >
+          {loading ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <CheckCircle2 className="w-3.5 h-3.5" />
+          )}
+          <span>Konfirmasi</span>
+        </button>
+      )}
+
       {currentStatus === "CONFIRMED" && (
         <button
           type="button"
