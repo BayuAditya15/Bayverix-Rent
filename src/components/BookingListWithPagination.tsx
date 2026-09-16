@@ -2,39 +2,22 @@
 
 import { useState } from "react";
 import { BookingQuickAction } from "@/components/BookingQuickAction";
-import { ClickableBookingCard, ClickableBookingRow } from "@/components/ClickableRow";
 import { TablePagination } from "@/components/TablePagination";
-
-export interface BookingListItem {
-  id: string;
-  booking_number: string;
-  start_at: string;
-  end_at: string;
-  rental_total: number | string;
-  deposit_total: number | string;
-  amount_due: number | string;
-  amount_paid: number | string;
-  status: string;
-  created_at: string;
-  customers: {
-    id?: string;
-    name: string;
-    phone?: string | null;
-  } | {
-    id?: string;
-    name: string;
-    phone?: string | null;
-  }[] | null;
-}
+import { BookingDetailModal, type BookingDetailModalItem } from "@/components/BookingDetailModal";
 
 interface BookingListWithPaginationProps {
-  bookings: BookingListItem[];
+  bookings: BookingDetailModalItem[];
+  storeName?: string;
 }
 
-export function BookingListWithPagination({ bookings }: BookingListWithPaginationProps) {
+export function BookingListWithPagination({
+  bookings,
+  storeName = "Rental Store",
+}: BookingListWithPaginationProps) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [selectedBooking, setSelectedBooking] = useState<BookingDetailModalItem | null>(null);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -106,10 +89,10 @@ export function BookingListWithPagination({ bookings }: BookingListWithPaginatio
             });
 
             return (
-              <ClickableBookingCard
+              <div
                 key={b.id}
-                bookingId={b.id}
-                className="p-4 rounded-xl bg-white border border-[#e2e8f0] shadow-xs space-y-3"
+                onClick={() => setSelectedBooking(b)}
+                className="p-4 rounded-xl bg-white border border-[#e2e8f0] shadow-xs space-y-3 cursor-pointer hover:border-[#0051d5] hover:shadow-sm transition active:scale-[0.99]"
               >
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-xs text-[#0051d5]">
@@ -145,7 +128,7 @@ export function BookingListWithPagination({ bookings }: BookingListWithPaginatio
                     currentStatus={b.status}
                   />
                 </div>
-              </ClickableBookingCard>
+              </div>
             );
           })
         )}
@@ -186,7 +169,11 @@ export function BookingListWithPagination({ bookings }: BookingListWithPaginatio
                 });
 
                 return (
-                  <ClickableBookingRow key={b.id} bookingId={b.id}>
+                  <tr
+                    key={b.id}
+                    onClick={() => setSelectedBooking(b)}
+                    className="hover:bg-slate-50/80 transition cursor-pointer"
+                  >
                     <td className="px-5 py-3.5 font-bold text-[#0051d5]">
                       {b.booking_number}
                     </td>
@@ -216,13 +203,22 @@ export function BookingListWithPagination({ bookings }: BookingListWithPaginatio
                         />
                       </div>
                     </td>
-                  </ClickableBookingRow>
+                  </tr>
                 );
               })
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Instant Booking Detail Modal */}
+      {selectedBooking && (
+        <BookingDetailModal
+          booking={selectedBooking}
+          onClose={() => setSelectedBooking(null)}
+          storeName={storeName}
+        />
+      )}
     </div>
   );
 }

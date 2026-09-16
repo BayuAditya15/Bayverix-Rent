@@ -11,7 +11,7 @@ export default async function BookingsPage({
 }: {
   searchParams: Promise<{ status?: string; search?: string }>;
 }) {
-  const { businessId } = await getCurrentBusinessOrRedirect();
+  const { businessId, business } = await getCurrentBusinessOrRedirect();
   const supabase = await createClient();
 
   const params = await searchParams;
@@ -30,11 +30,28 @@ export default async function BookingsPage({
       amount_due,
       amount_paid,
       status,
+      notes,
       created_at,
       customers (
         id,
         name,
-        phone
+        phone,
+        email
+      ),
+      booking_items (
+        id,
+        item_name_snapshot,
+        unit_price,
+        quantity,
+        subtotal
+      ),
+      payments (
+        id,
+        amount,
+        method,
+        status,
+        reference,
+        paid_at
       )
     `)
     .eq("business_id", businessId)
@@ -112,7 +129,10 @@ export default async function BookingsPage({
           </Link>
         </div>
       ) : (
-        <BookingListWithPagination bookings={bookings as any} />
+        <BookingListWithPagination
+          bookings={bookings as any}
+          storeName={business?.name || "Rental Store"}
+        />
       )}
     </div>
   );

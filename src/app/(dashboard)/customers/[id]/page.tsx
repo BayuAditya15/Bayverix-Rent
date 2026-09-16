@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getCurrentBusinessOrRedirect } from "@/lib/auth/getCurrentBusiness";
 import { createClient } from "@/lib/supabase/server";
 import { ArrowLeft, User, Phone, Mail, MapPin, MessageCircle, ShoppingBag, Clock } from "lucide-react";
-import { ClickableBookingCard } from "@/components/ClickableRow";
+import { DashboardRecentBookings } from "@/components/DashboardRecentBookings";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,7 @@ export default async function CustomerDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { businessId } = await getCurrentBusinessOrRedirect();
+  const { businessId, business } = await getCurrentBusinessOrRedirect();
   const supabase = await createClient();
   const { id } = await params;
 
@@ -37,9 +37,33 @@ export default async function CustomerDetailPage({
       start_at,
       end_at,
       rental_total,
+      deposit_total,
       amount_due,
+      amount_paid,
       status,
-      created_at
+      notes,
+      created_at,
+      customers (
+        id,
+        name,
+        phone,
+        email
+      ),
+      booking_items (
+        id,
+        item_name_snapshot,
+        unit_price,
+        quantity,
+        subtotal
+      ),
+      payments (
+        id,
+        amount,
+        method,
+        status,
+        reference,
+        paid_at
+      )
     `)
     .eq("customer_id", id)
     .eq("business_id", businessId)
@@ -144,58 +168,10 @@ export default async function CustomerDetailPage({
       <div className="p-5 rounded-2xl bg-white border border-[#e2e8f0] shadow-xs space-y-4">
         <h2 className="text-sm font-bold text-[#0b1c30]">Riwayat Booking ({bookings?.length || 0})</h2>
 
-        {(!bookings || bookings.length === 0) ? (
-          <p className="text-xs text-[#64748b] text-center py-6">
-            Pelanggan ini belum memiliki riwayat transaksi sewa.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {bookings.map((b) => {
-              const startDate = new Date(b.start_at).toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "short",
-              });
-              const endDate = new Date(b.end_at).toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              });
-
-              return (
-                <ClickableBookingCard
-                  key={b.id}
-                  bookingId={b.id}
-                  className="p-3.5 rounded-xl border border-[#e2e8f0] bg-[#f8f9ff]/50 hover:bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
-                >
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#0051d5]">{b.booking_number}</span>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700">
-                        {b.status}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-[#64748b] mt-0.5">
-                      {startDate} → {endDate}
-                    </p>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <p className="font-bold text-[#0b1c30]">
-                      Rp {Number(b.rental_total).toLocaleString("id-ID")}
-                    </p>
-                    {Number(b.amount_due) > 0 ? (
-                      <p className="text-[10px] text-amber-600">
-                        Sisa: Rp {Number(b.amount_due).toLocaleString("id-ID")}
-                      </p>
-                    ) : (
-                      <p className="text-[10px] text-emerald-600">Lunas</p>
-                    )}
-                  </div>
-                </ClickableBookingCard>
-              );
-            })}
-          </div>
-        )}
+        <DashboardRecentBookings
+          bookings={bookings as any}
+          storeName={business.name}
+        />
       </div>
     </div>
   );
