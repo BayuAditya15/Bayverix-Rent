@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import { Loader2, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default function BillingCallbackPage() {
   const router = useRouter();
   const supabase = createClient();
