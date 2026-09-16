@@ -12,6 +12,9 @@ interface BusinessProfile {
   email: string | null;
   address: string | null;
   slug: string | null;
+  bank_name?: string | null;
+  bank_account_number?: string | null;
+  bank_account_holder?: string | null;
 }
 
 interface StoreProfileSettingsProps {
@@ -27,12 +30,18 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
   const [name, setName] = useState(business.name);
   const [phone, setPhone] = useState(business.phone || "");
   const [address, setAddress] = useState(business.address || "");
+  const [bankName, setBankName] = useState(business.bank_name || "");
+  const [bankAccountNumber, setBankAccountNumber] = useState(business.bank_account_number || "");
+  const [bankAccountHolder, setBankAccountHolder] = useState(business.bank_account_holder || "");
   const [loading, setLoading] = useState(false);
 
   const handleOpen = () => {
     setName(business.name);
     setPhone(business.phone || "");
     setAddress(business.address || "");
+    setBankName(business.bank_name || "");
+    setBankAccountNumber(business.bank_account_number || "");
+    setBankAccountHolder(business.bank_account_holder || "");
     setIsOpen(true);
   };
 
@@ -52,6 +61,9 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
           name: name.trim(),
           phone: phone.trim() || null,
           address: address.trim() || null,
+          bank_name: bankName.trim() || null,
+          bank_account_number: bankAccountNumber.trim() || null,
+          bank_account_holder: bankAccountHolder.trim() || null,
         }),
       });
 
@@ -61,7 +73,7 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
         return;
       }
 
-      toast.success("Profil toko berhasil disimpan!");
+      toast.success("Profil toko dan rekening berhasil disimpan!");
       setIsOpen(false);
       router.refresh();
     } catch {
@@ -77,7 +89,7 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Store className="w-5 h-5 text-[#0051d5]" />
-            <h2 className="text-sm font-bold text-[#0b1c30]">Profil Toko</h2>
+            <h2 className="text-sm font-bold text-[#0b1c30]">Profil &amp; Rekening Toko</h2>
           </div>
 
           <button
@@ -126,6 +138,18 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
               </p>
             </div>
           </div>
+
+          <div className="pt-2 border-t border-slate-100">
+            <label className="block text-[#64748b] mb-1">Rekening Pembayaran Bank (Tampil di Form Sewa):</label>
+            {business.bank_name || business.bank_account_number ? (
+              <p className="font-medium text-[#0b1c30]">
+                <strong>{business.bank_name || "Bank"}</strong>: {business.bank_account_number || "-"}{" "}
+                {business.bank_account_holder ? `(a/n ${business.bank_account_holder})` : ""}
+              </p>
+            ) : (
+              <p className="text-slate-400 italic">Belum diatur (klik Edit untuk mengisi nomor rekening toko)</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -146,9 +170,9 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
                   <Store className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-[#0b1c30]">Edit Informasi Toko</h2>
+                  <h2 className="text-sm font-bold text-[#0b1c30]">Edit Informasi Toko &amp; Rekening</h2>
                   <p className="text-[11px] text-[#64748b]">
-                    Perbarui nama, kontak, dan alamat yang tercantum pada nota sewa
+                    Perbarui nama, kontak, alamat, dan nomor rekening pembayaran toko
                   </p>
                 </div>
               </div>
@@ -176,9 +200,6 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
                   placeholder="cth. Berkah Outdoor Rental"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e8f0] focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] outline-none"
                 />
-                <p className="text-[11px] text-[#64748b] mt-1">
-                  Nama ini akan muncul pada header nota, faktur invoice, dan halaman katalog publik.
-                </p>
               </div>
 
               <div>
@@ -192,24 +213,56 @@ export function StoreProfileSettings({ business, userEmail }: StoreProfileSettin
                   placeholder="cth. 081234567890"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e8f0] focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] outline-none"
                 />
-                <p className="text-[11px] text-[#64748b] mt-1">
-                  Digunakan untuk menerima konfirmasi booking otomatis dari pelanggan.
-                </p>
               </div>
-
-
 
               <div>
                 <label className="block font-medium text-[#0b1c30] mb-1">
                   Alamat Operasional Toko
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="cth. Jl. Merdeka No. 123, Bandung, Jawa Barat"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e8f0] focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] outline-none"
                 />
+              </div>
+
+              {/* Bank Account Section */}
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                <p className="font-bold text-[#0b1c30] text-xs">Rekening Pembayaran Bank (Toko)</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-medium text-[#64748b] mb-1">Nama Bank:</label>
+                    <input
+                      type="text"
+                      value={bankName}
+                      onChange={(e) => setBankName(e.target.value)}
+                      placeholder="cth. BCA / Mandiri / BRI"
+                      className="w-full px-3 py-2 rounded-lg border border-[#e2e8f0] bg-white focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium text-[#64748b] mb-1">Nomor Rekening:</label>
+                    <input
+                      type="text"
+                      value={bankAccountNumber}
+                      onChange={(e) => setBankAccountNumber(e.target.value)}
+                      placeholder="cth. 7310892831"
+                      className="w-full px-3 py-2 rounded-lg border border-[#e2e8f0] bg-white focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] outline-none"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block font-medium text-[#64748b] mb-1">Atas Nama (Pemilik Rekening):</label>
+                  <input
+                    type="text"
+                    value={bankAccountHolder}
+                    onChange={(e) => setBankAccountHolder(e.target.value)}
+                    placeholder="cth. Budi Santoso / Berkah Rental"
+                    className="w-full px-3 py-2 rounded-lg border border-[#e2e8f0] bg-white focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] outline-none"
+                  />
+                </div>
               </div>
 
               {/* Actions */}

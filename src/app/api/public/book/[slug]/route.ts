@@ -21,7 +21,7 @@ export async function GET(request: Request, { params }: Params) {
   // 1. Fetch Business by slug (or fallback by name)
   let { data: business } = await supabase
     .from("businesses")
-    .select("id, name, slug, phone, email, address, logo_url")
+    .select("id, name, slug, phone, email, address, logo_url, bank_name, bank_account_number, bank_account_holder")
     .eq("slug", slug.toLowerCase())
     .maybeSingle();
 
@@ -29,7 +29,7 @@ export async function GET(request: Request, { params }: Params) {
   if (!business) {
     const { data: byName } = await supabase
       .from("businesses")
-      .select("id, name, slug, phone, email, address, logo_url")
+      .select("id, name, slug, phone, email, address, logo_url, bank_name, bank_account_number, bank_account_holder")
       .ilike("name", slug)
       .maybeSingle();
 

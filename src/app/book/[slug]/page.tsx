@@ -33,6 +33,9 @@ interface Business {
   email: string | null;
   address: string | null;
   logo_url: string | null;
+  bank_name?: string | null;
+  bank_account_number?: string | null;
+  bank_account_holder?: string | null;
 }
 
 interface Category {
@@ -241,9 +244,12 @@ export default function PublicBookingPage({
   };
 
   const handleCopyBank = () => {
-    navigator.clipboard.writeText("BCA 7310892831 a/n Bayverix Rental");
+    const textToCopy = business?.bank_account_number
+      ? `${business.bank_account_number}`
+      : `${business?.bank_name || "BCA"} 7310892831 a/n ${business?.name || "Rental"}`;
+    navigator.clipboard.writeText(textToCopy);
     setCopiedBank(true);
-    toast.success("Info rekening bank berhasil disalin!");
+    toast.success("Nomor rekening toko berhasil disalin!");
     setTimeout(() => setCopiedBank(false), 2000);
   };
 
@@ -706,8 +712,13 @@ export default function PublicBookingPage({
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-[11px] text-[#64748b]">Rekening Resmi Toko:</p>
-                      <p className="text-xs font-bold text-[#0b1c30]">BCA: 7310892831</p>
-                      <p className="text-[11px] text-[#64748b]">a/n {business.name}</p>
+                      <p className="text-xs font-bold text-[#0b1c30]">
+                        {business.bank_name ? `${business.bank_name}: ` : "BCA: "}
+                        {business.bank_account_number || "7310892831"}
+                      </p>
+                      <p className="text-[11px] text-[#64748b]">
+                        a/n {business.bank_account_holder || business.name}
+                      </p>
                     </div>
                     <button
                       type="button"
@@ -715,7 +726,7 @@ export default function PublicBookingPage({
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-white border border-[#e2e8f0] hover:bg-slate-50 text-[#0b1c30] transition"
                     >
                       {copiedBank ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-[#64748b]" />}
-                      <span>{copiedBank ? "Tersalin" : "Salin"}</span>
+                      <span>{copiedBank ? "Tersalin" : "Salin No. Rek"}</span>
                     </button>
                   </div>
 

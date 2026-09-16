@@ -11,7 +11,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, phone, address } = body;
+    const { name, phone, address, bank_name, bank_account_number, bank_account_holder } = body;
 
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
@@ -27,6 +27,9 @@ export async function PUT(req: NextRequest) {
       name: name.trim(),
       phone: phone ? String(phone).trim() : null,
       address: address ? String(address).trim() : null,
+      bank_name: bank_name ? String(bank_name).trim() : null,
+      bank_account_number: bank_account_number ? String(bank_account_number).trim() : null,
+      bank_account_holder: bank_account_holder ? String(bank_account_holder).trim() : null,
     };
 
     if (!ctx.business?.slug) {

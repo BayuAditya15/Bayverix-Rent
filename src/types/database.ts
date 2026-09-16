@@ -15,9 +15,14 @@ export type UserRole = 'owner' | 'staff';
 export interface Business {
   id: string;
   name: string;
+  slug?: string | null;
   logo_url: string | null;
   phone: string | null;
   email: string | null;
+  address?: string | null;
+  bank_name?: string | null;
+  bank_account_number?: string | null;
+  bank_account_holder?: string | null;
   currency: string;
   operating_hours: string | null;
   created_at: string;
