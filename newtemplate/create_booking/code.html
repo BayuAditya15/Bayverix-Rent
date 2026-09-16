@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-surface": "#213145", "on-primary": "#ffffff", "outline": "#76777d", "on-primary-fixed": "#131b2e", "secondary": "#0051d5", "primary-fixed": "#dae2fd", "secondary-fixed": "#dbe1ff", "surface-container-high": "#dce9ff", "inverse-on-surface": "#eaf1ff", "surface-bright": "#f8f9ff", "surface-dim": "#cbdbf5", "surface-tint": "#565e74", "secondary-container": "#316bf3", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#003ea8", "outline-variant": "#c6c6cd", "surface": "#f8f9ff", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed": "#00174b", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#b87500", "background": "#f8f9ff", "on-background": "#0b1c30", "tertiary-container": "#2a1700", "on-surface": "#0b1c30", "surface-container": "#e5eeff", "primary": "#000000", "on-secondary-container": "#fefcff", "on-surface-variant": "#45464d", "surface-container-highest": "#d3e4fe", "surface-container-low": "#eff4ff", "on-secondary": "#ffffff", "error": "#ba1a1a", "secondary-fixed-dim": "#b4c5ff", "on-primary-container": "#7c839b", "on-error-container": "#93000a", "error-container": "#ffdad6", "tertiary-fixed": "#ffddb8", "primary-fixed-dim": "#bec6e0", "tertiary": "#000000", "on-primary-fixed-variant": "#3f465c", "inverse-primary": "#bec6e0", "primary-container": "#131b2e", "on-tertiary-fixed-variant": "#653e00", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "surface-variant": "#d3e4fe" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-8": "32px", "space-6": "24px", "container-padding-desktop": "32px", "container-padding-mobile": "16px", "gutter-mobile": "12px", "space-1": "4px", "space-3": "12px", "space-4": "16px", "gutter-desktop": "16px", "space-2": "8px", "container-padding-tablet": "24px" }, fontFamily: { "headline-md": ["Inter"], "display": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "headline-sm": ["Inter"], "display-mobile": ["Inter"], "body-sm-medium": ["Inter"], "body-sm": ["Inter"], "label-md": ["Inter"], "mono-data": ["JetBrains Mono"], "body-md-medium": ["Inter"] }, fontSize: { "headline-md": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-md": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm-medium": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.005em", "fontWeight": "500" }], "mono-data": ["12px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-md-medium": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased"><header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-container-padding-mobile flex items-center justify-between gap-space-2"><div class="flex items-center gap-space-2 min-w-0"><button aria-label="Go back" class="w-11 h-11 -ml-2 flex items-center justify-center rounded-lg text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><img alt="RentPro Logo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5N7VVCSO5u7HHFFleezMxKmo4DufK-8a6vQuVWU4DfRavk5W71Y6_qwCuInKQ5T-5TbedMLOFwobJlZTJu7o_RBLvDTpqGOHvXDn9FhBQdGG6iJchr4JFToq2Glft7yCtYqnwpPE4R3ji9gsa1i1HAUHlpgCZ_v8jytC_-nKgLZLOvtSck2EwrGlnppPUJFgZoZuXStGW5C-0ew1pDYKgA-REgnKoVL1Rb0TGz_opaoej6xQIYvlhUA"/><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">New Booking Flow</h1></div><div class="flex items-center gap-space-2 flex-shrink-0"><button aria-label="Context Actions" class="w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface min-h-screen pb-safe"><div class="flex flex-col w-full pb-28">
+<!-- Interactive Toast Notification Container -->
+<div class="fixed top-20 inset-x-4 z-50 flex items-center justify-between p-space-3 rounded-xl bg-primary text-on-primary shadow-xl transition-all duration-300 transform -translate-y-28 opacity-0 pointer-events-none max-w-lg mx-auto" id="toast-banner">
+<div class="flex items-center gap-space-2 min-w-0">
+<span class="material-symbols-outlined text-secondary-fixed text-[22px] flex-shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col">
+<span class="font-body-md-medium text-body-md-medium text-on-primary">Booking BK-9042 Created</span>
+<span class="font-body-sm text-body-sm text-on-primary/80">Inventory held for Budi Santoso</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-primary/70 hover:text-on-primary" onclick="dismissToast()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="w-full max-w-4xl mx-auto px-container-padding-mobile space-y-space-6 pt-space-2">
+<!-- Sub-navigation & Header Bar -->
+<section class="flex flex-col gap-space-3">
+<div class="flex items-center justify-between">
+<a class="inline-flex items-center gap-space-1 text-on-surface-variant hover:text-on-surface transition-colors py-space-1 -ml-1" href="javascript:history.back()">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="font-body-sm-medium text-body-sm-medium">Back to Bookings</span>
+</a>
+<div class="inline-flex items-center gap-space-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Draft</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-space-1">
+<h2 class="font-headline-lg-mobile sm:font-headline-lg text-headline-lg-mobile sm:text-headline-lg text-on-surface">Create New Booking</h2>
+<span class="font-mono-data text-mono-data text-on-surface-variant">ID: BK-AUTO-GEN</span>
+</div>
+</section>
+<!-- SECTION 1: Customer Selection -->
+<section class="rounded-xl bg-surface-container-lowest p-space-4 sm:p-space-6 shadow-sm space-y-space-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-on-surface">
+<span class="font-label-sm text-label-sm">1</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Customer Profile</h3>
+</div>
+<button class="font-label-md text-label-md text-secondary hover:underline flex items-center gap-1" id="toggle-customer-search-btn" onclick="toggleCustomerSearch()">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span>Change Customer</span>
+</button>
+</div>
+<!-- Live Search Box (Collapsible/Togglable) -->
+<div class="hidden flex-col gap-space-2 p-space-3 rounded-lg bg-surface-container-low" id="customer-search-box">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="cust-search">Find Registered Member</label>
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-secondary" id="cust-search" placeholder="Search customer by name or phone..." type="text"/>
+</div>
+</div>
+<!-- Selected Customer Profile Card -->
+<div class="rounded-xl bg-surface-container-low p-space-4 flex flex-col sm:flex-row sm:items-center justify-between gap-space-4">
+<div class="flex items-start gap-space-3 min-w-0">
+<div class="w-11 h-11 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-headline-sm text-headline-sm flex-shrink-0">
+            BS
+          </div>
+<div class="min-w-0 flex flex-col">
+<div class="flex items-center gap-space-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Budi Santoso</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Verified</span>
+</div>
+<div class="flex flex-wrap items-center gap-y-0.5 gap-x-2 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="font-mono-data text-mono-data">0812-3456-7890</span>
+<span>•</span>
+<span class="truncate">budi.santoso@email.com</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-2 pt-space-2 sm:pt-0">
+<div class="flex flex-col sm:items-end px-space-3 py-space-2 rounded-lg bg-surface-container-lowest w-full sm:w-auto">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Rental Track Record</span>
+<div class="flex items-center gap-space-2 mt-0.5">
+<span class="font-body-md-medium text-body-md-medium text-on-surface">3 past rentals</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm-medium text-body-sm-medium text-secondary">Zero late returns</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: Rental Period & Duration -->
+<section class="rounded-xl bg-surface-container-lowest p-space-4 sm:p-space-6 shadow-sm space-y-space-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-on-surface">
+<span class="font-label-sm text-label-sm">2</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Rental Period</h3>
+</div>
+<div class="px-space-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Computed Duration: 2 Days</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-4">
+<!-- Start Period -->
+<div class="rounded-lg bg-surface-container-low p-space-3 space-y-space-2">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm">PICKUP SCHEDULE</span>
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">12 Sep 2026</span>
+<span class="font-mono-data text-mono-data px-2 py-0.5 rounded bg-surface-container-lowest text-on-surface">09:00 WIB</span>
+</div>
+</div>
+<!-- End Period -->
+<div class="rounded-lg bg-surface-container-low p-space-3 space-y-space-2">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm">RETURN SCHEDULE</span>
+<span class="material-symbols-outlined text-[18px]">event_repeat</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">14 Sep 2026</span>
+<span class="font-mono-data text-mono-data px-2 py-0.5 rounded bg-surface-container-lowest text-on-surface">17:00 WIB</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: Rental Items & Live Availability -->
+<section class="rounded-xl bg-surface-container-lowest p-space-4 sm:p-space-6 shadow-sm space-y-space-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-3">
+<div class="flex items-center gap-space-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-on-surface">
+<span class="font-label-sm text-label-sm">3</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Select Items</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Inventory dynamically verified for 12–14 Sep</p>
+</div>
+</div>
+<!-- Category Filter Chips -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+<button class="px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm whitespace-nowrap">All Items</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm whitespace-nowrap">Tents</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm whitespace-nowrap">Sleeping</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm whitespace-nowrap">Cooking</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm whitespace-nowrap">Bags</button>
+</div>
+</div>
+<!-- Item List Cards -->
+<div class="space-y-space-3">
+<!-- Item 1: Tenda 4P -->
+<div class="rounded-xl bg-surface-container-low p-space-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-4">
+<div class="flex items-center gap-space-3 min-w-0">
+<div class="w-14 h-14 rounded-lg bg-surface-container-highest overflow-hidden flex-shrink-0 flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A modern 4-person waterproof dome camping tent pitched on grass, neutral natural studio lighting, minimalist gear product photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATylxOYrHh3lvYuJoMjq5AKI_lz1BnOM9Y_3oykmd8XqBuWzkeKlfFizmUYPKiP_U4cFTmX_DArMLUijuDnmtXmrBmuzfJ1zkCmYoyOkK1e93c3tb3tOI0QhKu_ZfOoFfJxYjhrHTIrOiZDQWYIwpd3yJtY147E3yvp3K1Tjqb-GxPrZucaA-p7vAG2hJ4XJRY2t1h4WiYJES0jkRRGQjdPfkuK4Cu8jMNfy_ft2hkn-AQeXr0zQ-aIg"/>
+</div>
+<div class="min-w-0 flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Tenda 4P Waterproof</span>
+<div class="flex items-center gap-space-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rp100.000 / day</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm-medium text-body-sm-medium text-secondary">5 in stock</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface mt-1" id="subtotal-item-1">2 units × 2 days = Rp400.000</span>
+</div>
+</div>
+<!-- Quantity Stepper -->
+<div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-space-3 pt-space-2 sm:pt-0">
+<span class="sm:hidden font-label-sm text-label-sm text-on-surface-variant">Qty:</span>
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button aria-label="Decrease Tenda 4P count" class="w-9 h-9 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="updateQty('item-1', -1, 100000, 5)">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-10 text-center font-mono-data text-mono-data text-on-surface" id="qty-item-1">2</span>
+<button aria-label="Increase Tenda 4P count" class="w-9 h-9 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="updateQty('item-1', 1, 100000, 5)">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2: Camping Chair -->
+<div class="rounded-xl bg-surface-container-low p-space-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-4">
+<div class="flex items-center gap-space-3 min-w-0">
+<div class="w-14 h-14 rounded-lg bg-surface-container-highest overflow-hidden flex-shrink-0 flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Lightweight foldable camping chair, outdoor tactical style, matte aluminum legs, neutral studio presentation against light gray backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiv1aoUW1i3DmQs9LEZIo18zjvBaT6eUsYZYOHqlA6jxjBD8IVL9cyNA0eP0r7Gxiwy966OdmrhSq-ez8k-qhNzRl8Gpl7Ymtyge_l_87xmrZUvcNJQtiQOgoUfn5m6y-TkrT7RwOSnJLU-03J4-rf1QhGgLHc6pqFjccsRhhzojgaLcDRowKcbUMgMGK88jez39AjWpYPjtcNqNF3-OK3_tz4eCaeS6EGEOSnGdVy5JW9zlfbFBxixA"/>
+</div>
+<div class="min-w-0 flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Camping Chair Ergonomic</span>
+<div class="flex items-center gap-space-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rp25.000 / day</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm-medium text-body-sm-medium text-secondary">8 in stock</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface mt-1" id="subtotal-item-2">2 units × 2 days = Rp100.000</span>
+</div>
+</div>
+<!-- Quantity Stepper -->
+<div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-space-3 pt-space-2 sm:pt-0">
+<span class="sm:hidden font-label-sm text-label-sm text-on-surface-variant">Qty:</span>
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button aria-label="Decrease Chair count" class="w-9 h-9 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="updateQty('item-2', -1, 25000, 8)">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-10 text-center font-mono-data text-mono-data text-on-surface" id="qty-item-2">2</span>
+<button aria-label="Increase Chair count" class="w-9 h-9 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="updateQty('item-2', 1, 25000, 8)">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3: Kompor Portable -->
+<div class="rounded-xl bg-surface-container-low p-space-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-4">
+<div class="flex items-center gap-space-3 min-w-0">
+<div class="w-14 h-14 rounded-lg bg-surface-container-highest overflow-hidden flex-shrink-0 flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Compact portable single-burner butane camp stove in clean black finish, isolated on soft ambient background, high clarity B2B equipment catalog style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0WiaB9DKAxsHCerTfTymVq4sTukGLwGVWAS6UwUFFgXmr41q98rBulTai7_pMyi45YG13k-bWrIg1Mkoc3Vp_wRSOPZgOO5hsU03xNT0aCjASQKDhVLdP_h8g4cyXeozRFu5B63Rs4wQpio1Mz4OJzGfocPU4f-oNZTB4XHhmnbBIHlFssOMdg8nSWsQD5mQ1kGeqb_32yTnnpFTgWgaqcrK6oVn62yk2o17Fv0o-skLW5idbxWQBOA"/>
+</div>
+<div class="min-w-0 flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Kompor Portable Windproof</span>
+<div class="flex items-center gap-space-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rp35.000 / day</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm-medium text-body-sm-medium text-secondary">4 in stock</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface mt-1" id="subtotal-item-3">0 units × 2 days = Rp0</span>
+</div>
+</div>
+<!-- Quantity Stepper -->
+<div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-space-3 pt-space-2 sm:pt-0">
+<span class="sm:hidden font-label-sm text-label-sm text-on-surface-variant">Qty:</span>
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button aria-label="Decrease Stove count" class="w-9 h-9 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="updateQty('item-3', -1, 35000, 4)">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-10 text-center font-mono-data text-mono-data text-on-surface" id="qty-item-3">0</span>
+<button aria-label="Increase Stove count" class="w-9 h-9 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="updateQty('item-3', 1, 35000, 4)">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 4: Tenda 6P (Unavailable showcase) -->
+<div class="rounded-xl bg-surface-container-low/60 p-space-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-4 opacity-75">
+<div class="flex items-center gap-space-3 min-w-0">
+<div class="w-14 h-14 rounded-lg bg-surface-container-high overflow-hidden flex-shrink-0 relative flex items-center justify-center">
+<img class="w-full h-full object-cover grayscale" data-alt="Large family size 6-person camping tent set up under overcast sky, high quality product visual, desaturated contrast for out of stock status" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABXc7_UJ_FUtzMxOusP3PJG2Sfz07pgIjlWlef70XDdDqyCrC1qfDhfFIdBWaeI_JD-hXJW5gyqlQV03oRlNqx6bVPWqsAczJkkR3B1QJyG4zSRfrqj9Mjsoa9Xsa6Ek_CCzToqYVbL1wX_oHeGYB8106H7r_SlLfdnIrAPbmBsQWka-x1VE7ao5FS5Dx12sQIRhhssQ7Gcv9aA-sWn9xonDDj5GQEudgEA9cC8gbRdk-A32DAKa6gpA"/>
+<div class="absolute inset-0 bg-inverse-surface/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface text-[20px]">block</span>
+</div>
+</div>
+<div class="min-w-0 flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface-variant truncate">Tenda 6P Expedition</span>
+<div class="flex items-center gap-space-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rp160.000 / day</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm-medium text-body-sm-medium text-error">0 in stock</span>
+</div>
+<span class="font-body-sm text-body-sm text-error/90 mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                All units reserved until 15 Sep
+              </span>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-space-3 pt-space-2 sm:pt-0">
+<span class="sm:hidden font-label-sm text-label-sm text-on-surface-variant">Status:</span>
+<div class="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+              Unavailable
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: Financial Summary Breakdown -->
+<section class="rounded-xl bg-surface-container-lowest p-space-4 sm:p-space-6 shadow-sm space-y-space-4">
+<div class="flex items-center gap-space-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-on-surface">
+<span class="font-label-sm text-label-sm">4</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Financial Summary</h3>
+</div>
+<div class="space-y-space-3 pt-space-1">
+<!-- Subtotal -->
+<div class="flex items-center justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Equipment Subtotal (2 items, 2 days)</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium" id="summary-subtotal">Rp500.000</span>
+</div>
+<!-- Deposit (Distinct Guarantee) -->
+<div class="flex items-start justify-between font-body-md text-body-md text-on-surface-variant">
+<div class="flex flex-col">
+<span class="text-on-surface">Deposit / Guarantee</span>
+<span class="font-body-sm text-body-sm text-secondary">Refundable upon undamaged equipment return</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Rp100.000</span>
+</div>
+<!-- Prominent Rental Total Container -->
+<div class="p-space-3 rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Rental Total</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Excluding refundable guarantee</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface" id="summary-total">Rp500.000</span>
+</div>
+<!-- Initial Payment Log -->
+<div class="flex items-center justify-between font-body-md text-body-md text-on-surface-variant pt-space-1">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">payments</span>
+<span>Initial Payment Recorded (BCA Transfer)</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">- Rp300.000</span>
+</div>
+<!-- Amount Due on Pickup (Slate/Neutral Bold Emphasis) -->
+<div class="p-space-3 rounded-lg bg-inverse-surface text-inverse-on-surface flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm tracking-wider uppercase text-inverse-on-surface/70">Remaining Balance</span>
+<span class="font-headline-sm text-headline-sm text-inverse-on-surface">Amount Due on Pickup</span>
+</div>
+<span class="font-headline-md text-headline-md font-mono-data text-inverse-on-surface" id="summary-due">Rp200.000</span>
+</div>
+</div>
+<!-- Operational Internal Notes -->
+<div class="pt-space-2 space-y-space-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="booking-notes">Operational Notes &amp; Handover Details</label>
+<textarea class="w-full p-space-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary resize-none" id="booking-notes" placeholder="Add pickup specifics, condition requests, or notes..." rows="2">Customer will pick up Saturday morning. Tent inspection checklist requested.</textarea>
+</div>
+</section>
+</div>
+<!-- Sticky Bottom Operational Action Bar -->
+<div class="fixed bottom-0 inset-x-0 z-40 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-container-padding-mobile py-space-3 pb-safe">
+<div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-3">
+<!-- Fast Glance Metadata -->
+<div class="flex items-center justify-between w-full sm:w-auto gap-space-4">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rental Total: <span class="font-mono-data font-semibold text-on-surface" id="bar-total">Rp500.000</span></span>
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface">Due on Handover: <span class="font-mono-data text-secondary font-bold" id="bar-due">Rp200.000</span></span>
+</div>
+<span class="sm:hidden px-2 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">2 Days</span>
+</div>
+<!-- Action Buttons (Touch Accessible 44px+) -->
+<div class="flex items-center gap-space-2 w-full sm:w-auto">
+<button class="flex-1 sm:flex-initial h-11 px-space-4 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center" onclick="saveDraftAction()" type="button">
+          Save as Draft
+        </button>
+<button class="flex-1 sm:flex-initial h-11 px-space-6 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-colors flex items-center justify-center gap-space-1 shadow-sm" onclick="createBookingAction()" type="button">
+<span>Confirm &amp; Create Booking</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let quantities = {
+    'item-1': 2,
+    'item-2': 2,
+    'item-3': 0
+  };
+  const prices = {
+    'item-1': 100000,
+    'item-2': 25000,
+    'item-3': 35000
+  };
+  const days = 2;
+  const initialPayment = 300000;
+
+  function updateQty(itemId, delta, price, maxStock) {
+    const current = quantities[itemId] || 0;
+    const next = Math.max(0, Math.min(maxStock, current + delta));
+    quantities[itemId] = next;
+
+    document.getElementById(`qty-${itemId}`).textContent = next;
+    const subtotal = next * price * days;
+    document.getElementById(`subtotal-${itemId}`).textContent = `${next} units × ${days} days = Rp${subtotal.toLocaleString('id-ID')}`;
+
+    recalculate();
+  }
+
+  function recalculate() {
+    let totalEquipment = 0;
+    for (const id in quantities) {
+      totalEquipment += quantities[id] * prices[id] * days;
+    }
+
+    const dueAmount = Math.max(0, totalEquipment - initialPayment);
+
+    const formattedTotal = 'Rp' + totalEquipment.toLocaleString('id-ID');
+    const formattedDue = 'Rp' + dueAmount.toLocaleString('id-ID');
+
+    document.getElementById('summary-subtotal').textContent = formattedTotal;
+    document.getElementById('summary-total').textContent = formattedTotal;
+    document.getElementById('summary-due').textContent = formattedDue;
+    document.getElementById('bar-total').textContent = formattedTotal;
+    document.getElementById('bar-due').textContent = formattedDue;
+  }
+
+  function toggleCustomerSearch() {
+    const box = document.getElementById('customer-search-box');
+    box.classList.toggle('hidden');
+    box.classList.toggle('flex');
+    if (!box.classList.contains('hidden')) {
+      document.getElementById('cust-search').focus();
+    }
+  }
+
+  function createBookingAction() {
+    const toast = document.getElementById('toast-banner');
+    toast.classList.remove('-translate-y-28', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      dismissToast();
+    }, 4000);
+  }
+
+  function dismissToast() {
+    const toast = document.getElementById('toast-banner');
+    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.classList.add('-translate-y-28', 'opacity-0', 'pointer-events-none');
+  }
+
+  function saveDraftAction() {
+    const toast = document.getElementById('toast-banner');
+    toast.querySelector('.font-body-md-medium').textContent = 'Draft Saved';
+    toast.querySelector('.font-body-sm').textContent = 'Draft BK-AUTO saved to workspace';
+    createBookingAction();
+  }
+</script></main></body></html>

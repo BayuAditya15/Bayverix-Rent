@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-surface": "#213145", "on-primary": "#ffffff", "outline": "#76777d", "on-primary-fixed": "#131b2e", "secondary": "#0051d5", "primary-fixed": "#dae2fd", "secondary-fixed": "#dbe1ff", "surface-container-high": "#dce9ff", "inverse-on-surface": "#eaf1ff", "surface-bright": "#f8f9ff", "surface-dim": "#cbdbf5", "surface-tint": "#565e74", "secondary-container": "#316bf3", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#003ea8", "outline-variant": "#c6c6cd", "surface": "#f8f9ff", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed": "#00174b", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#b87500", "background": "#f8f9ff", "on-background": "#0b1c30", "tertiary-container": "#2a1700", "on-surface": "#0b1c30", "surface-container": "#e5eeff", "primary": "#000000", "on-secondary-container": "#fefcff", "on-surface-variant": "#45464d", "surface-container-highest": "#d3e4fe", "surface-container-low": "#eff4ff", "on-secondary": "#ffffff", "error": "#ba1a1a", "secondary-fixed-dim": "#b4c5ff", "on-primary-container": "#7c839b", "on-error-container": "#93000a", "error-container": "#ffdad6", "tertiary-fixed": "#ffddb8", "primary-fixed-dim": "#bec6e0", "tertiary": "#000000", "on-primary-fixed-variant": "#3f465c", "inverse-primary": "#bec6e0", "primary-container": "#131b2e", "on-tertiary-fixed-variant": "#653e00", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "surface-variant": "#d3e4fe" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-8": "32px", "space-6": "24px", "container-padding-desktop": "32px", "container-padding-mobile": "16px", "gutter-mobile": "12px", "space-1": "4px", "space-3": "12px", "space-4": "16px", "gutter-desktop": "16px", "space-2": "8px", "container-padding-tablet": "24px" }, fontFamily: { "headline-md": ["Inter"], "display": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "headline-sm": ["Inter"], "display-mobile": ["Inter"], "body-sm-medium": ["Inter"], "body-sm": ["Inter"], "label-md": ["Inter"], "mono-data": ["JetBrains Mono"], "body-md-medium": ["Inter"] }, fontSize: { "headline-md": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-md": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm-medium": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.005em", "fontWeight": "500" }], "mono-data": ["12px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-md-medium": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }] } } } }</script></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased"><header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-container-padding-mobile flex items-center justify-between gap-space-3"><div class="flex items-center gap-space-2 min-w-0"><img alt="RentPro Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5N7VVCSO5u7HHFFleezMxKmo4DufK-8a6vQuVWU4DfRavk5W71Y6_qwCuInKQ5T-5TbedMLOFwobJlZTJu7o_RBLvDTpqGOHvXDn9FhBQdGG6iJchr4JFToq2Glft7yCtYqnwpPE4R3ji9gsa1i1HAUHlpgCZ_v8jytC_-nKgLZLOvtSck2EwrGlnppPUJFgZoZuXStGW5C-0ew1pDYKgA-REgnKoVL1Rb0TGz_opaoej6xQIYvlhUA"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-on-surface truncate leading-tight">RentPro</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate uppercase tracking-wider">Inventory</span></div></div><div class="flex items-center gap-space-2 flex-shrink-0"><button aria-label="Quick Search" class="w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">search</span></button><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors relative"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-secondary"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full pb-10">
+<!-- Top Operational Banner & Primary Action -->
+<div class="px-container-padding-mobile pt-space-4 pb-space-3 bg-surface-container-low shadow-sm">
+<div class="flex items-start justify-between gap-space-3">
+<div class="flex flex-col min-w-0">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface truncate">Rental Inventory</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-space-1">Track item availability, unit stock, maintenance, and rental rates</p>
+</div>
+<button class="flex items-center justify-center gap-1.5 h-9 px-space-3 bg-primary text-on-primary rounded-lg shadow-sm hover:opacity-95 active:scale-95 transition-all flex-shrink-0" onclick="openEditModal('New Item', 'Tents', '0', 1, '0', false)">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="font-label-md text-label-md">New Item</span>
+</button>
+</div>
+<!-- KPI Metric Summary (2x2 Grid) -->
+<div class="grid grid-cols-2 gap-space-2 mt-space-4">
+<div class="bg-surface-container-lowest p-space-3 rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Stock</span>
+<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-space-1">
+<span class="font-display-mobile text-display-mobile text-on-surface">142</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">items</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant">6 active categories</span>
+</div>
+<div class="bg-surface-container-lowest p-space-3 rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Available Now</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-space-1">
+<span class="font-display-mobile text-display-mobile text-secondary">98</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">units</span>
+</div>
+<span class="font-mono-data text-mono-data text-secondary">69.0% ready dispatch</span>
+</div>
+<div class="bg-surface-container-lowest p-space-3 rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">In Field</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-space-1">
+<span class="font-display-mobile text-display-mobile text-on-surface">38</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">units</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant">14 active contracts</span>
+</div>
+<div class="bg-surface-container-lowest p-space-3 rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-tertiary-container uppercase tracking-wider">Maintenance</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-space-1">
+<span class="font-display-mobile text-display-mobile text-on-tertiary-container">6</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">units</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-tertiary-container">Requires inspection</span>
+</div>
+</div>
+</div>
+<!-- Search & Filter Controls -->
+<div class="px-container-padding-mobile pt-space-4 space-y-space-3">
+<!-- Live Search Field -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[20px] text-on-surface-variant">search</span>
+<input class="w-full h-10 pl-10 pr-9 bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-sm placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-0" placeholder="Search gear name, SKU, serial number..." type="text"/>
+<button class="absolute right-2.5 top-2.5 text-on-surface-variant hover:text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Category Pills (Horizontal Scroll) -->
+<div class="flex items-center gap-space-2 overflow-x-auto no-scrollbar py-0.5">
+<button class="flex items-center gap-1.5 h-7 px-space-3 rounded-full bg-primary text-on-primary font-label-sm text-label-sm whitespace-nowrap shadow-sm">
+<span>All</span>
+<span class="opacity-75 font-mono-data text-mono-data">48</span>
+</button>
+<button class="flex items-center gap-1.5 h-7 px-space-3 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm whitespace-nowrap transition-colors">
+<span>Tents</span>
+<span class="opacity-60 font-mono-data text-mono-data">12</span>
+</button>
+<button class="flex items-center gap-1.5 h-7 px-space-3 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm whitespace-nowrap transition-colors">
+<span>Sleeping</span>
+<span class="opacity-60 font-mono-data text-mono-data">14</span>
+</button>
+<button class="flex items-center gap-1.5 h-7 px-space-3 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm whitespace-nowrap transition-colors">
+<span>Cooking</span>
+<span class="opacity-60 font-mono-data text-mono-data">10</span>
+</button>
+<button class="flex items-center gap-1.5 h-7 px-space-3 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm whitespace-nowrap transition-colors">
+<span>Backpacks</span>
+<span class="opacity-60 font-mono-data text-mono-data">8</span>
+</button>
+<button class="flex items-center gap-1.5 h-7 px-space-3 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm whitespace-nowrap transition-colors">
+<span>Lighting</span>
+<span class="opacity-60 font-mono-data text-mono-data">4</span>
+</button>
+</div>
+<!-- Secondary Availability Selector -->
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Filtering Stock:</span>
+<div class="relative">
+<select class="appearance-none bg-surface-container text-on-surface font-label-sm text-label-sm pl-2.5 pr-7 py-1 rounded-md shadow-sm focus:outline-none">
+<option>All Status (48)</option>
+<option>Available Now (32)</option>
+<option>Low Stock (3)</option>
+<option>Maintenance / Inspection (4)</option>
+</select>
+<span class="material-symbols-outlined absolute right-1.5 top-1 pointer-events-none text-[16px] text-on-surface-variant">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Inventory Items List (Operational Mobile Bento Cards) -->
+<div class="px-container-padding-mobile mt-space-3 space-y-space-3">
+<!-- Item 1: Tenda 4P Waterproof -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start gap-space-3">
+<img class="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container" data-alt="High resolution studio product photograph of a modern 4-person waterproof dome camping tent pitched on a slate gray surface with subtle technical gear details, clean lighting, minimalist outdoor apparel look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM0vqs6WC9kM5r73d1ha-d6jHaMJj23us6Qij9um3lDPUAorG_liAj5Vkg9nMrKACqgKNMNIYAAD5XjA87wkdtca9GGLdy6b071j6C6YC3XlAVMbAhV2TuHyLI6GZw3vbjj4V_O7zmQnJYSWLvGUYiYBekJDhtfxwSj6qeX5eMbpmO-QZFpkZB1KmdJAJXXJUMdmPYhE0wUvtE5BSx8Ya5Qftl6CKLGJcTkn8i0532zXV3jyOseLDgOA"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-secondary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Active
+            </span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-mono-data">Rp100.000<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-1">Tenda 4P Waterproof (Dome)</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant truncate">SKU: GEAR-T4P-01 • Tents</p>
+</div>
+</div>
+<!-- Availability Progress Segment -->
+<div class="bg-surface-container-low p-space-3 rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-on-surface font-body-sm-medium">5 Available <span class="text-on-surface-variant font-normal">/ 8 Total</span></span>
+<span class="text-on-surface-variant">3 Rented in Field</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-secondary rounded-full" style="width: 62.5%;"></div>
+<div class="h-full bg-secondary-container" style="width: 37.5%;"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant font-mono-data pt-0.5">
+<span>Good Condition (Grade A)</span>
+<span class="text-secondary font-medium">62.5% free</span>
+</div>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center justify-between pt-1 gap-space-2">
+<button class="flex-1 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="openEditModal('Tenda 4P Waterproof', 'Tents', '100.000', 8, '1.400.000', true)">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit</span>
+</button>
+<button class="flex-1 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="triggerToast('Viewing availability calendar for GEAR-T4P-01')">
+<span class="material-symbols-outlined text-[16px]">date_range</span>
+<span>Schedule</span>
+</button>
+<button aria-label="Stock Log" class="w-8 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded-md flex items-center justify-center shadow-sm transition-colors" onclick="triggerToast('Stock movement ledger opened')">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+</div>
+</div>
+<!-- Item 2: Camping Chair Ergonomic -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start gap-space-3">
+<img class="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container" data-alt="Product photo of an ultra lightweight ergonomic folding camp chair with navy ripstop nylon and matte black aluminum frame isolated on studio background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqtCEn5bsiHsZLP-TpPPs6-meLFQlzZH58I6lt2IrquxvUwj5_D0tKvkfWKNZ1vMqmkTLkMYmwucggZvXJX4fGJCmHnvdz8DT0lCii_kb2-Mhg4T3iXMEsVKLoZS6bsapGPcbB1EPE1j1QvTiLTgi41D0vHTRi5AE2M73twFMjGwuimNmTs4jS_F-ltAuEAzOCgTk2d9uTKx7Y6dhhzARSR5R_GG-YXveB-LT7cqt1TdsvKljLCzx-sQ"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-secondary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Active
+            </span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-mono-data">Rp25.000<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-1">Camping Chair Ergonomic</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant truncate">SKU: GEAR-CHR-02 • Furniture &amp; Camp</p>
+</div>
+</div>
+<!-- Availability Progress -->
+<div class="bg-surface-container-low p-space-3 rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-on-surface font-body-sm-medium">8 Available <span class="text-on-surface-variant font-normal">/ 10 Total</span></span>
+<span class="text-on-surface-variant">2 Rented</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-secondary rounded-full" style="width: 80%;"></div>
+<div class="h-full bg-secondary-container" style="width: 20%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-space-2">
+<button class="flex-1 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="openEditModal('Camping Chair Ergonomic', 'Furniture &amp; Camp', '25.000', 10, '350.000', false)">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit</span>
+</button>
+<button class="px-3 h-8 bg-surface-container hover:bg-surface-container-high text-error font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="triggerToast('Camping Chair deactivated from rental pool')">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+<span>Deactivate</span>
+</button>
+</div>
+</div>
+<!-- Item 3: Kompor Portable Windproof -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start gap-space-3">
+<img class="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container" data-alt="Compact portable camping gas stove with windproof lotus baffle petals in clean brushed stainless steel on minimalist studio base." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAR9G13vaht7knamLy9m0Q0DxHLLhuM0b7fAJ69_j5o7mV9SY9JFuEE0ORZB0IQ7ijr0ywygJCVR0euVJoP1b08TPDTWZSHdoy9Z1TncWnBqeck6tSgu-5DUsYybl-D5yr52_QdWD00W9vN4CD-PqY3hLzeEi50UQVWcO82VC_e-5nap4l8Gs6l8dsp-2A51EPVGLoHfdljjoZE3nZhDbzn0YVAse3ip2f9Sl9Ot6Dw2xa-FcW6kQ9Xg"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-secondary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Active
+            </span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-mono-data">Rp35.000<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-1">Kompor Portable Windproof</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant truncate">SKU: GEAR-KMP-01 • Cooking</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-3 rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-on-surface font-body-sm-medium">4 Available <span class="text-on-surface-variant font-normal">/ 6 Total</span></span>
+<span class="text-on-surface-variant">2 in Field</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-secondary rounded-full" style="width: 66%;"></div>
+<div class="h-full bg-secondary-container" style="width: 34%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-space-2">
+<button class="flex-1 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="openEditModal('Kompor Portable Windproof', 'Cooking', '35.000', 6, '280.000', true)">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit</span>
+</button>
+<button class="px-3 h-8 bg-surface-container hover:bg-surface-container-high text-error font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="triggerToast('Cooking gear item paused')">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+<span>Deactivate</span>
+</button>
+</div>
+</div>
+<!-- Item 4: Tenda 6P Expedition Heavy Duty (Out of Stock) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start gap-space-3">
+<img class="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container" data-alt="Rugged alpine 6-person expedition dome tent in deep navy and signal orange set against dramatic mist, studio product photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA6hYi3KReG_u1Zv4tmfNXUPLgBAfAJ2Do4gaKAACf_uA1aPgmF6LgloQhqCYIVQtzhEBAM3Qyq0YzCvh1nyKRa0spxt2nOelfI199qzeqRxJLo2I-UWjTMczUa0lCfqAv0MtAQ_XWPeznjVF3L5VkezVrBJr9I5ans5MdEH91D4jKdW6k9pe57pHkFcr4jpCz0JZKedqVm6m-mBedp9DGGOII5MeDLXVXOrDsXyEF7frDw-H0ZJU7UQ"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+              Out of Stock
+            </span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-mono-data">Rp160.000<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-1">Tenda 6P Expedition Heavy</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant truncate">SKU: GEAR-T6P-01 • Tents</p>
+</div>
+</div>
+<div class="bg-error-container/40 p-space-3 rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm text-on-error-container">
+<span class="font-body-sm-medium">0 Available / 4 Total</span>
+<span class="font-mono-data">All in field until 15 Sep</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full w-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-space-2">
+<button class="flex-1 h-8 bg-surface-container-high text-secondary font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm hover:opacity-90 transition-colors" onclick="triggerToast('Viewing 4 active bookings for 6P Expedition')">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>View Bookings</span>
+</button>
+<button class="px-4 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="openEditModal('Tenda 6P Expedition Heavy', 'Tents', '160.000', 4, '3.200.000', true)">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit</span>
+</button>
+</div>
+</div>
+<!-- Item 5: Carrier 60L Pro Trekker (Low Stock Alert) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start gap-space-3">
+<img class="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container" data-alt="Technical 60 liter expedition trekking backpack in dark graphite cordura fabric with compression straps and ergonomic harness, crisp commercial lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD_Qz1NJOANOuavqxCSZsSPyAPNRgc6ukD9eTW0ARqoKlT8Ihpy6JZcl-AynIpHlv8YjDdrfB73C40jGk6TcR5vDwtbRjgnpc65ONwEXFKRaU1CVbQ7TZxnc3OksAt116t_jRI14GrtYjUDu335GxstLQfwnjV3V-bJwHdQR-tJa58iP4sYKctSVDj6w_3u6nY87WHs6-QKlhZ6oyPxX1W97p-08inD2f2JhwcGOJXD8evaMItxLL37Q"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-on-tertiary-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim animate-ping"></span>
+              Low Stock Alert
+            </span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-mono-data">Rp50.000<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-1">Carrier 60L Pro Trekker</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant truncate">SKU: GEAR-CAR-60 • Backpacks</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-3 rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-on-tertiary-container font-body-sm-medium">1 Available <span class="text-on-surface-variant font-normal">/ 5 Total</span></span>
+<span class="text-on-surface-variant">4 currently dispatched</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-tertiary-fixed-dim rounded-full" style="width: 20%;"></div>
+<div class="h-full bg-secondary-container" style="width: 80%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 gap-space-2">
+<button class="flex-1 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="openEditModal('Carrier 60L Pro Trekker', 'Backpacks', '50.000', 5, '1.100.000', false)">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit</span>
+</button>
+<button class="px-3 h-8 bg-surface-container hover:bg-surface-container-high text-error font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="triggerToast('Backpack inventory marked inactive')">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+<span>Deactivate</span>
+</button>
+</div>
+</div>
+<!-- Item 6: Lampu Tenda LED Rechargeable (Maintenance Required) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start gap-space-3">
+<img class="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container" data-alt="Modern frosted cylindrical LED camp lantern with warm amber ambient glow and magnetic carabiner hook on industrial matte dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgKRD0gLz3B6cJy7saJ5t7GuUa00_JTuRjeld02BjVtafCF27K4PuBSBHHxKHda3ogkRgk4u3EfbYRSpF8BpDj0Wq8DIwprAZpcnoAv80JduQSOgH8OQJquEN6CQ1uCdqThwvTXX5oHAupc5OqG7cINjf73xjOhPIVqMOuv9BZfNJBpYGJAglWMPiYf_TZHWdCzckWC392rcUoAGIt8TaMfAcaEceoBN9XlNQjtSKiygakfOv0MKktHg"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+              Maintenance Req.
+            </span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-mono-data">Rp15.000<span class="font-body-sm text-body-sm text-on-surface-variant">/day</span></span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-1">Lampu Tenda LED Rechargeable</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant truncate">SKU: GEAR-LMP-03 • Lighting</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-3 rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-on-surface font-body-sm-medium">10 Available <span class="text-on-surface-variant font-normal">/ 12 Total</span></span>
+<span class="text-on-tertiary-container font-mono-data">2 in Inspection Bay</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-secondary rounded-full" style="width: 83.3%;"></div>
+<div class="h-full bg-tertiary-fixed-dim" style="width: 16.7%;"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant font-mono-data">Action required: Full battery discharge test &amp; clean casing</p>
+</div>
+<div class="flex items-center justify-between pt-1 gap-space-2">
+<button class="flex-1 h-8 bg-secondary text-on-secondary font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm hover:opacity-90 transition-colors" onclick="triggerToast('Maintenance marked complete: 2 units cleared for booking!')">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Complete Service</span>
+</button>
+<button class="px-4 h-8 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md flex items-center justify-center gap-1 shadow-sm transition-colors" onclick="openEditModal('Lampu Tenda LED', 'Lighting', '15.000', 12, '180.000', true)">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination Operational Workhorse -->
+<div class="px-container-padding-mobile mt-space-6 flex flex-col items-center gap-space-3">
+<div class="flex items-center justify-between w-full text-on-surface-variant font-body-sm text-body-sm">
+<span>Showing <span class="font-body-sm-medium text-on-surface">1 - 6</span> of 48 items</span>
+<span class="font-mono-data text-mono-data">Page 1 of 8</span>
+</div>
+<div class="flex items-center justify-center gap-space-1 w-full">
+<button class="h-9 px-3 rounded-lg bg-surface-container text-on-surface-variant disabled:opacity-40 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="h-9 w-9 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center shadow-sm">1</button>
+<button class="h-9 w-9 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="triggerToast('Navigating to Page 2')">2</button>
+<button class="h-9 w-9 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="triggerToast('Navigating to Page 3')">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="h-9 w-9 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="triggerToast('Navigating to Page 8')">8</button>
+<button class="h-9 px-3 rounded-lg bg-surface-container text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="triggerToast('Navigating to Page 2')">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Quick Edit Slide-Over Modal / Drawer Backdrop -->
+<div class="fixed inset-0 z-50 hidden transition-opacity duration-200" id="quickEditModal">
+<div class="absolute inset-0 bg-primary-container/50 backdrop-blur-xs" onclick="closeEditModal()"></div>
+<div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest rounded-t-2xl shadow-xl max-h-[90vh] overflow-y-auto flex flex-col z-10 transition-transform duration-300">
+<!-- Drawer Header -->
+<div class="sticky top-0 bg-surface-container-lowest px-space-4 py-space-3 flex items-center justify-between shadow-sm z-20">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">edit_note</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate" id="modalItemTitle">Edit Inventory Item</h2>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Operational Metadata &amp; Rules</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center hover:text-on-surface" onclick="closeEditModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Drawer Content Form -->
+<div class="p-space-4 space-y-space-4">
+<!-- Item Name -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Gear / Asset Name</label>
+<input class="w-full h-10 px-space-3 bg-surface-container-low text-on-surface rounded-lg font-body-md text-body-md focus:outline-none" id="editItemNameInput" type="text" value="Tenda 4P Waterproof"/>
+</div>
+<!-- Category & Daily Rate Row -->
+<div class="grid grid-cols-2 gap-space-3">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Category</label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-7 bg-surface-container-low text-on-surface rounded-lg font-body-md text-body-md appearance-none focus:outline-none" id="editCategorySelect">
+<option value="Tents">Tents</option>
+<option value="Furniture &amp; Camp">Furniture</option>
+<option value="Cooking">Cooking</option>
+<option value="Backpacks">Backpacks</option>
+<option value="Lighting">Lighting</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 pointer-events-none text-[18px] text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Daily Rate (Rp)</label>
+<input class="w-full h-10 px-space-3 bg-surface-container-low text-on-surface rounded-lg font-mono-data text-mono-data focus:outline-none text-right" id="editDailyRateInput" type="text" value="100.000"/>
+</div>
+</div>
+<!-- Total Stock Counter & Replacement Value -->
+<div class="grid grid-cols-2 gap-space-3">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Total Fleet Units</label>
+<div class="flex items-center bg-surface-container-low rounded-lg h-10 px-1">
+<button class="w-8 h-8 rounded bg-surface-container text-on-surface flex items-center justify-center active:scale-95 transition-transform" onclick="decrementStock()">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<span class="flex-1 text-center font-mono-data text-mono-data text-on-surface font-semibold" id="stockCounterDisplay">8</span>
+<button class="w-8 h-8 rounded bg-surface-container text-on-surface flex items-center justify-center active:scale-95 transition-transform" onclick="incrementStock()">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Replacement (Rp)</label>
+<input class="w-full h-10 px-space-3 bg-surface-container-low text-on-surface rounded-lg font-mono-data text-mono-data focus:outline-none text-right" id="editReplacementInput" type="text" value="1.400.000"/>
+</div>
+</div>
+<!-- Mandatory Maintenance Inspection Protocol -->
+<div class="bg-surface-container-low p-space-3 rounded-xl space-y-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">checklist</span>
+            Standard Inspection Checklist
+          </span>
+<div class="space-y-2">
+<label class="flex items-center gap-space-2 text-on-surface cursor-pointer">
+<input checked="" class="w-4 h-4 rounded text-secondary focus:ring-0" id="checkClean" type="checkbox"/>
+<span class="font-body-sm text-body-sm">Post-trip cleaning &amp; sanitization check</span>
+</label>
+<label class="flex items-center gap-space-2 text-on-surface cursor-pointer">
+<input checked="" class="w-4 h-4 rounded text-secondary focus:ring-0" id="checkPoles" type="checkbox"/>
+<span class="font-body-sm text-body-sm">Hardware &amp; accessories physical inventory</span>
+</label>
+<label class="flex items-center gap-space-2 text-on-surface cursor-pointer">
+<input class="w-4 h-4 rounded text-secondary focus:ring-0" id="checkWaterproof" type="checkbox"/>
+<span class="font-body-sm text-body-sm">Seam seal &amp; waterproofing spray applied</span>
+</label>
+</div>
+</div>
+<!-- Modal Action Buttons -->
+<div class="pt-space-2 space-y-space-2">
+<button class="w-full h-11 bg-primary text-on-primary rounded-lg font-headline-sm text-headline-sm flex items-center justify-center gap-2 shadow-sm hover:opacity-90 active:scale-98 transition-all" onclick="saveItemChanges()">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Save Changes</span>
+</button>
+<button class="w-full h-10 bg-error-container text-on-error-container rounded-lg font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm hover:opacity-90 transition-all" onclick="deactivateFromModal()">
+<span class="material-symbols-outlined text-[18px]">archive</span>
+<span>Deactivate Item</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Feedback Toast -->
+<div class="fixed bottom-20 inset-x-4 max-w-sm mx-auto bg-inverse-surface text-inverse-on-surface px-space-4 py-space-3 rounded-xl shadow-lg flex items-center gap-space-2 transform translate-y-32 opacity-0 pointer-events-none transition-all duration-300 z-50" id="toastNotification">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">info</span>
+<span class="font-body-sm text-body-sm flex-1 truncate" id="toastMessage">Item updated successfully</span>
+</div>
+</div>
+<script>
+  let currentStock = 8;
+
+  function openEditModal(name, category, rate, stock, replacement, isChecked) {
+    const modal = document.getElementById('quickEditModal');
+    document.getElementById('modalItemTitle').innerText = 'Edit ' + name;
+    document.getElementById('editItemNameInput').value = name;
+    document.getElementById('editCategorySelect').value = category;
+    document.getElementById('editDailyRateInput').value = rate;
+    document.getElementById('editReplacementInput').value = replacement;
+    currentStock = stock;
+    document.getElementById('stockCounterDisplay').innerText = stock;
+    document.getElementById('checkWaterproof').checked = isChecked;
+    
+    modal.classList.remove('hidden');
+  }
+
+  function closeEditModal() {
+    document.getElementById('quickEditModal').classList.add('hidden');
+  }
+
+  function incrementStock() {
+    currentStock++;
+    document.getElementById('stockCounterDisplay').innerText = currentStock;
+  }
+
+  function decrementStock() {
+    if (currentStock > 0) {
+      currentStock--;
+      document.getElementById('stockCounterDisplay').innerText = currentStock;
+    }
+  }
+
+  function saveItemChanges() {
+    const name = document.getElementById('editItemNameInput').value;
+    closeEditModal();
+    triggerToast(name + ' settings saved successfully!');
+  }
+
+  function deactivateFromModal() {
+    closeEditModal();
+    triggerToast('Item moved to deactivated catalog.');
+  }
+
+  function triggerToast(message) {
+    const toast = document.getElementById('toastNotification');
+    const label = document.getElementById('toastMessage');
+    label.innerText = message;
+    toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      toast.classList.remove('translate-y-0', 'opacity-100');
+      toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+    }, 2800);
+  }
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-secondary font-body-sm-medium"><div class="flex justify-around items-center h-16 px-space-2"><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Overview</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="bookings" href="#"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="font-label-sm text-label-sm">Bookings</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="calendar" href="#"><span class="material-symbols-outlined text-[22px]">calendar_today</span><span class="font-label-sm text-label-sm">Schedule</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 transition-colors text-secondary font-body-sm-medium" data-path="inventory" href="#"><span class="material-symbols-outlined text-[22px]">category</span><span class="font-label-sm text-label-sm">Inventory</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[22px]">settings</span><span class="font-label-sm text-label-sm">Settings</span></a></div></nav></body></html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-surface": "#213145", "on-primary": "#ffffff", "outline": "#76777d", "on-primary-fixed": "#131b2e", "secondary": "#0051d5", "primary-fixed": "#dae2fd", "secondary-fixed": "#dbe1ff", "surface-container-high": "#dce9ff", "inverse-on-surface": "#eaf1ff", "surface-bright": "#f8f9ff", "surface-dim": "#cbdbf5", "surface-tint": "#565e74", "secondary-container": "#316bf3", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#003ea8", "outline-variant": "#c6c6cd", "surface": "#f8f9ff", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed": "#00174b", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#b87500", "background": "#f8f9ff", "on-background": "#0b1c30", "tertiary-container": "#2a1700", "on-surface": "#0b1c30", "surface-container": "#e5eeff", "primary": "#000000", "on-secondary-container": "#fefcff", "on-surface-variant": "#45464d", "surface-container-highest": "#d3e4fe", "surface-container-low": "#eff4ff", "on-secondary": "#ffffff", "error": "#ba1a1a", "secondary-fixed-dim": "#b4c5ff", "on-primary-container": "#7c839b", "on-error-container": "#93000a", "error-container": "#ffdad6", "tertiary-fixed": "#ffddb8", "primary-fixed-dim": "#bec6e0", "tertiary": "#000000", "on-primary-fixed-variant": "#3f465c", "inverse-primary": "#bec6e0", "primary-container": "#131b2e", "on-tertiary-fixed-variant": "#653e00", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "surface-variant": "#d3e4fe" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-8": "32px", "space-6": "24px", "container-padding-desktop": "32px", "container-padding-mobile": "16px", "gutter-mobile": "12px", "space-1": "4px", "space-3": "12px", "space-4": "16px", "gutter-desktop": "16px", "space-2": "8px", "container-padding-tablet": "24px" }, fontFamily: { "headline-md": ["Inter"], "display": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "headline-sm": ["Inter"], "display-mobile": ["Inter"], "body-sm-medium": ["Inter"], "body-sm": ["Inter"], "label-md": ["Inter"], "mono-data": ["JetBrains Mono"], "body-md-medium": ["Inter"] }, fontSize: { "headline-md": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-md": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm-medium": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.005em", "fontWeight": "500" }], "mono-data": ["12px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-md-medium": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }] } } } }</script></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased"><header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-container-padding-mobile flex items-center justify-between gap-space-3"><div class="flex items-center gap-space-2 min-w-0"><img alt="RentPro Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5N7VVCSO5u7HHFFleezMxKmo4DufK-8a6vQuVWU4DfRavk5W71Y6_qwCuInKQ5T-5TbedMLOFwobJlZTJu7o_RBLvDTpqGOHvXDn9FhBQdGG6iJchr4JFToq2Glft7yCtYqnwpPE4R3ji9gsa1i1HAUHlpgCZ_v8jytC_-nKgLZLOvtSck2EwrGlnppPUJFgZoZuXStGW5C-0ew1pDYKgA-REgnKoVL1Rb0TGz_opaoej6xQIYvlhUA"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-on-surface truncate leading-tight">RentPro</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate uppercase tracking-wider">Dashboard</span></div></div><div class="flex items-center gap-space-2 flex-shrink-0"><button aria-label="Quick Search" class="w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">search</span></button><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors relative"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-secondary"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Toast Notification Component (Self-dismissing micro-delight) -->
+<div class="fixed top-20 right-4 z-50 transform translate-y-[-120%] opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-2 px-space-3 py-space-2 rounded-lg bg-inverse-surface text-inverse-on-surface shadow-xl" id="statusToast">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]">verified</span>
+<span class="font-body-sm-medium text-body-sm-medium" id="statusToastText">Action logged successfully</span>
+</div>
+<div class="w-full max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-tablet lg:px-container-padding-desktop py-space-4 space-y-space-6">
+<!-- Top Greeting & Operational Pulse -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-3">
+<div>
+<div class="flex items-center gap-space-2">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold tracking-tight">Daily Ops Overview</h1>
+<span class="inline-flex items-center gap-1.5 px-space-2 py-0.5 rounded-full bg-surface-container-high text-secondary font-mono-data text-mono-data">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            LIVE
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Fleet &amp; rental dispatch log for today, <span class="font-body-md-medium text-body-md-medium text-on-surface" id="currentDateStr">Thursday, Oct 24</span></p>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center gap-space-2 overflow-x-auto pb-1 sm:pb-0">
+<button class="flex items-center justify-center gap-space-2 h-9 px-space-4 rounded-lg bg-primary text-on-primary shadow-sm hover:bg-primary-container transition-all active:scale-[0.98] flex-shrink-0 cursor-pointer" onclick="handleQuickAction('create_booking')">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="font-label-md text-label-md">Create Booking</span>
+</button>
+<button class="flex items-center justify-center gap-space-2 h-9 px-space-3 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-all active:scale-[0.98] shadow-sm flex-shrink-0 cursor-pointer" onclick="handleQuickAction('check_availability')">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">inventory_2</span>
+<span class="font-label-md text-label-md">Check Availability</span>
+</button>
+<button class="flex items-center justify-center gap-space-2 h-9 px-space-3 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-all active:scale-[0.98] shadow-sm flex-shrink-0 cursor-pointer" onclick="handleQuickAction('record_return')">
+<span class="material-symbols-outlined text-[18px] text-secondary">assignment_return</span>
+<span class="font-label-md text-label-md">Record Return</span>
+</button>
+</div>
+</div>
+<!-- 4 High-Density Operational Metric Cards (No bloated giant charts) -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-space-3">
+<!-- Metric 1: Today's Bookings -->
+<div class="bg-surface-container-lowest p-space-4 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Today's Bookings</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+</div>
+</div>
+<div class="mt-space-3">
+<div class="flex items-baseline gap-space-2">
+<span class="font-display-mobile md:font-display text-display-mobile md:text-display text-on-surface font-semibold leading-none">8</span>
+<span class="font-mono-data text-mono-data text-secondary">Total Booked</span>
+</div>
+<div class="mt-space-2 pt-space-2 flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm bg-surface-container-low px-space-2 py-1 rounded">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 4 Pickups</span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span> 4 Returns</span>
+</div>
+</div>
+</div>
+<!-- Metric 2: Active Rentals -->
+<div class="bg-surface-container-lowest p-space-4 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Active Rentals</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[16px]">hiking</span>
+</div>
+</div>
+<div class="mt-space-3">
+<div class="flex items-baseline gap-space-2">
+<span class="font-display-mobile md:font-display text-display-mobile md:text-display text-on-surface font-semibold leading-none">12</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">units</span>
+</div>
+<div class="mt-space-2 pt-space-2 flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">check_circle</span>
+<span class="truncate">All deployed with tag IDs</span>
+</div>
+</div>
+</div>
+<!-- Metric 3: Outstanding Balance -->
+<div class="bg-surface-container-lowest p-space-4 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Outstanding</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[16px]">pending_actions</span>
+</div>
+</div>
+<div class="mt-space-3">
+<div class="flex flex-col">
+<span class="font-headline-md md:font-display text-headline-md md:text-display text-on-surface font-mono-data font-semibold leading-tight truncate">Rp4.250.000</span>
+</div>
+<div class="mt-space-2 pt-space-2 flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="truncate">3 pending collections</span>
+</div>
+</div>
+</div>
+<!-- Metric 4: Revenue (This Month) -->
+<div class="bg-surface-container-lowest p-space-4 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Revenue (Month)</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[16px]">payments</span>
+</div>
+</div>
+<div class="mt-space-3">
+<div class="flex flex-col">
+<span class="font-headline-md md:font-display text-headline-md md:text-display text-on-surface font-mono-data font-semibold leading-tight truncate">Rp8.500.000</span>
+</div>
+<div class="mt-space-2 pt-space-2 flex items-center gap-1.5 text-secondary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+18.4% vs last cycle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Operational Workspace (Responsive Split Layout: 8-col & 4-col on desktop) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-4 items-start">
+<!-- Left Column: Operations Dispatch & Queue for Today (8 cols) -->
+<div class="lg:col-span-8 space-y-space-4">
+<!-- Returns Due Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-4 flex items-center justify-between bg-surface-container-low/60">
+<div class="flex items-center gap-space-2">
+<div class="w-6 h-6 rounded bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[16px]">assignment_return</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Returns Due Today</h2>
+<span class="px-space-2 py-0.5 text-label-sm font-label-sm rounded bg-surface-container-high text-on-surface-variant">2 Pending</span>
+</div>
+<button class="font-body-sm-medium text-body-sm-medium text-secondary hover:underline flex items-center gap-1 cursor-pointer" onclick="navigateTo('bookings')">
+<span>View All</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<!-- Queue List -->
+<div class="p-space-3 space-y-space-2">
+<!-- Item 1: Dimas Wijaya -->
+<div class="p-space-3 rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-space-3 group" onclick="openInspector('RNT-00019', 'Dimas Wijaya', '2x Tenda 4P', 'Due 14:00', 'ONGOING', 'Rp450.000', 'Transfer BCA', '+62 812-3344-9081')">
+<div class="flex items-start gap-space-3 min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex flex-col items-center justify-center flex-shrink-0 text-on-surface">
+<span class="font-mono-data text-[10px] text-on-surface-variant leading-none">DUE</span>
+<span class="font-headline-sm text-[13px] font-bold text-error leading-tight">14:00</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-space-2">
+<span class="font-mono-data text-mono-data text-secondary font-semibold">RNT-00019</span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface truncate">Dimas Wijaya</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">2x Tenda 4P (Eiger Hyperlight Camp)</p>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-space-3 flex-shrink-0">
+<!-- Status Badge: ONGOING with pulsing dot -->
+<div class="inline-flex items-center gap-1.5 h-[22px] px-2 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm uppercase font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+<span>ONGOING</span>
+</div>
+<button class="h-8 px-space-3 rounded bg-surface-container text-on-surface hover:bg-primary hover:text-on-primary transition-colors text-label-sm font-label-sm flex items-center gap-1" onclick="event.stopPropagation(); triggerCheckIn('RNT-00019')">
+<span class="material-symbols-outlined text-[14px]">check</span>
+<span>Receive</span>
+</button>
+</div>
+</div>
+<!-- Item 2: Siti Rahma -->
+<div class="p-space-3 rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-space-3 group" onclick="openInspector('RNT-00018', 'Siti Rahma', '1x Carrier 60L, 1x Sleeping Bag', 'Due 17:00', 'ONGOING', 'Rp220.000', 'Cash on Return', '+62 856-1122-8874')">
+<div class="flex items-start gap-space-3 min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex flex-col items-center justify-center flex-shrink-0 text-on-surface">
+<span class="font-mono-data text-[10px] text-on-surface-variant leading-none">DUE</span>
+<span class="font-headline-sm text-[13px] font-bold text-on-surface leading-tight">17:00</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-space-2">
+<span class="font-mono-data text-mono-data text-secondary font-semibold">RNT-00018</span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface truncate">Siti Rahma</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">1x Carrier 60L, 1x Sleeping Bag Comfort -5°C</p>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-space-3 flex-shrink-0">
+<!-- Status Badge: ONGOING -->
+<div class="inline-flex items-center gap-1.5 h-[22px] px-2 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm uppercase font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>ONGOING</span>
+</div>
+<button class="h-8 px-space-3 rounded bg-surface-container text-on-surface hover:bg-primary hover:text-on-primary transition-colors text-label-sm font-label-sm flex items-center gap-1" onclick="event.stopPropagation(); triggerCheckIn('RNT-00018')">
+<span class="material-symbols-outlined text-[14px]">check</span>
+<span>Receive</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pickups Scheduled Today Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-4 flex items-center justify-between bg-surface-container-low/60">
+<div class="flex items-center gap-space-2">
+<div class="w-6 h-6 rounded bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Pickups Scheduled Today</h2>
+<span class="px-space-2 py-0.5 text-label-sm font-label-sm rounded bg-surface-container-high text-on-surface-variant">1 Ready</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Self Pick-up Bay A</span>
+</div>
+<!-- Pickups List -->
+<div class="p-space-3">
+<!-- Item 1: Budi Santoso -->
+<div class="p-space-3 rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-space-3 group" onclick="openInspector('RNT-00021', 'Budi Santoso', '2x Tenda 4P, 2x Camping Chair', 'Slot 10:00 AM', 'CONFIRMED', 'Rp580.000', 'Transfer BCA (Paid)', '+62 813-9988-1123')">
+<div class="flex items-start gap-space-3 min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex flex-col items-center justify-center flex-shrink-0 text-on-surface">
+<span class="font-mono-data text-[10px] text-on-surface-variant leading-none">TIME</span>
+<span class="font-headline-sm text-[13px] font-bold text-secondary leading-tight">10:00</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-space-2">
+<span class="font-mono-data text-mono-data text-secondary font-semibold">RNT-00021</span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface truncate">Budi Santoso</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">2x Tenda 4P Dome, 2x Compact Camping Chair</p>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-space-3 flex-shrink-0">
+<!-- Status Badge: CONFIRMED -->
+<div class="inline-flex items-center gap-1.5 h-[22px] px-2 rounded-md bg-surface-container-highest text-on-surface font-label-sm text-label-sm uppercase font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>CONFIRMED</span>
+</div>
+<button class="h-8 px-space-3 rounded bg-primary text-on-primary hover:bg-primary-container transition-colors text-label-sm font-label-sm flex items-center gap-1" onclick="event.stopPropagation(); triggerDispatch('RNT-00021')">
+<span class="material-symbols-outlined text-[14px]">output</span>
+<span>Handover</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Rental Fleet Quick Snapshot / Equipment Showcase -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm">
+<div class="flex items-center justify-between mb-space-3">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Fleet Deployment Density</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Top utilized gear categories this weekend</p>
+</div>
+<button class="font-body-sm-medium text-body-sm-medium text-secondary hover:underline cursor-pointer" onclick="navigateTo('rental-items')">Catalog →</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-3 pt-1">
+<!-- Gear Item 1 -->
+<div class="flex items-center gap-space-3 p-space-2 rounded-lg bg-surface-container-low">
+<img class="w-12 h-12 rounded-lg object-cover flex-shrink-0" data-alt="High quality dome 4-person outdoor camping tent pitched on grass, clean studio commercial photography, natural warm lighting, minimalist product shot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7p-DST-CTocWi8b_MpG0pzmvYkEZm3SKwqcnSY3TZV-UIex3HKZgfJLo0vwzf_2BfrjXLj8EquPngjE2llAUvFD1XFkt8sKz0wBUBhTjLKIAyLqRzKOghpUApALFSt2FKVB-9XBkkKNyY0aep4JiekGxAVugeIV-w0Spgg_sCD9XTMJqCvCKj1Ax_B1OgDExqWuwMKukB-DDtPOjmMhkiptTfhoOyvbd1yiM_PbURbEg0SnUgtCenFw"/>
+<div class="min-w-0 flex-1">
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface truncate block">Dome Tent 4P</span>
+<span class="font-mono-data text-mono-data text-secondary block">6/8 in field (75%)</span>
+</div>
+</div>
+<!-- Gear Item 2 -->
+<div class="flex items-center gap-space-3 p-space-2 rounded-lg bg-surface-container-low">
+<img class="w-12 h-12 rounded-lg object-cover flex-shrink-0" data-alt="Ergonomic tactical hiking backpack 60L, outdoor expedition gear, clean modern commercial style studio background with soft shadow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvnGvk8NiJRD3gkvzhU-i43K4TUhVreddNprOvANyE-mHSWdJUAwSIAVyjvTh8cI4TalIoLm-SD5laGCNyBOvEZNvlQNe8UQovCCzY9yxuhvEvC1oHCa0PLgwFCOWcc07kge1wHPGkAUt1HjoouacOk_K8Jr-QC-sc1YPp47mnG32paUV7lloF2y0Q_ma4y1trxNNfQictuTJd9o_08Ufc7AtPTB5yq4zpBN3sY6UbbAmOjWo6l1a8Mg"/>
+<div class="min-w-0 flex-1">
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface truncate block">Carrier 60L Pro</span>
+<span class="font-mono-data text-mono-data text-secondary block">4/5 in field (80%)</span>
+</div>
+</div>
+<!-- Gear Item 3 -->
+<div class="flex items-center gap-space-3 p-space-2 rounded-lg bg-surface-container-low">
+<img class="w-12 h-12 rounded-lg object-cover flex-shrink-0" data-alt="Compact portable butane camping stove with aluminum cooking set, neatly organized outdoor gear on rustic wood surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBddieejwAGpNJ_46qEjCfrx_xsh6m0xxhPXrXwtofgIoD0QEUtb3vSm_D_EJUM49BBhhbMBnPNROOhKpdw4Q9PS9kl1W71G0MKdV0ogRirbD0QLxRafzdcAneo0Y3sES1LIydKZYfe--EtVWAjQDkMOmD7H6hGICvKkU255z--_e77dyGboexcKzQEHZIU1F1aR7SaRd7GIj4UhYFjq-3fmaKyTkAN8u3UabMZFVGNyatYf233dXDXgA"/>
+<div class="min-w-0 flex-1">
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface truncate block">Camp Stove &amp; Cookware</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant block">2/6 in field (33%)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Recent Payments Stream & Quick Audit (4 cols) -->
+<div class="lg:col-span-4 space-y-space-4">
+<!-- Recent Payments Stream -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-4 bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<div class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[16px]">receipt</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Recent Payments</h2>
+</div>
+<span class="font-mono-data text-[11px] text-secondary bg-surface-container-high px-1.5 py-0.5 rounded">Auto-Reconciled</span>
+</div>
+<div class="p-space-4 space-y-space-3">
+<!-- Payment 1: Andi Pratama -->
+<div class="p-space-3 rounded-lg bg-surface-container-low/70 space-y-2">
+<div class="flex items-start justify-between">
+<div>
+<h4 class="font-body-md-medium text-body-md-medium text-on-surface">Andi Pratama</h4>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Ref: #PAY-8821</span>
+</div>
+<div class="text-right">
+<span class="font-headline-sm text-headline-sm font-mono-data font-semibold text-on-surface block">Rp300.000</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Verified</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">account_balance</span>
+<span>Transfer BCA</span>
+</span>
+<span class="font-mono-data text-mono-data bg-surface-container px-1.5 py-0.5 rounded text-on-surface cursor-pointer hover:underline" onclick="openInspector('RNT-00020', 'Andi Pratama', '1x Tenda 2P, 1x Matras', 'Active until Tomorrow', 'ONGOING', 'Rp300.000', 'Transfer BCA (Paid)', '+62 811-4455-6677')">
+                  → RNT-00020
+                </span>
+</div>
+</div>
+<!-- Payment 2: Riana Kusuma (Contextual Secondary stream item) -->
+<div class="p-space-3 rounded-lg bg-surface-container-low/40 space-y-2">
+<div class="flex items-start justify-between">
+<div>
+<h4 class="font-body-md-medium text-body-md-medium text-on-surface">Riana Kusuma</h4>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Ref: #PAY-8819</span>
+</div>
+<div class="text-right">
+<span class="font-headline-sm text-headline-sm font-mono-data font-semibold text-on-surface block">Rp550.000</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">QRIS Static</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">qr_code_2</span>
+<span>GoPay / BCA QRIS</span>
+</span>
+<span class="font-mono-data text-mono-data bg-surface-container px-1.5 py-0.5 rounded text-on-surface cursor-pointer hover:underline" onclick="openInspector('RNT-00017', 'Riana Kusuma', '3x Sleeping Bag, 1x Lamp', 'Returned Today', 'COMPLETED', 'Rp550.000', 'QRIS (Settled)', '+62 878-9900-1122')">
+                  → RNT-00017
+                </span>
+</div>
+</div>
+<!-- Quick Action to Reconciliation -->
+<button class="w-full h-8 flex items-center justify-center gap-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md cursor-pointer" onclick="showToast('Financial ledger synced with BCA Business API')">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Sync Payment Gateway</span>
+</button>
+</div>
+</div>
+<!-- Quick Operational Checklist / Micro Delight Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm space-y-space-3">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Equipment Readiness</span>
+<span class="font-mono-data text-[11px] text-secondary">Warehouse Bay 2</span>
+</div>
+<div class="space-y-space-2 font-body-sm text-body-sm">
+<label class="flex items-center gap-space-2 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="group-hover:text-on-surface text-on-surface line-through opacity-70">Sanitize 4x returned sleeping bags</span>
+</label>
+<label class="flex items-center gap-space-2 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="group-hover:text-on-surface text-on-surface line-through opacity-70">Inspect poles on RNT-00019</span>
+</label>
+<label class="flex items-center gap-space-2 cursor-pointer group">
+<input class="w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="group-hover:text-on-surface text-on-surface">Stage Budi Santoso's gear at Bay A</span>
+</label>
+<label class="flex items-center gap-space-2 cursor-pointer group">
+<input class="w-4 h-4 rounded text-primary focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="group-hover:text-on-surface text-on-surface">Confirm security deposit for Siti Rahma</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Rental Inspector Slide-Over Panel (Contextual Drawer) -->
+<div class="fixed inset-0 z-50 bg-primary/40 backdrop-blur-[2px] transition-opacity duration-300 opacity-0 pointer-events-none" id="inspectorBackdrop" onclick="closeInspector()"></div>
+<div class="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[420px] bg-surface-container-lowest shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out" id="inspectorPanel">
+<!-- Inspector Header -->
+<div class="h-16 px-space-4 flex items-center justify-between bg-surface-container-low/80">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">quick_reference_all</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold" id="inspRentalId">RNT-00019</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Rental Inspection</span>
+</div>
+</div>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer" onclick="closeInspector()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Inspector Body -->
+<div class="flex-1 overflow-y-auto p-space-4 space-y-space-4">
+<!-- Status & Timeline Header -->
+<div class="p-space-3 rounded-xl bg-surface-container-low flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Current Lifecycle</span>
+<div class="inline-flex items-center gap-1.5 mt-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface font-semibold" id="inspStatus">ONGOING</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Scheduled Window</span>
+<span class="font-mono-data text-mono-data text-secondary font-medium" id="inspDueTime">Due 14:00</span>
+</div>
+</div>
+<!-- Customer Details Card -->
+<div class="space-y-space-2">
+<h4 class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Customer Profile</h4>
+<div class="p-space-3 rounded-xl bg-surface-container-lowest shadow-sm space-y-2">
+<div class="flex items-center gap-space-3">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-headline-sm text-headline-sm font-semibold" id="inspCustomerInitials">
+              DW
+            </div>
+<div>
+<div class="font-body-md-medium text-body-md-medium text-on-surface" id="inspCustomerName">Dimas Wijaya</div>
+<div class="font-mono-data text-mono-data text-on-surface-variant" id="inspCustomerPhone">+62 812-3344-9081</div>
+</div>
+</div>
+<div class="pt-2 flex items-center gap-space-2">
+<button class="flex-1 h-8 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center justify-center gap-1" onclick="showToast('Calling customer...')">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span>Call</span>
+</button>
+<button class="flex-1 h-8 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center justify-center gap-1" onclick="showToast('WhatsApp template dispatched')">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+<span>WhatsApp</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Items Rented Breakdown -->
+<div class="space-y-space-2">
+<h4 class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Assigned Gear</h4>
+<div class="p-space-3 rounded-xl bg-surface-container-lowest shadow-sm space-y-space-3">
+<div class="flex items-center gap-space-3">
+<div class="w-9 h-9 rounded bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[18px]">camping</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="font-body-sm-medium text-body-sm-medium text-on-surface" id="inspItemName">2x Tenda 4P</p>
+<span class="font-mono-data text-[11px] text-on-surface-variant">Barcode: T4P-091, T4P-092</span>
+</div>
+</div>
+<div class="p-space-2 rounded bg-surface-container-low text-on-surface font-body-sm text-body-sm flex items-center justify-between">
+<span>Security Deposit Held</span>
+<span class="font-mono-data text-mono-data font-semibold">Rp200.000</span>
+</div>
+</div>
+</div>
+<!-- Financial Snapshot -->
+<div class="space-y-space-2">
+<h4 class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Billing &amp; Ledger</h4>
+<div class="p-space-3 rounded-xl bg-surface-container-lowest shadow-sm space-y-2 font-body-sm text-body-sm">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Rental Fee</span>
+<span class="font-mono-data text-mono-data text-on-surface" id="inspPrice">Rp450.000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Payment Method</span>
+<span class="font-mono-data text-mono-data text-on-surface" id="inspPaymentMethod">Transfer BCA</span>
+</div>
+<div class="flex justify-between font-semibold pt-2">
+<span class="text-on-surface">Total Reconciled</span>
+<span class="font-mono-data text-mono-data text-secondary" id="inspTotal">Rp450.000</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Inspector Fixed Action Footer -->
+<div class="p-space-4 bg-surface-container-low/80 flex items-center gap-space-2">
+<button class="flex-1 h-10 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-colors font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm" onclick="handleQuickAction('create_booking')">
+<span class="material-symbols-outlined text-[18px]">edit_document</span>
+<span>Edit Booking</span>
+</button>
+<button class="h-10 px-space-3 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm" onclick="printRentalAgreement()">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>Slip</span>
+</button>
+</div>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+    // Highlight Active Tab in Bottom Nav
+    (function initActiveNav() {
+      const links = document.querySelectorAll('nav a[data-path]');
+      links.forEach(l => {
+        if (l.getAttribute('data-path') === 'dashboard') {
+          l.classList.remove('text-on-surface-variant');
+          l.classList.add('text-secondary', 'font-body-sm-medium');
+        }
+      });
+
+      // Populate Live Date
+      const dateOptions = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+      const now = new Date();
+      const el = document.getElementById('currentDateStr');
+      if (el) el.textContent = now.toLocaleDateString('en-US', dateOptions);
+    })();
+
+    // Interactive Toast trigger
+    function showToast(message) {
+      const toast = document.getElementById('statusToast');
+      const text = document.getElementById('statusToastText');
+      if (!toast || !text) return;
+      text.textContent = message;
+      toast.classList.remove('translate-y-[-120%]', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[-120%]', 'opacity-0', 'pointer-events-none');
+      }, 2600);
+    }
+
+    // Modal / Drawer Inspector Controls
+    function openInspector(id, customer, items, due, status, price, method, phone) {
+      document.getElementById('inspRentalId').textContent = id;
+      document.getElementById('inspCustomerName').textContent = customer;
+      document.getElementById('inspCustomerPhone').textContent = phone;
+      document.getElementById('inspCustomerInitials').textContent = customer.split(' ').map(n => n[0]).join('').substring(0, 2);
+      document.getElementById('inspItemName').textContent = items;
+      document.getElementById('inspDueTime').textContent = due;
+      document.getElementById('inspStatus').textContent = status;
+      document.getElementById('inspPrice').textContent = price;
+      document.getElementById('inspTotal').textContent = price;
+      document.getElementById('inspPaymentMethod').textContent = method;
+
+      const panel = document.getElementById('inspectorPanel');
+      const backdrop = document.getElementById('inspectorBackdrop');
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop.classList.add('opacity-100', 'pointer-events-auto');
+      panel.classList.remove('translate-x-full');
+      panel.classList.add('translate-x-0');
+    }
+
+    function closeInspector() {
+      const panel = document.getElementById('inspectorPanel');
+      const backdrop = document.getElementById('inspectorBackdrop');
+      backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-0');
+      panel.classList.add('translate-x-full');
+    }
+
+    // Quick action handler with prototype feedback
+    function handleQuickAction(action) {
+      if (action === 'create_booking') {
+        showToast("Opening 'Create Booking' wizard...");
+        const bookingLink = document.querySelector('nav a[data-path="bookings"]');
+        if (bookingLink) {
+          setTimeout(() => bookingLink.click(), 400);
+        }
+      } else if (action === 'check_availability') {
+        showToast("Checking real-time gear inventory...");
+        const invLink = document.querySelector('nav a[data-path="rental-items"]');
+        if (invLink) {
+          setTimeout(() => invLink.click(), 400);
+        }
+      } else if (action === 'record_return') {
+        showToast("Scanned barcode reader active for returns");
+        openInspector('RNT-00019', 'Dimas Wijaya', '2x Tenda 4P', 'Due 14:00', 'ONGOING', 'Rp450.000', 'Transfer BCA', '+62 812-3344-9081');
+      }
+    }
+
+    function triggerCheckIn(id) {
+      showToast(`Rental ${id} returned: items logged to warehouse inventory`);
+    }
+
+    function triggerDispatch(id) {
+      showToast(`Rental ${id} dispatched: equipment handed over to customer`);
+    }
+
+    function printRentalAgreement() {
+      showToast('Generating official PDF handover slip...');
+      setTimeout(() => closeInspector(), 500);
+    }
+
+    function navigateTo(path) {
+      const navItem = document.querySelector(`nav a[data-path="${path}"]`);
+      if (navItem) {
+        navItem.click();
+      } else {
+        showToast(`Navigating to ${path}...`);
+      }
+    }
+  </script>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-secondary font-body-sm-medium"><div class="flex justify-around items-center h-16 px-space-2"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 transition-colors text-secondary font-body-sm-medium" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Overview</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="bookings" href="#"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="font-label-sm text-label-sm">Bookings</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="calendar" href="#"><span class="material-symbols-outlined text-[22px]">calendar_today</span><span class="font-label-sm text-label-sm">Schedule</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="rental-items" href="#"><span class="material-symbols-outlined text-[22px]">category</span><span class="font-label-sm text-label-sm">Inventory</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 gap-0.5 text-on-surface-variant transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[22px]">settings</span><span class="font-label-sm text-label-sm">Settings</span></a></div></nav></body></html>

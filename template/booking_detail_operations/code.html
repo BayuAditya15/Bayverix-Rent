@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;font-family:'Inter',sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-surface": "#213145", "on-primary": "#ffffff", "outline": "#76777d", "on-primary-fixed": "#131b2e", "secondary": "#0051d5", "primary-fixed": "#dae2fd", "secondary-fixed": "#dbe1ff", "surface-container-high": "#dce9ff", "inverse-on-surface": "#eaf1ff", "surface-bright": "#f8f9ff", "surface-dim": "#cbdbf5", "surface-tint": "#565e74", "secondary-container": "#316bf3", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#003ea8", "outline-variant": "#c6c6cd", "surface": "#f8f9ff", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed": "#00174b", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#b87500", "background": "#f8f9ff", "on-background": "#0b1c30", "tertiary-container": "#2a1700", "on-surface": "#0b1c30", "surface-container": "#e5eeff", "primary": "#000000", "on-secondary-container": "#fefcff", "on-surface-variant": "#45464d", "surface-container-highest": "#d3e4fe", "surface-container-low": "#eff4ff", "on-secondary": "#ffffff", "error": "#ba1a1a", "secondary-fixed-dim": "#b4c5ff", "on-primary-container": "#7c839b", "on-error-container": "#93000a", "error-container": "#ffdad6", "tertiary-fixed": "#ffddb8", "primary-fixed-dim": "#bec6e0", "tertiary": "#000000", "on-primary-fixed-variant": "#3f465c", "inverse-primary": "#bec6e0", "primary-container": "#131b2e", "on-tertiary-fixed-variant": "#653e00", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "surface-variant": "#d3e4fe" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-8": "32px", "space-6": "24px", "container-padding-desktop": "32px", "container-padding-mobile": "16px", "gutter-mobile": "12px", "space-1": "4px", "space-3": "12px", "space-4": "16px", "gutter-desktop": "16px", "space-2": "8px", "container-padding-tablet": "24px" }, fontFamily: { "headline-md": ["Inter"], "display": ["Inter"], "body-lg": ["Inter"], "headline-lg-mobile": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "headline-sm": ["Inter"], "display-mobile": ["Inter"], "body-sm-medium": ["Inter"], "body-sm": ["Inter"], "label-md": ["Inter"], "mono-data": ["JetBrains Mono"], "body-md-medium": ["Inter"] }, fontSize: { "headline-md": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "display": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["15px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-md": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm-medium": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.005em", "fontWeight": "500" }], "mono-data": ["12px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-md-medium": ["13px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }] } } } }</script></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased"><header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-container-padding-mobile flex items-center justify-between gap-space-2"><div class="flex items-center gap-space-2 min-w-0"><button aria-label="Go back" class="w-11 h-11 -ml-2 flex items-center justify-center rounded-lg text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><img alt="RentPro Logo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5N7VVCSO5u7HHFFleezMxKmo4DufK-8a6vQuVWU4DfRavk5W71Y6_qwCuInKQ5T-5TbedMLOFwobJlZTJu7o_RBLvDTpqGOHvXDn9FhBQdGG6iJchr4JFToq2Glft7yCtYqnwpPE4R3ji9gsa1i1HAUHlpgCZ_v8jytC_-nKgLZLOvtSck2EwrGlnppPUJFgZoZuXStGW5C-0ew1pDYKgA-REgnKoVL1Rb0TGz_opaoej6xQIYvlhUA"/><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Booking Detail</h1></div><div class="flex items-center gap-space-2 flex-shrink-0"><button aria-label="Context Actions" class="w-11 h-11 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">more_vert</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface min-h-screen pb-safe"><div class="flex flex-col w-full">
+<div class="px-container-padding-mobile py-space-3 bg-surface-container-lowest flex items-center justify-between shadow-sm">
+<a class="inline-flex items-center gap-space-1 text-secondary font-label-md text-label-md hover:underline" href="javascript:void(0)" onclick="history.back()">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Back to Bookings</span>
+</a>
+<div class="flex items-center gap-space-1 text-on-surface-variant font-mono-data text-mono-data">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>LIVE HUB</span>
+</div>
+</div>
+<div class="px-container-padding-mobile py-space-4 flex flex-col gap-space-4">
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-start justify-between gap-space-2">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-2">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">RNT-00021</h2>
+<div class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>CONFIRMED</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Created 09 Sep 2026, 14:30 WIB <span class="text-outline-variant">•</span> Admin Dian P.
+          </p>
+</div>
+<div class="relative">
+<button aria-label="More operational actions" class="w-9 h-9 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" id="moreActionsBtn" onclick="toggleMoreMenu()">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+<div class="hidden absolute right-0 top-11 w-56 bg-surface-container-lowest rounded-xl shadow-xl z-30 p-space-1 flex flex-col" id="moreActionsMenu">
+<button class="flex items-center gap-space-2 px-space-3 py-2 rounded-lg text-left text-error hover:bg-error-container/30 transition-colors font-body-sm-medium text-body-sm-medium" onclick="toggleSheet('fullCancelModal'); toggleMoreMenu();">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+<span>Cancel Booking</span>
+</button>
+<button class="flex items-center gap-space-2 px-space-3 py-2 rounded-lg text-left text-on-surface hover:bg-surface-container transition-colors font-body-sm-medium text-body-sm-medium" onclick="alert('Generating Surat Jalan &amp; Official Receipt...'); toggleMoreMenu();">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>Print Surat Jalan / Slip</span>
+</button>
+<button class="flex items-center gap-space-2 px-space-3 py-2 rounded-lg text-left text-on-surface hover:bg-surface-container transition-colors font-body-sm-medium text-body-sm-medium" onclick="alert('Inventory audit log synchronized.'); toggleMoreMenu();">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span>Audit History</span>
+</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-2 pt-space-2">
+<button class="flex items-center justify-center gap-space-1 bg-primary hover:bg-primary-container text-on-primary py-2 px-space-3 rounded-lg font-label-md text-label-md shadow-sm active:scale-[0.99] transition-all" onclick="toggleSheet('paymentSheet')">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+<span>Record Payment</span>
+</button>
+<button class="flex items-center justify-center gap-space-1 bg-surface-container-lowest text-on-surface hover:bg-surface-container py-2 px-space-3 rounded-lg font-label-md text-label-md shadow-sm active:scale-[0.99] transition-all" onclick="alert('Inline editing triggered for booking metadata.')">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span>Edit Details</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-center justify-between pb-space-2 bg-surface-container-low -mx-space-4 -mt-space-4 p-space-4 rounded-t-xl">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">badge</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Customer Profile</h3>
+</div>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary bg-surface-container-lowest px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">verified</span> KTP Verified
+        </span>
+</div>
+<div class="flex flex-col gap-space-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Full Name</span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface">Budi Santoso</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Identity (KTP)</span>
+<span class="font-mono-data text-mono-data text-on-surface">3273-0982-****-0004</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Phone (WhatsApp)</span>
+<a class="font-body-sm-medium text-body-sm-medium text-secondary hover:underline flex items-center gap-1" href="tel:081234567890">
+<span>0812-3456-7890</span>
+<span class="material-symbols-outlined text-[14px]">call</span>
+</a>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Email</span>
+<span class="font-body-sm text-body-sm text-on-surface">budi.santoso@email.com</span>
+</div>
+<div class="mt-space-1 p-space-3 rounded-lg bg-surface-container-low flex items-start gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">warehouse</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">HANDOVER METHOD</span>
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface">Self Pick-up at Warehouse 1 (Bay A, Rack 04)</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">calendar_today</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Rental Timeline &amp; Status</h3>
+</div>
+<span class="font-mono-data text-mono-data bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">48 Hrs</span>
+</div>
+<div class="grid grid-cols-2 gap-space-2 p-space-3 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flight_takeoff</span> PICKUP
+          </span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface mt-1">12 Sep 2026</span>
+<span class="font-mono-data text-mono-data text-secondary">09:00 WIB</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flight_land</span> RETURN
+          </span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface mt-1">14 Sep 2026</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">17:00 WIB</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-space-2 rounded-lg bg-secondary-fixed/40">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">task_alt</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-secondary-fixed">OPERATIONAL READINESS</span>
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface">Ready for Handover</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container-lowest px-2 py-1 rounded">Stage: Pre-check OK</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">camping</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Booking Items &amp; Serials</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 Line Items (4 Units)</span>
+</div>
+<div class="flex flex-col gap-space-3">
+<div class="p-space-3 rounded-xl bg-surface-container-low flex flex-col gap-space-2" id="itemRow1">
+<div class="flex items-start justify-between gap-space-2">
+<div>
+<div class="font-body-md-medium text-body-md-medium text-on-surface">Tenda 4P Waterproof (Dome Tent)</div>
+<div class="font-mono-data text-mono-data text-on-surface-variant mt-0.5">2 units × Rp 100.000 × 2 days</div>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">Rp 400.000</span>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-2 pt-space-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface-container-lowest font-mono-data text-mono-data text-on-surface-variant">#T4P-011</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface-container-lowest font-mono-data text-mono-data text-on-surface-variant">#T4P-014</span>
+<span class="text-secondary font-label-sm text-label-sm">Reserved</span>
+</div>
+<button class="inline-flex items-center gap-1 text-error hover:bg-error-container/40 px-2 py-1 rounded font-label-sm text-label-sm transition-colors" onclick="openPartialCancellation('Tenda 4P Waterproof', 2, 200000)">
+<span class="material-symbols-outlined text-[14px]">remove_circle_outline</span>
+<span>Cancel / Reduce</span>
+</button>
+</div>
+</div>
+<div class="p-space-3 rounded-xl bg-surface-container-low flex flex-col gap-space-2" id="itemRow2">
+<div class="flex items-start justify-between gap-space-2">
+<div>
+<div class="font-body-md-medium text-body-md-medium text-on-surface">Camping Chair Ergonomic</div>
+<div class="font-mono-data text-mono-data text-on-surface-variant mt-0.5">2 units × Rp 25.000 × 2 days</div>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">Rp 100.000</span>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-2 pt-space-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface-container-lowest font-mono-data text-mono-data text-on-surface-variant">#CC-088</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface-container-lowest font-mono-data text-mono-data text-on-surface-variant">#CC-089</span>
+<span class="text-secondary font-label-sm text-label-sm">Reserved</span>
+</div>
+<button class="inline-flex items-center gap-1 text-error hover:bg-error-container/40 px-2 py-1 rounded font-label-sm text-label-sm transition-colors" onclick="openPartialCancellation('Camping Chair Ergonomic', 2, 50000)">
+<span class="material-symbols-outlined text-[14px]">remove_circle_outline</span>
+<span>Cancel / Reduce</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">account_balance_wallet</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Strict Financial Disambiguation</h3>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">verified_user</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        RentPro maintains isolated ledgers for rental fees, cash guarantees, and overpayments to prevent settlement ambiguity.
+      </p>
+<div class="space-y-2 pt-space-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Equipment Subtotal</span>
+<span class="font-mono-data text-mono-data text-on-surface">Rp 500.000</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-1">
+<span class="text-on-surface-variant">Refundable Security Deposit</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant" title="Held in guarantee ledger, refunded post-check">info</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface">Rp 100.000</span>
+</div>
+<div class="flex items-center justify-between text-body-md font-body-md font-semibold pt-1">
+<span class="text-on-surface">Gross Rental Total</span>
+<span class="font-mono-data text-mono-data text-on-surface font-semibold">Rp 500.000</span>
+</div>
+<div class="p-space-3 rounded-lg bg-surface-container-low flex flex-col gap-2 my-2">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Amount Paid (BCA #PAY-8821)</span>
+<span class="font-mono-data text-mono-data text-secondary font-semibold">Rp 300.000</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-error font-semibold">AMOUNT DUE (RENTAL BALANCE)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Payable before checkout / handover</span>
+</div>
+<span class="font-mono-data text-headline-sm text-headline-sm text-error font-semibold">Rp 200.000</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 text-body-sm font-body-sm pt-1">
+<div class="p-2 rounded bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Overpayment</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Rp 0</span>
+</div>
+<div class="p-2 rounded bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Store Credit Applied</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Rp 0</span>
+</div>
+<div class="p-2 rounded bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Refundable Deposit Held</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Rp 100.000</span>
+</div>
+<div class="p-2 rounded bg-surface-container-low flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Amount Refunded</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Rp 0</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col gap-space-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">receipt_long</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Payment &amp; Transaction Log</h3>
+</div>
+<button class="inline-flex items-center gap-1 font-label-md text-label-md text-secondary hover:underline" onclick="toggleSheet('paymentSheet')">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Record</span>
+</button>
+</div>
+<div class="p-space-3 rounded-lg bg-surface-container-low flex items-start justify-between gap-space-2">
+<div class="flex items-start gap-space-2">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary mt-0.5">
+<span class="material-symbols-outlined text-[18px]">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface">BCA Direct Transfer</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Ref: #PAY-8821</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">09 Sep 2026, 14:35 WIB</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono-data text-mono-data font-semibold text-on-surface">Rp 300.000</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary bg-surface-container px-1.5 py-0.5 rounded mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Verified</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden fixed inset-0 z-50 flex flex-col justify-end bg-inverse-surface/40 backdrop-blur-sm" id="paymentSheet">
+<div class="bg-surface-container-lowest rounded-t-2xl p-space-4 max-h-[90vh] overflow-y-auto flex flex-col gap-space-4 shadow-xl">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[18px]">add_card</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Record Customer Payment</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="toggleSheet('paymentSheet')">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-3">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">PAYMENT AMOUNT (IDR)</label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-on-surface-variant font-mono-data text-mono-data">Rp</span>
+<input class="w-full h-10 pl-10 pr-3 rounded-lg bg-surface-container-low text-on-surface font-mono-data text-mono-data focus:outline-none focus:bg-surface-container" id="paymentAmountInput" oninput="updatePaymentPreview()" type="number" value="200000"/>
+</div>
+<span class="text-[11px] font-body-sm text-secondary">Default pre-filled with remaining Amount Due</span>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">PAYMENT METHOD</label>
+<select class="w-full h-10 px-3 rounded-lg bg-surface-container-low text-on-surface font-body-sm focus:outline-none" id="payMethodSelect">
+<option value="BCA Transfer">BCA Direct Transfer</option>
+<option value="Cash at Warehouse">Cash (Handover Desk Bay A)</option>
+<option value="QRIS Dynamic">QRIS Instant Dynamic</option>
+<option value="Mandiri Virtual Account">Mandiri Virtual Account</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">DATE &amp; TIME</label>
+<input class="h-10 px-3 rounded-lg bg-surface-container-low text-on-surface-variant font-body-sm" readonly="" type="text" value="Today, Now"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">TRANSACTION REF</label>
+<input class="h-10 px-3 rounded-lg bg-surface-container-low text-on-surface font-mono-data text-mono-data" type="text" value="PAY-8829-M"/>
+</div>
+</div>
+<div class="p-space-3 rounded-xl bg-surface-container-high/60 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">RECONCILIATION PREVIEW</span>
+<span class="font-body-sm-medium text-body-sm-medium text-on-surface">Simulated Status</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant">New Remaining Due</span>
+<span class="font-mono-data text-headline-sm text-headline-sm font-semibold text-secondary" id="previewBalanceDue">Rp 0</span>
+</div>
+</div>
+<div class="flex items-center gap-space-2 pt-space-2">
+<button class="flex-1 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-colors text-center" onclick="recordPaymentAction()">
+            Confirm &amp; Print Receipt
+          </button>
+<button class="px-space-3 py-2.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md" onclick="toggleSheet('paymentSheet')">
+            Cancel
+          </button>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden fixed inset-0 z-50 flex flex-col justify-end bg-inverse-surface/40 backdrop-blur-sm" id="partialCancelSheet">
+<div class="bg-surface-container-lowest rounded-t-2xl p-space-4 max-h-[90vh] overflow-y-auto flex flex-col gap-space-4 shadow-xl">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2">
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[18px]">remove_shopping_cart</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Partial Item Cancellation</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="toggleSheet('partialCancelSheet')">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-space-3 rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">TARGET LINE ITEM</span>
+<span class="font-body-md-medium text-body-md-medium text-on-surface" id="partialItemName">Tenda 4P Waterproof</span>
+<div class="flex items-center justify-between text-body-sm mt-1">
+<span class="text-on-surface-variant">Cancel Quantity</span>
+<div class="flex items-center gap-space-2">
+<button class="w-7 h-7 rounded bg-surface-container flex items-center justify-center font-bold text-on-surface" onclick="adjustPartialQty(-1)">-</button>
+<span class="font-mono-data text-mono-data font-semibold" id="partialQtyDisplay">1</span>
+<button class="w-7 h-7 rounded bg-surface-container flex items-center justify-center font-bold text-on-surface" onclick="adjustPartialQty(1)">+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-3 flex flex-col gap-space-2">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">FINANCIAL IMPACT LEDGER PREVIEW</span>
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface-variant">Original Rental Total</span>
+<span class="font-mono-data text-mono-data">Rp 500.000</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-error">
+<span>Reduction (1 Unit Tenda 4P)</span>
+<span class="font-mono-data text-mono-data">- Rp 200.000</span>
+</div>
+<div class="flex items-center justify-between font-body-md font-body-md font-semibold pt-1">
+<span>New Adjusted Rental Total</span>
+<span class="font-mono-data text-mono-data" id="impactNewTotal">Rp 300.000</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-secondary">
+<span>Amount Already Paid</span>
+<span class="font-mono-data text-mono-data">Rp 300.000</span>
+</div>
+<div class="p-space-2 rounded bg-surface-container-lowest mt-1 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary font-semibold">NEW AMOUNT DUE</span>
+<span class="text-[11px] text-on-surface-variant font-body-sm">Payment covers adjusted total</span>
+</div>
+<span class="font-mono-data text-headline-sm text-headline-sm font-bold text-secondary">Rp 0</span>
+</div>
+</div>
+<div class="flex items-center gap-space-2 pt-space-2">
+<button class="flex-1 py-2.5 rounded-lg bg-error hover:bg-error-container text-on-error font-label-md text-label-md transition-colors text-center" onclick="confirmPartialCancellation()">
+          Confirm Item Cancellation
+        </button>
+<button class="px-space-3 py-2.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md" onclick="toggleSheet('partialCancelSheet')">
+          Dismiss
+        </button>
+</div>
+</div>
+</div>
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-space-4 bg-inverse-surface/40 backdrop-blur-sm" id="fullCancelModal">
+<div class="bg-surface-container-lowest rounded-2xl p-space-4 max-w-sm w-full shadow-2xl flex flex-col gap-space-3">
+<div class="w-10 h-10 rounded-full bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">warning</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Confirm Full Cancellation?</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          Cancelling booking <span class="font-mono-data text-mono-data text-on-surface font-semibold">RNT-00021</span> will return 4 reserved units to the available pool. An unallocated credit/refund payable of <span class="font-mono-data text-mono-data text-error font-semibold">Rp 300.000</span> will be created for Budi Santoso.
+        </p>
+</div>
+<div class="flex flex-col gap-2 pt-space-2">
+<button class="w-full py-2.5 rounded-lg bg-error hover:bg-error-container text-on-error font-label-md text-label-md transition-colors" onclick="alert('Booking RNT-00021 has been Cancelled. Return ticket created.'); toggleSheet('fullCancelModal')">
+          Confirm Cancellation
+        </button>
+<button class="w-full py-2.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors" onclick="toggleSheet('fullCancelModal')">
+          Keep Booking
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function toggleMoreMenu() {
+    const menu = document.getElementById('moreActionsMenu');
+    menu.classList.toggle('hidden');
+  }
+
+  function toggleSheet(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('hidden');
+  }
+
+  function updatePaymentPreview() {
+    const input = document.getElementById('paymentAmountInput');
+    const preview = document.getElementById('previewBalanceDue');
+    const val = parseFloat(input.value) || 0;
+    const remaining = Math.max(0, 200000 - val);
+    preview.innerText = 'Rp ' + remaining.toLocaleString('id-ID');
+  }
+
+  function recordPaymentAction() {
+    alert('Payment of Rp 200.000 recorded via ' + document.getElementById('payMethodSelect').value + '. Balance cleared!');
+    toggleSheet('paymentSheet');
+  }
+
+  let currentPartialItem = '';
+  let currentQty = 1;
+  let currentUnitRate = 200000;
+
+  function openPartialCancellation(itemName, maxQty, unitReduction) {
+    currentPartialItem = itemName;
+    currentQty = 1;
+    currentUnitRate = unitReduction;
+    document.getElementById('partialItemName').innerText = itemName + ' (Current: ' + maxQty + ' Units)';
+    document.getElementById('partialQtyDisplay').innerText = currentQty;
+    updatePartialDisplay();
+    toggleSheet('partialCancelSheet');
+  }
+
+  function adjustPartialQty(delta) {
+    if (delta > 0 && currentQty < 2) currentQty += delta;
+    if (delta < 0 && currentQty > 1) currentQty += delta;
+    document.getElementById('partialQtyDisplay').innerText = currentQty;
+    updatePartialDisplay();
+  }
+
+  function updatePartialDisplay() {
+    const reduction = currentQty * currentUnitRate;
+    const newTotal = 500000 - reduction;
+    document.getElementById('impactNewTotal').innerText = 'Rp ' + newTotal.toLocaleString('id-ID');
+  }
+
+  function confirmPartialCancellation() {
+    alert('Cancelled ' + currentQty + ' unit(s) of ' + currentPartialItem + '. Inventory released to active pool.');
+    toggleSheet('partialCancelSheet');
+  }
+</script></main></body></html>
