@@ -1,44 +1,42 @@
-import { createClient } from '@/lib/supabase/client';
-
-export const SUPABASE_STORAGE_BUCKET = 'rentall-assets';
+export const SUPABASE_STORAGE_BUCKET = "rental-items";
 
 /**
- * Upload a file directly to Supabase Storage bucket ('rentall-assets').
- * If upload fails (e.g. offline or permission issue), falls back to Base64 data URI.
+ * Upload a file via server-side /api/upload (which uses admin client with auto bucket creation).
+ * Falls back to Base64 data URI if upload fails or is offline.
  */
 export async function uploadToSupabaseStorage(
   file: File,
-  folder: 'proofs' | 'products' = 'proofs'
+  folder: "proofs" | "products" | "items" = "proofs"
 ): Promise<string> {
-  if (typeof window === 'undefined') {
-    throw new Error('Upload can only be initiated from the client.');
+  if (typeof window === "undefined") {
+    throw new Error("Upload can only be initiated from the client.");
   }
 
   try {
-    const supabase = createClient();
-    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-    const cleanFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-    const filePath = `${folder}/${cleanFileName}`;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", folder);
+    formData.append("bucket", SUPABASE_STORAGE_BUCKET);
 
-    const { error: uploadError } = await supabase.storage
-      .from(SUPABASE_STORAGE_BUCKET)
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
 
-    if (uploadError) {
-      console.warn('Supabase storage upload error, falling back to data URI:', uploadError.message);
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      console.warn("Upload endpoint returned error, falling back to base64:", errJson);
       return await fileToBase64(file);
     }
 
-    const { data: publicUrlData } = supabase.storage
-      .from(SUPABASE_STORAGE_BUCKET)
-      .getPublicUrl(filePath);
+    const data = await res.json();
+    if (data.url) {
+      return data.url;
+    }
 
-    return publicUrlData.publicUrl;
+    return await fileToBase64(file);
   } catch (err: any) {
-    console.warn('Storage upload exception, using fallback:', err?.message);
+    console.warn("Storage upload exception, using base64 fallback:", err?.message);
     return await fileToBase64(file);
   }
 }

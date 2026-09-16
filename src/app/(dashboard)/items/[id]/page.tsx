@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Loader2, Package, Trash2, ImagePlus, X, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+import { uploadToSupabaseStorage } from "@/lib/supabase/storage";
 
 interface Category {
   id: string;
@@ -26,26 +27,24 @@ export default function EditItemPage() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [priceUnit, setPriceUnit] = useState("DAY");
-  const [depositAmount, setDepositAmount] = useState("");
+  const [depositAmount, setDepositAmount] = useState("0");
   const [totalQuantity, setTotalQuantity] = useState("1");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
-    // 1. Fetch categories
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.data) setCategories(json.data);
-      })
-      .catch(() => {});
-
-    // 2. Fetch item data
     async function loadItem() {
       try {
+        const { data: catData } = await supabase
+          .from("categories")
+          .select("id, name")
+          .eq("status", "ACTIVE")
+          .order("name");
+        if (catData) setCategories(catData);
+
         const { data, error } = await supabase
           .from("rental_items")
           .select("*")
@@ -113,28 +112,7 @@ export default function EditItemPage() {
 
       // Upload new photo if changed
       if (selectedFile) {
-        const ext = selectedFile.name.split(".").pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
-        const filePath = `items/${fileName}`;
-
-        const { error: uploadErr } = await supabase.storage
-          .from("rental-images")
-          .upload(filePath, selectedFile, { cacheControl: "3600", upsert: false });
-
-        if (uploadErr) {
-          // If custom bucket fails, try general bucket
-          const { error: proofUploadErr } = await supabase.storage
-            .from("proofs")
-            .upload(filePath, selectedFile, { cacheControl: "3600", upsert: false });
-
-          if (!proofUploadErr) {
-            const { data: publicData } = supabase.storage.from("proofs").getPublicUrl(filePath);
-            finalImageUrl = publicData.publicUrl;
-          }
-        } else {
-          const { data: publicData } = supabase.storage.from("rental-images").getPublicUrl(filePath);
-          finalImageUrl = publicData.publicUrl;
-        }
+        finalImageUrl = await uploadToSupabaseStorage(selectedFile, "items");
       }
 
       const { error: updateErr } = await supabase

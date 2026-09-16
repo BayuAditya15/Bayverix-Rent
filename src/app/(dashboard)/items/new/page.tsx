@@ -6,10 +6,12 @@ import Link from "next/link";
 import { ArrowLeft, Loader2, PackagePlus, AlertCircle, ImagePlus, X, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+import { uploadToSupabaseStorage } from "@/lib/supabase/storage";
 
 interface Category {
   id: string;
   name: string;
+  status?: string;
 }
 
 export default function NewItemPage() {
@@ -24,7 +26,7 @@ export default function NewItemPage() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [priceUnit, setPriceUnit] = useState("DAY");
-  const [depositAmount, setDepositAmount] = useState("");
+  const [depositAmount, setDepositAmount] = useState("0");
   const [totalQuantity, setTotalQuantity] = useState("1");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -36,7 +38,9 @@ export default function NewItemPage() {
     fetch("/api/categories")
       .then((res) => res.json())
       .then((json) => {
-        if (json.data) setCategories(json.data);
+        if (json.data) {
+          setCategories(json.data.filter((c: any) => c.status === "ACTIVE"));
+        }
       })
       .catch(() => {});
   }, []);
@@ -65,24 +69,8 @@ export default function NewItemPage() {
   const uploadImageToSupabase = async (file: File): Promise<string | null> => {
     try {
       setUploadingImage(true);
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-      const filePath = `items/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("rental-items")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) {
-        console.warn("Storage upload warning (using fallback without image):", uploadError.message);
-        return null;
-      }
-
-      const { data } = supabase.storage.from("rental-items").getPublicUrl(filePath);
-      return data.publicUrl || null;
+      const url = await uploadToSupabaseStorage(file, "items");
+      return url;
     } catch {
       return null;
     } finally {
