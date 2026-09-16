@@ -15,11 +15,14 @@ import {
   Ban,
   Package,
   ExternalLink,
-  Printer,
   Copy,
   Check,
   Loader2,
   FileText,
+  BadgeAlert,
+  Wallet,
+  Building2,
+  Store,
 } from "lucide-react";
 import { toast } from "sonner";
 import { PaymentProofViewer } from "@/components/PaymentProofViewer";
@@ -82,13 +85,14 @@ export function BookingDetailModal({
   const supabase = createClient();
 
   const [loading, setLoading] = useState(false);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [paymentAmount, setPaymentAmount] = useState(
-    booking ? String(Number(booking.amount_due) > 0 ? Number(booking.amount_due) : "") : ""
-  );
-  const [paymentMethod, setPaymentMethod] = useState("CASH");
-  const [paymentRef, setPaymentRef] = useState("");
   const [copiedInvoice, setCopiedInvoice] = useState(false);
+
+  // In-store confirmation flow state
+  const [showInStoreConfirm, setShowInStoreConfirm] = useState(false);
+  const [storePayMethod, setStorePayMethod] = useState("CASH");
+  const [storePayAmount, setStorePayAmount] = useState(
+    booking ? String(Number(booking.amount_due) > 0 ? Number(booking.amount_due) : booking.rental_total) : ""
+  );
 
   if (!booking) return null;
 
@@ -117,6 +121,15 @@ export function BookingDetailModal({
     ? customer.phone.replace(/^0/, "62").replace(/\D/g, "")
     : "";
 
+  // Detect transfer payment vs bayar di tempat
+  const pendingTransferPayment = booking.payments?.find(
+    (p) => p.method === "TRANSFER"
+  );
+  const hasProof = Boolean(pendingTransferPayment?.reference);
+  const isTransferMethod =
+    Boolean(pendingTransferPayment) ||
+    booking.notes?.toLowerCase().includes("transfer");
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "PENDING":
@@ -136,8 +149,74 @@ export function BookingDetailModal({
     }
   };
 
+  // Main Confirm Handler
+  const handleConfirmBookingClick = async () => {
+    // KASUS 1: Jika metode TRANSFER & ada bukti -> Langsung otomatis verifikasi lunas & confirm!
+    if (isTransferMethod) {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/bookings/${booking.id}/confirm`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ settlement_type: "AUTO_TRANSFER" }),
+        });
+
+        const json = await res.json();
+        if (!res.ok) {
+          toast.error(json.error || "Gagal mengonfirmasi booking.");
+          return;
+        }
+
+        toast.success(json.message || "Booking berhasil dikonfirmasi & transfer diverifikasi lunas!");
+        router.refresh();
+        onClose();
+      } catch {
+        toast.error("Terjadi kesalahan jaringan.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    // KASUS 2: Jika Bayar di Toko -> Munculkan opsi pembayaran di tempat
+    setShowInStoreConfirm(true);
+  };
+
+  // Submit in-store confirmation with payment
+  const handleExecuteInStoreConfirm = async (settleNow: boolean) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/bookings/${booking.id}/confirm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          settlement_type: settleNow ? "PAY_AT_STORE" : "CONFIRM_UNPAID",
+          payment_method: storePayMethod,
+          payment_amount: settleNow ? Number(storePayAmount) || amountDue || rentalTotal : 0,
+          new_status: "CONFIRMED",
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error || "Gagal mengonfirmasi booking.");
+        return;
+      }
+
+      toast.success(json.message || "Booking berhasil dikonfirmasi!");
+      setShowInStoreConfirm(false);
+      router.refresh();
+      onClose();
+    } catch {
+      toast.error("Terjadi kesalahan sistem.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Status transitions for other statuses
   const handleUpdateStatus = async (
-    newStatus: "CONFIRMED" | "ONGOING" | "COMPLETED" | "CANCELLED"
+    newStatus: "ONGOING" | "COMPLETED" | "CANCELLED"
   ) => {
     if (newStatus === "CANCELLED" && !confirm("Yakin ingin membatalkan transaksi booking ini?")) {
       return;
@@ -159,9 +238,7 @@ export function BookingDetailModal({
       }
 
       toast.success(
-        newStatus === "CONFIRMED"
-          ? `Booking #${booking.booking_number} berhasil dikonfirmasi!`
-          : newStatus === "ONGOING"
+        newStatus === "ONGOING"
           ? `Unit sewa #${booking.booking_number} berhasil diserah-terimakan!`
           : newStatus === "COMPLETED"
           ? `Unit sewa #${booking.booking_number} telah dikembalikan & selesai!`
@@ -171,44 +248,6 @@ export function BookingDetailModal({
       onClose();
     } catch {
       toast.error("Terjadi kesalahan sistem.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRecordPayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const amount = Number(paymentAmount);
-    if (!amount || amount <= 0) {
-      toast.error("Masukkan jumlah pembayaran yang valid.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await fetch("/api/payments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          booking_id: booking.id,
-          amount,
-          method: paymentMethod,
-          reference: paymentRef.trim() || null,
-        }),
-      });
-
-      const json = await res.json();
-      if (!res.ok) {
-        toast.error(json.error || "Gagal mencatat pembayaran.");
-        return;
-      }
-
-      toast.success("Pembayaran berhasil dicatat!");
-      setShowPaymentForm(false);
-      router.refresh();
-      onClose();
-    } catch {
-      toast.error("Terjadi kesalahan jaringan.");
     } finally {
       setLoading(false);
     }
@@ -325,35 +364,34 @@ export function BookingDetailModal({
             )}
           </div>
 
-          {/* Notes & Payment Method Info */}
-          {booking.notes && (
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-              <p className="text-[#64748b] font-medium text-[11px]">Catatan / Info Booking:</p>
-              <p className="text-[#0b1c30]">{booking.notes}</p>
+          {/* Notes & Payment Method Details */}
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[#64748b] text-[11px] font-medium">Metode Pembayaran:</span>
+              <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                isTransferMethod
+                  ? "bg-blue-50 text-[#0051d5] border border-blue-200"
+                  : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+              }`}>
+                {isTransferMethod ? "Transfer Bank" : "Bayar di Toko / Tempat"}
+              </span>
             </div>
-          )}
 
-          {/* Payment Proof / History */}
-          {booking.payments && booking.payments.length > 0 && (
-            <div className="p-3 bg-blue-50/50 rounded-xl border border-blue-100 space-y-2">
-              <p className="text-[#0051d5] font-bold text-xs">Riwayat Pembayaran &amp; Bukti Transfer:</p>
-              <div className="space-y-1.5">
-                {booking.payments.map((p) => (
-                  <div key={p.id} className="flex items-center justify-between gap-2 text-xs bg-white p-2 rounded-lg border border-blue-100">
-                    <div>
-                      <span className="font-semibold text-[#0b1c30]">
-                        Rp {Number(p.amount).toLocaleString("id-ID")}
-                      </span>
-                      <span className="text-[11px] text-[#64748b] ml-1.5">
-                        ({p.method === "TRANSFER" ? "Transfer Bank" : p.method})
-                      </span>
-                    </div>
-                    <PaymentProofViewer reference={p.reference} />
-                  </div>
-                ))}
+            {booking.notes && (
+              <p className="text-[11px] text-[#0b1c30] pt-1 border-t border-slate-200/60">
+                <span className="text-[#64748b]">Catatan: </span>
+                {booking.notes}
+              </p>
+            )}
+
+            {/* Proof of Payment Viewer if Transfer */}
+            {hasProof && (
+              <div className="flex items-center justify-between pt-1 border-t border-slate-200/60">
+                <span className="text-[11px] text-[#64748b]">Bukti Pembayaran:</span>
+                <PaymentProofViewer reference={pendingTransferPayment?.reference || null} />
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Payment Summary */}
           <div className="p-3.5 rounded-2xl bg-white border border-[#e2e8f0] space-y-1.5 shadow-2xs">
@@ -373,109 +411,119 @@ export function BookingDetailModal({
             </div>
           </div>
 
-          {/* Inline Payment Form */}
-          {showPaymentForm && (
-            <form onSubmit={handleRecordPayment} className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 animate-in fade-in">
+          {/* In-Store Confirmation Interactive Box (Only shown if clicking confirm on Bayar di Toko) */}
+          {showInStoreConfirm && (
+            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3 animate-in fade-in">
               <div className="flex justify-between items-center">
-                <p className="font-bold text-xs text-[#0b1c30]">Formulir Pelunasan</p>
+                <p className="font-bold text-xs text-amber-900 flex items-center gap-1.5">
+                  <Store className="w-4 h-4 text-amber-700" />
+                  <span>Konfirmasi Pembayaran di Toko</span>
+                </p>
                 <button
                   type="button"
-                  onClick={() => setShowPaymentForm(false)}
-                  className="text-slate-400 hover:text-slate-700"
+                  onClick={() => setShowInStoreConfirm(false)}
+                  className="text-amber-600 hover:text-amber-800"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <p className="text-[11px] text-amber-800">
+                Pelanggan memilih metode <strong>Bayar di Toko</strong> sebesar <strong>Rp {rentalTotal.toLocaleString("id-ID")}</strong>. Pilih aksi pembayaran:
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[11px] font-medium text-[#64748b] mb-1">Jumlah (Rp):</label>
-                  <input
-                    type="number"
-                    required
-                    min={1}
-                    value={paymentAmount}
-                    onChange={(e) => setPaymentAmount(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-[#e2e8f0] bg-white outline-none focus:ring-2 focus:ring-[#0051d5]/20"
-                  />
+                  <label className="block text-[11px] font-medium text-amber-900 mb-1">Metode Penerimaan:</label>
+                  <select
+                    value={storePayMethod}
+                    onChange={(e) => setStorePayMethod(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-amber-200 bg-white outline-none focus:ring-2 focus:ring-[#0051d5]/20 font-medium"
+                  >
+                    <option value="CASH">💵 Tunai / Cash</option>
+                    <option value="QRIS">📱 QRIS Toko</option>
+                    <option value="TRANSFER">🏦 Transfer di Tempat</option>
+                  </select>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-medium text-[#64748b] mb-1">Metode Bayar:</label>
-                  <select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-[#e2e8f0] bg-white outline-none focus:ring-2 focus:ring-[#0051d5]/20"
-                  >
-                    <option value="CASH">Tunai / Cash</option>
-                    <option value="TRANSFER">Transfer Bank</option>
-                    <option value="QRIS">QRIS</option>
-                  </select>
+                  <label className="block text-[11px] font-medium text-amber-900 mb-1">Nominal (Rp):</label>
+                  <input
+                    type="number"
+                    value={storePayAmount}
+                    onChange={(e) => setStorePayAmount(e.target.value)}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-amber-200 bg-white outline-none focus:ring-2 focus:ring-[#0051d5]/20 font-bold"
+                  />
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition"
-              >
-                {loading ? "Menyimpan..." : "Simpan Pembayaran"}
-              </button>
-            </form>
+              <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => handleExecuteInStoreConfirm(true)}
+                  className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5"
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+                  <span>Konfirmasi &amp; Catat Lunas</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => handleExecuteInStoreConfirm(false)}
+                  className="py-2.5 px-3 rounded-xl bg-white border border-amber-300 hover:bg-amber-100 text-amber-900 font-semibold text-xs transition"
+                >
+                  Konfirmasi Saja (Bayar Nanti)
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
         {/* Modal Action Footer */}
         <div className="p-4 sm:p-5 border-t border-[#e2e8f0] bg-slate-50/60 shrink-0 space-y-2">
-          {/* Main Status Actions */}
+          {/* Main Status Actions (Simplified Single Action) */}
           <div className="flex flex-wrap items-center gap-2">
-            {/* Konfirmasi Booking */}
-            {booking.status === "PENDING" && (
+            {/* 1. Konfirmasi Booking (Single Click for Transfer, or prompt for In-Store) */}
+            {booking.status === "PENDING" && !showInStoreConfirm && (
               <button
                 type="button"
                 disabled={loading}
-                onClick={() => handleUpdateStatus("CONFIRMED")}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition disabled:opacity-60"
+                onClick={handleConfirmBookingClick}
+                className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-bold shadow-md transition active:scale-[0.99] disabled:opacity-60"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
-                <span>Konfirmasi Booking</span>
+                <span>
+                  {isTransferMethod
+                    ? "Konfirmasi Booking (Otomatis Lunas)"
+                    : "Konfirmasi Pesanan Booking"}
+                </span>
               </button>
             )}
 
-            {/* Serah Terima Unit */}
+            {/* 2. Serah Terima Unit */}
             {booking.status === "CONFIRMED" && (
               <button
                 type="button"
                 disabled={loading}
                 onClick={() => handleUpdateStatus("ONGOING")}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-semibold shadow-xs transition disabled:opacity-60"
+                className="w-full sm:flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-bold shadow-md transition disabled:opacity-60"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlayCircle className="w-4 h-4" />}
-                <span>Serah Terima Unit (Pickup)</span>
+                <span>Serah Terima Unit (Mulai Sewa)</span>
               </button>
             )}
 
-            {/* Selesai & Unit Kembali */}
+            {/* 3. Selesai & Unit Kembali */}
             {(booking.status === "ONGOING" || booking.status === "OVERDUE") && (
               <button
                 type="button"
                 disabled={loading}
                 onClick={() => handleUpdateStatus("COMPLETED")}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition disabled:opacity-60"
+                className="w-full sm:flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition disabled:opacity-60"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
-                <span>Selesai &amp; Unit Kembali</span>
-              </button>
-            )}
-
-            {/* Catat Pelunasan Button */}
-            {amountDue > 0 && booking.status !== "CANCELLED" && !showPaymentForm && (
-              <button
-                type="button"
-                onClick={() => setShowPaymentForm(true)}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#131b2e] hover:bg-[#1e293b] text-white text-xs font-semibold shadow-xs transition"
-              >
-                <CreditCard className="w-4 h-4" />
-                <span>Pelunasan (Rp {amountDue.toLocaleString("id-ID")})</span>
+                <span>Selesai &amp; Unit Telah Kembali</span>
               </button>
             )}
           </div>

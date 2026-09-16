@@ -46,26 +46,39 @@ export function BookingQuickAction({
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("bookings")
-        .update({
-          status: newStatus,
-        })
-        .eq("id", bookingId);
+      if (newStatus === "CONFIRMED") {
+        const res = await fetch(`/api/bookings/${bookingId}/confirm`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ settlement_type: "AUTO_DETECT" }),
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          toast.error(json.error || "Gagal mengonfirmasi booking.");
+          return;
+        }
+        toast.success(json.message || `Booking #${bookingNumber} berhasil dikonfirmasi!`);
+        router.refresh();
+      } else {
+        const { error } = await supabase
+          .from("bookings")
+          .update({
+            status: newStatus,
+          })
+          .eq("id", bookingId);
 
-      if (error) {
-        toast.error("Gagal mengubah status: " + error.message);
-        return;
+        if (error) {
+          toast.error("Gagal mengubah status: " + error.message);
+          return;
+        }
+
+        toast.success(
+          newStatus === "ONGOING"
+            ? `Unit sewa #${bookingNumber} berhasil diserah-terimakan!`
+            : `Booking #${bookingNumber} selesai dan unit telah dikembalikan.`
+        );
+        router.refresh();
       }
-
-      toast.success(
-        newStatus === "CONFIRMED"
-          ? `Booking #${bookingNumber} berhasil dikonfirmasi!`
-          : newStatus === "ONGOING"
-          ? `Unit sewa #${bookingNumber} berhasil diserah-terimakan!`
-          : `Booking #${bookingNumber} selesai dan unit telah dikembalikan.`
-      );
-      router.refresh();
     } catch {
       toast.error("Terjadi kesalahan sistem saat memperbarui status.");
     } finally {
