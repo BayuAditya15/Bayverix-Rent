@@ -14,14 +14,36 @@ export async function GET(request: Request, { params }: Params) {
 
   const supabase = createAdminClient();
 
-  // 1. Fetch Business by slug
-  const { data: business, error: bError } = await supabase
+  // 1. Fetch Business by slug (or fallback by name)
+  let { data: business, error: bError } = await supabase
     .from("businesses")
     .select("id, name, slug, phone, email, address, logo_url")
     .eq("slug", slug.toLowerCase())
     .maybeSingle();
 
-  if (bError || !business) {
+  // If not found by slug, try matching case-insensitive by name
+  if (!business) {
+    const { data: byName } = await supabase
+      .from("businesses")
+      .select("id, name, slug, phone, email, address, logo_url")
+      .ilike("name", slug)
+      .maybeSingle();
+
+    if (byName) {
+      business = byName;
+      // Auto-populate slug if empty
+      if (!business.slug) {
+        const generatedSlug = slug.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        await supabase
+          .from("businesses")
+          .update({ slug: generatedSlug })
+          .eq("id", business.id);
+        business.slug = generatedSlug;
+      }
+    }
+  }
+
+  if (!business) {
     return NextResponse.json({ error: "Toko tidak ditemukan." }, { status: 404 });
   }
 
@@ -68,13 +90,25 @@ export async function POST(request: Request, { params }: Params) {
   const supabase = createAdminClient();
 
   // 1. Fetch Business & WhatsApp Phone Number
-  const { data: business, error: bError } = await supabase
+  let { data: business, error: bError } = await supabase
     .from("businesses")
     .select("id, name, slug, phone")
     .eq("slug", slug.toLowerCase())
     .maybeSingle();
 
-  if (bError || !business) {
+  if (!business) {
+    const { data: byName } = await supabase
+      .from("businesses")
+      .select("id, name, slug, phone")
+      .ilike("name", slug)
+      .maybeSingle();
+
+    if (byName) {
+      business = byName;
+    }
+  }
+
+  if (!business) {
     return NextResponse.json({ error: "Toko tidak ditemukan." }, { status: 404 });
   }
 
