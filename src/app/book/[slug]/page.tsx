@@ -75,9 +75,18 @@ export default function PublicBookingPage({
   const [loadingStock, setLoadingStock] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  // Dates
-  const [startAt, setStartAt] = useState("");
-  const [endAt, setEndAt] = useState("");
+  // Dates initialized synchronously
+  const [startAt, setStartAt] = useState(() => {
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T09:00`;
+  });
+  const [endAt, setEndAt] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}T17:00`;
+  });
 
   // Cart & Modals
   const [cart, setCart] = useState<Record<string, number>>({});
@@ -101,60 +110,53 @@ export default function PublicBookingPage({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Set default dates (today 09:00 to tomorrow 17:00)
-  useEffect(() => {
-    const now = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const pad = (n: number) => String(n).padStart(2, "0");
-    setStartAt(`${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T09:00`);
-    setEndAt(`${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}T17:00`);
-  }, []);
-
-  // Fetch Store Catalog and Real-Time Stock whenever slug or dates change
+  // Fetch Store Catalog and Real-Time Stock with debounce
   useEffect(() => {
     if (!slug) return;
 
-    let url = `/api/public/book/${slug}`;
-    if (startAt && endAt) {
-      url += `?start_at=${encodeURIComponent(new Date(startAt).toISOString())}&end_at=${encodeURIComponent(new Date(endAt).toISOString())}`;
-    }
+    const timer = setTimeout(() => {
+      let url = `/api/public/book/${slug}`;
+      if (startAt && endAt) {
+        url += `?start_at=${encodeURIComponent(new Date(startAt).toISOString())}&end_at=${encodeURIComponent(new Date(endAt).toISOString())}`;
+      }
 
-    setLoadingStock(true);
-    fetch(url)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.business) {
-          setBusiness(json.business);
-          setCategories(json.categories || []);
-          setItems(json.items || []);
+      setLoadingStock(true);
+      fetch(url)
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.business) {
+            setBusiness(json.business);
+            setCategories(json.categories || []);
+            setItems(json.items || []);
 
-          // Auto-adjust cart if booked items exceed newly computed availability
-          if (json.items) {
-            setCart((prevCart) => {
-              const updatedCart: Record<string, number> = {};
-              for (const [itemId, qty] of Object.entries(prevCart)) {
-                const fetchedItem = (json.items as Item[]).find((i) => i.id === itemId);
-                const maxAvail = fetchedItem ? (fetchedItem.available_quantity ?? fetchedItem.total_quantity) : 0;
-                if (maxAvail > 0) {
-                  updatedCart[itemId] = Math.min(qty, maxAvail);
+            // Auto-adjust cart if booked items exceed newly computed availability
+            if (json.items) {
+              setCart((prevCart) => {
+                const updatedCart: Record<string, number> = {};
+                for (const [itemId, qty] of Object.entries(prevCart)) {
+                  const fetchedItem = (json.items as Item[]).find((i) => i.id === itemId);
+                  const maxAvail = fetchedItem ? (fetchedItem.available_quantity ?? fetchedItem.total_quantity) : 0;
+                  if (maxAvail > 0) {
+                    updatedCart[itemId] = Math.min(qty, maxAvail);
+                  }
                 }
-              }
-              return updatedCart;
-            });
+                return updatedCart;
+              });
+            }
+          } else {
+            toast.error(json.error || "Toko tidak ditemukan.");
           }
-        } else {
-          toast.error(json.error || "Toko tidak ditemukan.");
-        }
-      })
-      .catch(() => {
-        toast.error("Gagal memuat katalog toko.");
-      })
-      .finally(() => {
-        setLoading(false);
-        setLoadingStock(false);
-      });
+        })
+        .catch(() => {
+          toast.error("Gagal memuat katalog toko.");
+        })
+        .finally(() => {
+          setLoading(false);
+          setLoadingStock(false);
+        });
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, [slug, startAt, endAt]);
 
   // Duration in days

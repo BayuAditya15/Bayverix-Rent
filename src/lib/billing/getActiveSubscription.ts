@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export interface ActiveSubscriptionInfo {
@@ -19,9 +20,9 @@ export interface ActiveSubscriptionInfo {
   };
 }
 
-export async function getActiveSubscription(
+export const getActiveSubscription = cache(async (
   businessId: string
-): Promise<ActiveSubscriptionInfo> {
+): Promise<ActiveSubscriptionInfo> => {
   const supabase = await createClient();
 
   // 1. Fetch active subscription for rental_manager
@@ -107,4 +108,4 @@ export async function getActiveSubscription(
     maxStaff: plan?.max_staff ?? 1,
     features,
   };
-}
+});

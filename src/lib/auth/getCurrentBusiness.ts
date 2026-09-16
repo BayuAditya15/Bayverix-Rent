@@ -38,9 +38,12 @@ export const getCurrentBusiness = cache(async (): Promise<CurrentBusinessContext
 
   const { data: profile, error: profileError } = await supabase
     .from("users")
-    .select("id, email, name, role, business_id, onboarding_completed, avatar_url")
+    .select(`
+      id, email, name, role, business_id, onboarding_completed, avatar_url,
+      businesses (*)
+    `)
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   if (profileError || !profile || !profile.business_id) {
     return {
@@ -51,16 +54,13 @@ export const getCurrentBusiness = cache(async (): Promise<CurrentBusinessContext
     };
   }
 
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("id", profile.business_id)
-    .single();
+  const rawBusiness = (profile as any).businesses;
+  const business = Array.isArray(rawBusiness) ? rawBusiness[0] : rawBusiness;
 
   return {
     user: { id: user.id, email: user.email },
     profile,
-    business: business || null,
+    business: (business as BusinessRow) || null,
     businessId: profile.business_id,
   };
 });

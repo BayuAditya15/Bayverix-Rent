@@ -8,13 +8,31 @@ export async function updateSession(request: NextRequest) {
   });
 
   const pathname = request.nextUrl.pathname;
-  const isLandingRoute = pathname === "/";
-  const isCallbackRoute = pathname.startsWith("/auth/callback");
+  const isPublicRoute =
+    pathname === "/" ||
+    pathname.startsWith("/book") ||
+    pathname.startsWith("/api/public") ||
+    pathname.startsWith("/auth/callback") ||
+    pathname.startsWith("/billing/callback");
+
+  const allCookies = request.cookies.getAll();
+  const hasAuthCookie = allCookies.some((c) => c.name.includes("auth-token") || c.name.startsWith("sb-"));
+
+  // If public route with no auth cookie, pass through immediately with zero overhead
+  if (isPublicRoute && !hasAuthCookie) {
+    return supabaseResponse;
+  }
+
   const isAuthRoute = pathname.startsWith("/login");
   const isOnboardingRoute = pathname.startsWith("/onboarding");
-  const isBookRoute = pathname.startsWith("/book");
-  const isBillingRoute = pathname.startsWith("/billing");
   const isApiRoute = pathname.startsWith("/api");
+
+  // If no auth cookie at all on a protected dashboard route, redirect to /login immediately without network overhead
+  if (!hasAuthCookie && !isPublicRoute && !isAuthRoute && !isOnboardingRoute && !isApiRoute) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
@@ -39,50 +57,28 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Allow /auth/callback to proceed directly to the route handler
-  if (isCallbackRoute) {
+  // If public route, allow session cookies to refresh and proceed without blocking checks
+  if (isPublicRoute) {
     return supabaseResponse;
   }
 
-  // IMPORTANT: Do not run code between createServerClient and
-  // supabase.auth.getUser().
+  // Validate session for protected routes
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   // 1. Unauthenticated users trying to access protected routes
-  const isPublicRoute = isLandingRoute || isAuthRoute || isBookRoute || isBillingRoute || isApiRoute;
-  if (!user && !isPublicRoute && !isOnboardingRoute) {
+  if (!user && !isAuthRoute && !isOnboardingRoute && !isApiRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // 2. Authenticated users checks
-  if (user) {
-    const { data: profile } = await supabase
-      .from("users")
-      .select("business_id, onboarding_completed")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    const isCompleted = Boolean(profile?.onboarding_completed && profile?.business_id);
-
-    if (!isCompleted) {
-      // User is logged in but hasn't finished onboarding
-      if (!isOnboardingRoute && !isAuthRoute && !isApiRoute) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/onboarding";
-        return NextResponse.redirect(url);
-      }
-    } else {
-      // User is logged in and onboarding is completed
-      if (isAuthRoute || isOnboardingRoute) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/dashboard";
-        return NextResponse.redirect(url);
-      }
-    }
+  // 2. Authenticated user visiting /login
+  if (user && isAuthRoute) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
   }
 
   return supabaseResponse;
