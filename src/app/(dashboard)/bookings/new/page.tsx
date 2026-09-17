@@ -71,8 +71,7 @@ export default function NewBookingPage() {
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
   const [notes, setNotes] = useState("");
   const [depositTotal, setDepositTotal] = useState("");
-  const [paymentType, setPaymentType] = useState<"UNPAID" | "DP" | "PAID">("UNPAID");
-  const [customPaymentAmount, setCustomPaymentAmount] = useState("");
+  const [paymentType, setPaymentType] = useState<"UNPAID" | "PAID">("UNPAID");
   const [paymentMethod, setPaymentMethod] = useState<"CASH" | "TRANSFER" | "QRIS" | "EWALLET" | "CARD">("CASH");
   const [paymentRef, setPaymentRef] = useState("");
   const proofInputRef = useRef<HTMLInputElement>(null);
@@ -205,26 +204,37 @@ export default function NewBookingPage() {
     });
   }, [itemsList, selectedCategory, itemSearch]);
 
-  // Stepper quantity handler (Adds, increments, decrements, removes)
+  // Stepper quantity handler (Adds, increments, decrements, removes with strict stock limit cap)
   const handleUpdateQuantity = (itemId: string, delta: number) => {
     setSelectedItems((prev) => {
       const existing = prev.find((i) => i.rental_item_id === itemId);
+      const catalogItem = itemsList.find((i) => i.id === itemId);
+      const totalStock = catalogItem ? catalogItem.total_quantity : 1;
+      const maxAvailable = existing?.available_quantity !== undefined ? existing.available_quantity : totalStock;
+
       if (!existing) {
         if (delta > 0) {
-          const item = itemsList.find((i) => i.id === itemId);
-          if (!item) return prev;
+          if (!catalogItem || maxAvailable <= 0) {
+            toast.error("Stok barang ini sedang tidak tersedia.");
+            return prev;
+          }
           return [
             ...prev,
             {
-              rental_item_id: item.id,
-              name: item.name,
-              unit_price: Number(item.price),
+              rental_item_id: catalogItem.id,
+              name: catalogItem.name,
+              unit_price: Number(catalogItem.price),
               quantity: 1,
-              available_quantity: item.total_quantity,
-              image_url: item.image_url,
+              available_quantity: maxAvailable,
+              image_url: catalogItem.image_url,
             },
           ];
         }
+        return prev;
+      }
+
+      if (delta > 0 && existing.quantity >= maxAvailable) {
+        toast.error(`Stok ${existing.name} hanya tersedia ${maxAvailable} unit.`);
         return prev;
       }
 
@@ -233,8 +243,10 @@ export default function NewBookingPage() {
         return prev.filter((i) => i.rental_item_id !== itemId);
       }
 
+      const cappedQty = Math.min(nextQty, maxAvailable);
+
       return prev.map((i) =>
-        i.rental_item_id === itemId ? { ...i, quantity: nextQty } : i
+        i.rental_item_id === itemId ? { ...i, quantity: cappedQty } : i
       );
     });
   };
@@ -293,21 +305,7 @@ export default function NewBookingPage() {
       return;
     }
 
-    const payAmount = paymentType === "PAID"
-      ? estimatedTotal
-      : paymentType === "DP"
-      ? Math.max(0, Number(customPaymentAmount) || 0)
-      : 0;
-
-    if (paymentType === "DP" && payAmount <= 0) {
-      toast.error("Masukkan nominal DP yang valid.");
-      return;
-    }
-
-    if (payAmount > estimatedTotal) {
-      toast.error("Nominal pembayaran melebihi total biaya sewa.");
-      return;
-    }
+    const payAmount = paymentType === "PAID" ? estimatedTotal : 0;
 
     setLoading(true);
 
@@ -592,6 +590,11 @@ export default function NewBookingPage() {
                   {filteredRentalItems.map((item) => {
                     const selected = selectedItems.find((s) => s.rental_item_id === item.id);
                     const selectedQty = selected ? selected.quantity : 0;
+                    const maxQty = selected
+                      ? (selected.available_quantity ?? item.total_quantity)
+                      : item.total_quantity;
+                    const isMaxReached = selectedQty >= maxQty;
+                    const isOutOfStock = maxQty <= 0;
 
                     return (
                       <div
@@ -622,13 +625,17 @@ export default function NewBookingPage() {
                               <span className="text-[10px] text-[#64748b] font-normal"> /hari</span>
                             </p>
                             <p className="text-[10px] text-[#64748b]">
-                              Stok Total: {item.total_quantity} Unit
+                              Stok: {item.total_quantity} Unit
                             </p>
                           </div>
                         </div>
 
                         {/* Qty Stepper right on Catalog Card */}
-                        {selectedQty === 0 ? (
+                        {isOutOfStock ? (
+                          <span className="px-2.5 py-1 text-[10px] font-semibold text-red-600 bg-red-50 rounded-lg border border-red-100 shrink-0">
+                            Habis
+                          </span>
+                        ) : selectedQty === 0 ? (
                           <button
                             type="button"
                             onClick={() => handleUpdateQuantity(item.id, 1)}
@@ -651,9 +658,10 @@ export default function NewBookingPage() {
                             </span>
                             <button
                               type="button"
+                              disabled={isMaxReached}
                               onClick={() => handleUpdateQuantity(item.id, 1)}
-                              className="w-6 h-6 rounded bg-[#0051d5] hover:bg-[#0041ab] text-white font-bold text-xs flex items-center justify-center transition"
-                              title="Tambah"
+                              className="w-6 h-6 rounded bg-[#0051d5] hover:bg-[#0041ab] text-white font-bold text-xs flex items-center justify-center transition disabled:opacity-30 disabled:cursor-not-allowed"
+                              title={isMaxReached ? `Stok maksimal (${maxQty}) tercapai` : "Tambah"}
                             >
                               <Plus className="w-3 h-3" />
                             </button>
@@ -744,79 +752,62 @@ export default function NewBookingPage() {
         </div>
 
         {/* Step 3: Financial Summary, Payment Method & Notes */}
+        {/* Step 3: Financial Summary, Payment Method & Notes */}
         <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#e2e8f0] shadow-xs space-y-5">
           <div>
             <h2 className="text-sm font-bold text-[#0b1c30]">3. Pembayaran &amp; Catatan Transaksi</h2>
             <p className="text-xs text-[#64748b]">
-              Tentukan status pembayaran awal (Lunas, DP, atau Bayar Nanti) dan metode pembayaran yang digunakan
+              Pilih apakah pelanggan membayar langsung atau bayar nanti saat pengambilan unit
             </p>
           </div>
 
-          {/* Payment Status Switcher */}
+          {/* Payment Status Switcher (2 choices: Bayar Nanti vs Bayar Langsung) */}
           <div className="space-y-3 bg-[#f8f9ff] p-4 rounded-xl border border-slate-200">
             <label className="block text-xs font-bold text-[#0b1c30]">
-              Status Pembayaran Awal:
+              Pilihan Pembayaran:
             </label>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <button
                 type="button"
                 onClick={() => setPaymentType("UNPAID")}
-                className={`py-2 px-3 rounded-lg text-xs font-semibold border transition ${
+                className={`py-3 px-4 rounded-xl text-xs font-semibold border transition text-left flex items-center justify-between ${
                   paymentType === "UNPAID"
                     ? "bg-[#131b2e] text-white border-[#131b2e] shadow-xs"
                     : "bg-white text-[#64748b] border-[#e2e8f0] hover:bg-slate-50"
                 }`}
               >
-                Bayar Nanti (Belum Bayar)
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setPaymentType("DP")}
-                className={`py-2 px-3 rounded-lg text-xs font-semibold border transition ${
-                  paymentType === "DP"
-                    ? "bg-[#0051d5] text-white border-[#0051d5] shadow-xs"
-                    : "bg-white text-[#64748b] border-[#e2e8f0] hover:bg-slate-50"
-                }`}
-              >
-                Bayar Uang Muka (DP)
+                <div>
+                  <p className="font-bold text-xs">Bayar Nanti</p>
+                  <p className={`text-[11px] mt-0.5 ${paymentType === "UNPAID" ? "text-slate-300" : "text-[#64748b]"}`}>
+                    Pembayaran saat pengambilan barang (Pickup)
+                  </p>
+                </div>
+                {paymentType === "UNPAID" && <Check className="w-4 h-4 text-white shrink-0" />}
               </button>
 
               <button
                 type="button"
                 onClick={() => setPaymentType("PAID")}
-                className={`py-2 px-3 rounded-lg text-xs font-semibold border transition ${
+                className={`py-3 px-4 rounded-xl text-xs font-semibold border transition text-left flex items-center justify-between ${
                   paymentType === "PAID"
                     ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
                     : "bg-white text-[#64748b] border-[#e2e8f0] hover:bg-slate-50"
                 }`}
               >
-                Langsung Lunas (Full)
+                <div>
+                  <p className="font-bold text-xs">Bayar Langsung</p>
+                  <p className={`text-[11px] mt-0.5 ${paymentType === "PAID" ? "text-emerald-100" : "text-[#64748b]"}`}>
+                    Pelunasan sekarang (Tunai / Transfer / QRIS)
+                  </p>
+                </div>
+                {paymentType === "PAID" && <Check className="w-4 h-4 text-white shrink-0" />}
               </button>
             </div>
 
-            {/* If DP or Paid: Select Payment Method & Amount */}
-            {paymentType !== "UNPAID" && (
+            {/* If Bayar Langsung: Select Payment Method & Proof Photo */}
+            {paymentType === "PAID" && (
               <div className="pt-3 border-t border-slate-200/80 space-y-3 animate-fade-up">
-                {paymentType === "DP" && (
-                  <div>
-                    <label className="block text-xs font-medium text-[#0b1c30] mb-1">
-                      Nominal Uang Muka (DP) <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      min={1}
-                      max={estimatedTotal}
-                      required
-                      value={customPaymentAmount}
-                      onChange={(e) => setCustomPaymentAmount(e.target.value)}
-                      placeholder="cth. 100000"
-                      className="w-full px-3.5 py-2 text-xs rounded-lg border border-[#e2e8f0] bg-white focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5] font-bold text-[#0051d5]"
-                    />
-                  </div>
-                )}
-
                 <div>
                   <label className="block text-xs font-medium text-[#0b1c30] mb-1.5">
                     Metode Pembayaran:
@@ -943,14 +934,13 @@ export default function NewBookingPage() {
               <p className="text-2xl font-bold text-[#0051d5]">
                 Rp {estimatedTotal.toLocaleString("id-ID")}
               </p>
-              {paymentType === "DP" && Number(customPaymentAmount) > 0 && (
-                <p className="text-[11px] text-amber-600 font-medium mt-0.5">
-                  DP: Rp {Number(customPaymentAmount).toLocaleString("id-ID")} &bull; Sisa Tagihan: Rp {Math.max(0, estimatedTotal - Number(customPaymentAmount)).toLocaleString("id-ID")}
-                </p>
-              )}
-              {paymentType === "PAID" && (
+              {paymentType === "PAID" ? (
                 <p className="text-[11px] text-emerald-600 font-semibold mt-0.5">
                   Langsung Lunas: Rp {estimatedTotal.toLocaleString("id-ID")} ({paymentMethod})
+                </p>
+              ) : (
+                <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                  Status: Bayar Nanti (Sisa Tagihan: Rp {estimatedTotal.toLocaleString("id-ID")})
                 </p>
               )}
             </div>
@@ -965,7 +955,7 @@ export default function NewBookingPage() {
               <button
                 type="submit"
                 disabled={loading || selectedItems.length === 0}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-semibold shadow-xs transition disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0051d5] hover:bg-[#0041ab] text-white text-xs font-semibold shadow-xs transition disabled:opacity-60 cursor-pointer active:scale-[0.99]"
               >
                 {loading ? (
                   <>
@@ -975,7 +965,7 @@ export default function NewBookingPage() {
                 ) : (
                   <>
                     <PackageCheck className="w-4 h-4" />
-                    <span>Konfirmasi &amp; Simpan Booking</span>
+                    <span>Konfirmasi Booking</span>
                   </>
                 )}
               </button>
