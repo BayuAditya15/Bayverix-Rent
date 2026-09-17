@@ -112,57 +112,41 @@ export async function POST(request: Request, { params }: Params) {
     }
 
     // ── KASUS 2: Bayar di Toko / Tempat (Pelunasan Tunai/QRIS/Transfer di Tempat) ──
-    if (settlement_type === "PAY_AT_STORE") {
-      const amountToPay = Number(payment_amount) || Number(booking.amount_due) || rentalTotal;
-      const validMethod = ["CASH", "TRANSFER", "QRIS", "CARD", "EWALLET"].includes(payment_method)
-        ? payment_method
-        : "CASH";
+    const amountToPay = Number(payment_amount) || Number(booking.amount_due) || rentalTotal;
+    const validMethod = ["CASH", "TRANSFER", "QRIS", "CARD", "EWALLET"].includes(payment_method)
+      ? payment_method
+      : "CASH";
 
-      if (amountToPay > 0) {
-        await supabase.from("payments").insert({
-          business_id: ctx.businessId,
-          booking_id: booking.id,
-          amount: amountToPay,
-          currency: "IDR",
-          method: validMethod,
-          status: "COMPLETED",
-          reference: `Pembayaran di Toko (${validMethod})`,
-          created_by: ctx.user.id,
-          paid_at: new Date().toISOString(),
-        });
-      }
-
-      const newAmountPaid = Number(booking.amount_paid || 0) + amountToPay;
-      const newAmountDue = Math.max(0, rentalTotal - newAmountPaid);
-
-      await supabase
-        .from("bookings")
-        .update({
-          status: new_status,
-          amount_paid: newAmountPaid,
-          amount_due: newAmountDue,
-        })
-        .eq("id", booking.id);
-
-      return NextResponse.json({
-        success: true,
-        message: `Booking #${booking.booking_number} berhasil dikonfirmasi dan pembayaran ${validMethod} Rp ${amountToPay.toLocaleString("id-ID")} berhasil dicatat.`,
-        is_paid: newAmountDue === 0,
+    if (amountToPay > 0) {
+      await supabase.from("payments").insert({
+        business_id: ctx.businessId,
+        booking_id: booking.id,
+        amount: amountToPay,
+        currency: "IDR",
+        method: validMethod,
+        status: "COMPLETED",
+        reference: `Pembayaran di Toko (${validMethod})`,
+        created_by: ctx.user.id,
+        paid_at: new Date().toISOString(),
       });
     }
 
-    // ── KASUS 3: Konfirmasi Saja (Belum Dibayar / Bayar Nanti saat Pickup) ──
+    const newAmountPaid = Number(booking.amount_paid || 0) + amountToPay;
+    const newAmountDue = Math.max(0, rentalTotal - newAmountPaid);
+
     await supabase
       .from("bookings")
       .update({
         status: new_status,
+        amount_paid: newAmountPaid,
+        amount_due: newAmountDue,
       })
       .eq("id", booking.id);
 
     return NextResponse.json({
       success: true,
-      message: `Booking #${booking.booking_number} berhasil dikonfirmasi (Status: ${new_status}).`,
-      is_paid: Number(booking.amount_due) <= 0,
+      message: `Booking #${booking.booking_number} berhasil dikonfirmasi dan pembayaran ${validMethod} Rp ${amountToPay.toLocaleString("id-ID")} berhasil dicatat.`,
+      is_paid: newAmountDue === 0,
     });
   } catch (error: any) {
     return NextResponse.json(

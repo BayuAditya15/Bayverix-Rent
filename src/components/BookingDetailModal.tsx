@@ -217,16 +217,16 @@ export function BookingDetailModal({
   };
 
   // Submit in-store confirmation with payment
-  const handleExecuteInStoreConfirm = async (settleNow: boolean) => {
+  const handleExecuteInStoreConfirm = async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/bookings/${booking.id}/confirm`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          settlement_type: settleNow ? "PAY_AT_STORE" : "CONFIRM_UNPAID",
+          settlement_type: "PAY_AT_STORE",
           payment_method: storePayMethod,
-          payment_amount: settleNow ? Number(storePayAmount) || amountDue || rentalTotal : 0,
+          payment_amount: Number(storePayAmount) || amountDue || rentalTotal,
           new_status: "CONFIRMED",
         }),
       });
@@ -490,20 +490,11 @@ export function BookingDetailModal({
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={() => handleExecuteInStoreConfirm(true)}
-                  className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5"
+                  onClick={handleExecuteInStoreConfirm}
+                  className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 disabled:opacity-60"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                   <span>Konfirmasi &amp; Catat Lunas</span>
-                </button>
-
-                <button
-                  type="button"
-                  disabled={loading}
-                  onClick={() => handleExecuteInStoreConfirm(false)}
-                  className="py-2.5 px-3 rounded-xl bg-white border border-amber-300 hover:bg-amber-100 text-amber-900 font-semibold text-xs transition"
-                >
-                  Konfirmasi Saja (Bayar Nanti)
                 </button>
               </div>
             </div>
