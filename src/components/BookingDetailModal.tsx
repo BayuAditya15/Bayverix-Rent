@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -39,6 +39,7 @@ export interface BookingDetailModalItem {
   status: string;
   notes?: string | null;
   created_at: string;
+  initialInStoreConfirm?: boolean;
   customers:
     | {
         id?: string;
@@ -74,12 +75,14 @@ interface BookingDetailModalProps {
   booking: BookingDetailModalItem | null;
   onClose: () => void;
   storeName?: string;
+  initialInStoreConfirm?: boolean;
 }
 
 export function BookingDetailModal({
   booking,
   onClose,
   storeName = "Rental Store",
+  initialInStoreConfirm = false,
 }: BookingDetailModalProps) {
   const router = useRouter();
   const supabase = createClient();
@@ -88,11 +91,42 @@ export function BookingDetailModal({
   const [copiedInvoice, setCopiedInvoice] = useState(false);
 
   // In-store confirmation flow state
-  const [showInStoreConfirm, setShowInStoreConfirm] = useState(false);
+  const [showInStoreConfirm, setShowInStoreConfirm] = useState(
+    initialInStoreConfirm || Boolean(booking?.initialInStoreConfirm)
+  );
   const [storePayMethod, setStorePayMethod] = useState("CASH");
   const [storePayAmount, setStorePayAmount] = useState(
     booking ? String(Number(booking.amount_due) > 0 ? Number(booking.amount_due) : booking.rental_total) : ""
   );
+
+  // Keyboard Escape listener & body scroll lock
+  useEffect(() => {
+    if (!booking) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [booking, onClose]);
+
+  // Sync state when booking changes
+  useEffect(() => {
+    if (booking) {
+      setShowInStoreConfirm(initialInStoreConfirm || Boolean(booking.initialInStoreConfirm));
+      setStorePayAmount(
+        String(Number(booking.amount_due) > 0 ? Number(booking.amount_due) : booking.rental_total)
+      );
+    }
+  }, [booking, initialInStoreConfirm]);
 
   if (!booking) return null;
 

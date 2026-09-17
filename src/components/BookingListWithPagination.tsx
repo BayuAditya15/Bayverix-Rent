@@ -213,6 +213,7 @@ export function BookingListWithPagination({
                     hasProof={hasProof}
                     isTransfer={Boolean(isTransfer)}
                     onStatusChange={(newStatus) => handleOptimisticStatusChange(b.id, newStatus)}
+                    onOpenInStoreConfirm={() => setSelectedBooking({ ...b, initialInStoreConfirm: true })}
                   />
                 </div>
               </div>
@@ -298,6 +299,7 @@ export function BookingListWithPagination({
                           hasProof={hasProof}
                           isTransfer={Boolean(isTransfer)}
                           onStatusChange={(newStatus) => handleOptimisticStatusChange(b.id, newStatus)}
+                          onOpenInStoreConfirm={() => setSelectedBooking({ ...b, initialInStoreConfirm: true })}
                         />
                       </div>
                     </td>
@@ -313,6 +315,7 @@ export function BookingListWithPagination({
       {selectedBooking && (
         <BookingDetailModal
           booking={selectedBooking}
+          initialInStoreConfirm={Boolean(selectedBooking.initialInStoreConfirm)}
           onClose={() => setSelectedBooking(null)}
           storeName={storeName}
         />
