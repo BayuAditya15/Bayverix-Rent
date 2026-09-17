@@ -41,6 +41,7 @@ export default async function DashboardLayout({
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header Topbar (<1024px) */}
         <AppNavbar
+          businessId={businessId}
           businessName={business.name}
           userName={profile?.name || user.email || "Pengguna"}
           planName={sub.planName}
@@ -54,6 +55,7 @@ export default async function DashboardLayout({
 
         {/* Mobile Bottom Navigation Bar (<1024px) */}
         <MobileBottomNav
+          businessId={businessId}
           businessName={business.name}
           userName={profile?.name || user.email || "Pengguna"}
           planName={sub.planName}

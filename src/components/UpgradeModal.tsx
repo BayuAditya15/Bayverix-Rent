@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Check, X, Sparkles, Zap, ShieldCheck } from "lucide-react";
 
 interface UpgradeModalProps {
@@ -9,6 +10,24 @@ interface UpgradeModalProps {
 }
 
 export function UpgradeModal({ isOpen, onClose, businessId }: UpgradeModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const billingBase = process.env.NEXT_PUBLIC_BILLING_URL || "https://billing.example.com";
@@ -19,8 +38,14 @@ export function UpgradeModal({ isOpen, onClose, businessId }: UpgradeModalProps)
   const lifetimeUrl = `${billingBase}/checkout?product=rental_manager&plan=lifetime&business=${businessId}&callback=${callbackUrl}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#e2e8f0] overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-xs animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-[#e2e8f0] overflow-hidden max-h-[92vh] flex flex-col animate-in zoom-in-95 duration-150"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Modal Header */}
         <div className="p-6 border-b border-[#e2e8f0] flex items-center justify-between">
           <div className="flex items-center gap-2">

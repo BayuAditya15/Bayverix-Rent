@@ -29,9 +29,20 @@ export function UsageIndicator({
     <div className="p-4 rounded-xl bg-white border border-[#e2e8f0] shadow-xs">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#eff4ff] text-[#0051d5]">
-            Paket {planName}
-          </span>
+          {onUpgradeClick ? (
+            <button
+              type="button"
+              onClick={onUpgradeClick}
+              className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#eff4ff] text-[#0051d5] hover:bg-[#dce9ff] transition cursor-pointer"
+              title="Klik untuk melihat daftar harga & paket"
+            >
+              Paket {planName}
+            </button>
+          ) : (
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#eff4ff] text-[#0051d5]">
+              Paket {planName}
+            </span>
+          )}
         </div>
         {isFree && onUpgradeClick && (
           <button

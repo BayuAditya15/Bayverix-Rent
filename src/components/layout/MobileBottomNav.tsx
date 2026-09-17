@@ -20,19 +20,22 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { LogoutConfirmModal } from "@/components/LogoutConfirmModal";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 interface MobileBottomNavProps {
+  businessId?: string;
   businessName: string;
   userName: string;
   planName: string;
 }
 
-export function MobileBottomNav({ businessName, userName, planName }: MobileBottomNavProps) {
+export function MobileBottomNav({ businessId, businessName, userName, planName }: MobileBottomNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -156,7 +159,20 @@ export function MobileBottomNav({ businessName, userName, planName }: MobileBott
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-[#0b1c30]">{businessName}</h3>
-                  <p className="text-[11px] text-[#64748b]">Paket {planName}</p>
+                  {businessId ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMoreMenu(false);
+                        setUpgradeOpen(true);
+                      }}
+                      className="text-[11px] text-[#0051d5] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Paket {planName} (Lihat Harga)</span>
+                    </button>
+                  ) : (
+                    <p className="text-[11px] text-[#64748b]">Paket {planName}</p>
+                  )}
                 </div>
               </div>
               <button
@@ -210,6 +226,15 @@ export function MobileBottomNav({ businessName, userName, planName }: MobileBott
             </div>
           </div>
         </div>
+      )}
+
+      {/* Upgrade Price List Modal */}
+      {businessId && (
+        <UpgradeModal
+          isOpen={upgradeOpen}
+          onClose={() => setUpgradeOpen(false)}
+          businessId={businessId}
+        />
       )}
 
       {/* Logout Confirmation Modal */}
