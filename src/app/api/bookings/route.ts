@@ -183,30 +183,40 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify each item's available stock
-    for (const reqItem of items) {
-      const { data: availableQty, error: availError } = await (supabase.rpc as any)("get_available_quantity", {
-        p_rental_item_id: reqItem.rental_item_id,
-        p_start_at: start_at,
-        p_end_at: end_at,
-      });
+    // Verify all items available stock in parallel
+    const stockResults = await Promise.all(
+      items.map(async (reqItem) => {
+        const { data: availableQty, error: availError } = await (supabase.rpc as any)("get_available_quantity", {
+          p_rental_item_id: reqItem.rental_item_id,
+          p_start_at: start_at,
+          p_end_at: end_at,
+        });
 
-      if (availError) {
-        return NextResponse.json({ error: "Gagal memeriksa ketersediaan stok: " + availError.message }, { status: 500 });
-      }
+        if (availError) {
+          throw new Error("Gagal memeriksa ketersediaan stok: " + availError.message);
+        }
 
-      const available = typeof availableQty === "number" ? availableQty : 0;
-      const matchedDb = dbItems.find((d) => d.id === reqItem.rental_item_id);
+        const available = typeof availableQty === "number" ? availableQty : 0;
+        const matchedDb = dbItems.find((d) => d.id === reqItem.rental_item_id);
 
-      if (reqItem.quantity > available) {
-        return NextResponse.json(
-          {
-            error: "STOCK_UNAVAILABLE",
-            message: `Stok barang "${matchedDb?.name || 'Item'}" tidak mencukupi untuk tanggal tersebut. Sisa tersedia: ${available} unit.`,
-          },
-          { status: 400 }
-        );
-      }
+        return {
+          reqItem,
+          matchedDb,
+          available,
+          isAvailable: reqItem.quantity <= available,
+        };
+      })
+    );
+
+    const unavailable = stockResults.find((s) => !s.isAvailable);
+    if (unavailable) {
+      return NextResponse.json(
+        {
+          error: "STOCK_UNAVAILABLE",
+          message: `Stok barang "${unavailable.matchedDb?.name || 'Item'}" tidak mencukupi untuk tanggal tersebut. Sisa tersedia: ${unavailable.available} unit.`,
+        },
+        { status: 400 }
+      );
     }
 
     // 3. Generate Booking Number

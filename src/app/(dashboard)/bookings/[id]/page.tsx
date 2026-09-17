@@ -29,7 +29,7 @@ export default async function BookingDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  // 1. Fetch Booking Header with Customer
+  // 1. Fetch Booking Header with Customer, Items, and Payments in 1 single query
   const { data: booking, error: bError } = await supabase
     .from("bookings")
     .select(`
@@ -40,7 +40,9 @@ export default async function BookingDetailPage({
         phone,
         email,
         notes
-      )
+      ),
+      booking_items (*),
+      payments (*)
     `)
     .eq("id", id)
     .eq("business_id", businessId)
@@ -50,18 +52,10 @@ export default async function BookingDetailPage({
     notFound();
   }
 
-  // 2. Fetch Booking Items
-  const { data: items } = await supabase
-    .from("booking_items")
-    .select("*")
-    .eq("booking_id", id);
-
-  // 3. Fetch Payments
-  const { data: payments } = await supabase
-    .from("payments")
-    .select("*")
-    .eq("booking_id", id)
-    .order("paid_at", { ascending: false });
+  const items = booking.booking_items || [];
+  const payments = (booking.payments || []).sort(
+    (a: any, b: any) => new Date(b.paid_at || b.created_at).getTime() - new Date(a.paid_at || a.created_at).getTime()
+  );
 
   const customer = Array.isArray(booking.customers) ? booking.customers[0] : booking.customers;
   const startDateObj = new Date(booking.start_at);

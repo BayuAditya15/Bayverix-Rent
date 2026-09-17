@@ -361,7 +361,6 @@ export default function NewBookingPage() {
 
       toast.success("Booking berhasil dibuat!");
       router.push(`/bookings/${json.data.id}`);
-      router.refresh();
     } catch {
       toast.error("Terjadi kesalahan sistem saat membuat booking.");
     } finally {
