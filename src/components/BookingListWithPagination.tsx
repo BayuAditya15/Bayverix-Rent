@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import { BookingQuickAction } from "@/components/BookingQuickAction";
 import { TablePagination } from "@/components/TablePagination";
 import { BookingDetailModal, type BookingDetailModalItem } from "@/components/BookingDetailModal";
+import { toast } from "sonner";
 
 interface BookingListWithPaginationProps {
   bookings: BookingDetailModalItem[];
@@ -14,10 +17,83 @@ export function BookingListWithPagination({
   bookings,
   storeName = "Rental Store",
 }: BookingListWithPaginationProps) {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [bookingsList, setBookingsList] = useState<BookingDetailModalItem[]>(bookings);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selectedBooking, setSelectedBooking] = useState<BookingDetailModalItem | null>(null);
+
+  useEffect(() => {
+    setBookingsList(bookings);
+  }, [bookings]);
+
+  // Realtime subscription for instant new booking arrival & updates
+  useEffect(() => {
+    const channel = supabase
+      .channel("bookings-list-realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "bookings",
+        },
+        (payload) => {
+          toast.info(`Pesanan booking baru masuk: #${(payload.new as any)?.booking_number || ""}`);
+          router.refresh();
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "bookings",
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [router, supabase]);
+
+  // Optimistic status update handler
+  const handleOptimisticStatusChange = (
+    bookingId: string,
+    newStatus: string,
+    extraUpdates: Partial<BookingDetailModalItem> = {}
+  ) => {
+    setBookingsList((prev) =>
+      prev.map((item) =>
+        item.id === bookingId
+          ? {
+              ...item,
+              status: newStatus,
+              ...extraUpdates,
+            }
+          : item
+      )
+    );
+
+    if (selectedBooking && selectedBooking.id === bookingId) {
+      setSelectedBooking((prev) =>
+        prev
+          ? {
+              ...prev,
+              status: newStatus,
+              ...extraUpdates,
+            }
+          : null
+      );
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -38,7 +114,7 @@ export function BookingListWithPagination({
     }
   };
 
-  const filteredBookings = bookings.filter((b) => {
+  const filteredBookings = bookingsList.filter((b) => {
     const customer = Array.isArray(b.customers) ? b.customers[0] : b.customers;
     const q = search.toLowerCase().trim();
     if (!q) return true;
@@ -88,6 +164,11 @@ export function BookingListWithPagination({
               year: "numeric",
             });
 
+            const hasProof = Boolean(b.payments?.some((p) => p.reference));
+            const isTransfer =
+              Boolean(b.payments?.some((p) => p.method === "TRANSFER")) ||
+              b.notes?.toLowerCase().includes("transfer");
+
             return (
               <div
                 key={b.id}
@@ -126,6 +207,12 @@ export function BookingListWithPagination({
                     bookingId={b.id}
                     bookingNumber={b.booking_number}
                     currentStatus={b.status}
+                    rentalTotal={b.rental_total}
+                    amountDue={b.amount_due}
+                    notes={b.notes}
+                    hasProof={hasProof}
+                    isTransfer={Boolean(isTransfer)}
+                    onStatusChange={(newStatus) => handleOptimisticStatusChange(b.id, newStatus)}
                   />
                 </div>
               </div>
@@ -168,6 +255,11 @@ export function BookingListWithPagination({
                   year: "numeric",
                 });
 
+                const hasProof = Boolean(b.payments?.some((p) => p.reference));
+                const isTransfer =
+                  Boolean(b.payments?.some((p) => p.method === "TRANSFER")) ||
+                  b.notes?.toLowerCase().includes("transfer");
+
                 return (
                   <tr
                     key={b.id}
@@ -200,6 +292,12 @@ export function BookingListWithPagination({
                           bookingId={b.id}
                           bookingNumber={b.booking_number}
                           currentStatus={b.status}
+                          rentalTotal={b.rental_total}
+                          amountDue={b.amount_due}
+                          notes={b.notes}
+                          hasProof={hasProof}
+                          isTransfer={Boolean(isTransfer)}
+                          onStatusChange={(newStatus) => handleOptimisticStatusChange(b.id, newStatus)}
                         />
                       </div>
                     </td>

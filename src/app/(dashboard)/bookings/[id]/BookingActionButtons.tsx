@@ -23,27 +23,38 @@ export function BookingActionButtons({ bookingId, currentStatus, amountDue }: Ac
   const [paymentRef, setPaymentRef] = useState("");
 
   const handleUpdateStatus = async (newStatus: "CONFIRMED" | "ONGOING" | "COMPLETED" | "CANCELLED") => {
-    if (newStatus === "CANCELLED" && !confirm("Yakin ingin membatalkan booking ini?")) {
-      return;
-    }
-
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("bookings")
-        .update({
-          status: newStatus,
-          cancelled_at: newStatus === "CANCELLED" ? new Date().toISOString() : null,
-        })
-        .eq("id", bookingId);
+      if (newStatus === "CONFIRMED") {
+        const res = await fetch(`/api/bookings/${bookingId}/confirm`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ settlement_type: "AUTO_DETECT" }),
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          toast.error(json.error || "Gagal mengonfirmasi booking.");
+          return;
+        }
+        toast.success(json.message || "Booking berhasil dikonfirmasi!");
+        router.refresh();
+      } else {
+        const { error } = await supabase
+          .from("bookings")
+          .update({
+            status: newStatus,
+            cancelled_at: newStatus === "CANCELLED" ? new Date().toISOString() : null,
+          })
+          .eq("id", bookingId);
 
-      if (error) {
-        toast.error("Gagal mengubah status: " + error.message);
-        return;
+        if (error) {
+          toast.error("Gagal mengubah status: " + error.message);
+          return;
+        }
+
+        toast.success(`Status booking berhasil diubah menjadi ${newStatus}`);
+        router.refresh();
       }
-
-      toast.success(`Status booking berhasil diubah menjadi ${newStatus}`);
-      router.refresh();
     } catch {
       toast.error("Terjadi kesalahan sistem.");
     } finally {

@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import { BookingQuickAction } from "@/components/BookingQuickAction";
 import { BookingDetailModal, type BookingDetailModalItem } from "@/components/BookingDetailModal";
+import { toast } from "sonner";
 
 interface DashboardRecentBookingsProps {
   bookings: BookingDetailModalItem[];
@@ -14,7 +17,79 @@ export function DashboardRecentBookings({
   bookings,
   storeName = "Rental Store",
 }: DashboardRecentBookingsProps) {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [bookingsList, setBookingsList] = useState<BookingDetailModalItem[]>(bookings);
   const [selectedBooking, setSelectedBooking] = useState<BookingDetailModalItem | null>(null);
+
+  useEffect(() => {
+    setBookingsList(bookings);
+  }, [bookings]);
+
+  // Realtime updates for Dashboard
+  useEffect(() => {
+    const channel = supabase
+      .channel("dashboard-bookings-realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "bookings",
+        },
+        (payload) => {
+          toast.info(`Pesanan baru diterima: #${(payload.new as any)?.booking_number || ""}`);
+          router.refresh();
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "bookings",
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [router, supabase]);
+
+  const handleOptimisticStatusChange = (
+    bookingId: string,
+    newStatus: string,
+    extraUpdates: Partial<BookingDetailModalItem> = {}
+  ) => {
+    setBookingsList((prev) =>
+      prev.map((item) =>
+        item.id === bookingId
+          ? {
+              ...item,
+              status: newStatus,
+              ...extraUpdates,
+            }
+          : item
+      )
+    );
+
+    if (selectedBooking && selectedBooking.id === bookingId) {
+      setSelectedBooking((prev) =>
+        prev
+          ? {
+              ...prev,
+              status: newStatus,
+              ...extraUpdates,
+            }
+          : null
+      );
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -35,7 +110,7 @@ export function DashboardRecentBookings({
     }
   };
 
-  if (!bookings || bookings.length === 0) {
+  if (!bookingsList || bookingsList.length === 0) {
     return (
       <div className="text-center py-10 text-xs text-[#64748b]">
         Belum ada transaksi booking tercatat.
@@ -54,7 +129,7 @@ export function DashboardRecentBookings({
   return (
     <>
       <div className="divide-y divide-[#e2e8f0]">
-        {bookings.map((b) => {
+        {bookingsList.map((b) => {
           const customer = Array.isArray(b.customers) ? b.customers[0] : b.customers;
           const startDate = new Date(b.start_at).toLocaleDateString("id-ID", {
             day: "numeric",
@@ -65,6 +140,11 @@ export function DashboardRecentBookings({
             month: "short",
             year: "numeric",
           });
+
+          const hasProof = Boolean(b.payments?.some((p) => p.reference));
+          const isTransfer =
+            Boolean(b.payments?.some((p) => p.method === "TRANSFER")) ||
+            b.notes?.toLowerCase().includes("transfer");
 
           return (
             <div
@@ -105,6 +185,12 @@ export function DashboardRecentBookings({
                   bookingId={b.id}
                   bookingNumber={b.booking_number}
                   currentStatus={b.status}
+                  rentalTotal={b.rental_total}
+                  amountDue={b.amount_due}
+                  notes={b.notes}
+                  hasProof={hasProof}
+                  isTransfer={Boolean(isTransfer)}
+                  onStatusChange={(newStatus) => handleOptimisticStatusChange(b.id, newStatus)}
                 />
               </div>
             </div>

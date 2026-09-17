@@ -218,10 +218,6 @@ export function BookingDetailModal({
   const handleUpdateStatus = async (
     newStatus: "ONGOING" | "COMPLETED" | "CANCELLED"
   ) => {
-    if (newStatus === "CANCELLED" && !confirm("Yakin ingin membatalkan transaksi booking ini?")) {
-      return;
-    }
-
     setLoading(true);
     try {
       const { error } = await supabase
