@@ -47,27 +47,27 @@ export function UpgradeModal({ isOpen, onClose, businessId }: UpgradeModalProps)
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="p-6 border-b border-[#e2e8f0] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-[#eff4ff] text-[#0051d5]">
+        <div className="p-5 sm:p-6 border-b border-[#e2e8f0] flex items-center justify-between shrink-0 bg-slate-50/50">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-[#eff4ff] text-[#0051d5]">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-[#0b1c30]">Upgrade Paket Rental</h3>
-              <p className="text-xs text-[#64748b]">Buka batasan inventaris & transaksi rental Anda</p>
+              <h3 className="text-base sm:text-lg font-bold text-[#0b1c30]">Upgrade Paket Rental</h3>
+              <p className="text-xs text-[#64748b]">Buka batasan inventaris &amp; transaksi rental Anda</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg text-[#64748b] hover:bg-slate-100 transition"
+            className="p-2 rounded-xl text-[#64748b] hover:bg-slate-100 transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Modal Body - 2 Columns on Tablet/Desktop */}
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Modal Body - Scrollable & 2 Columns on Tablet/Desktop */}
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Pro Monthly */}
           <div className="p-5 rounded-xl border-2 border-[#0051d5] bg-[#f8f9ff] flex flex-col justify-between">
             <div>

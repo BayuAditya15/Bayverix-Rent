@@ -328,7 +328,7 @@ export function BookingDetailModal({
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4 text-xs">
           {/* Customer & Period Info Box */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#f8f9ff] border border-slate-100">
             <div>
