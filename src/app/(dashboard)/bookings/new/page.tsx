@@ -71,8 +71,7 @@ export default function NewBookingPage() {
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
   const [notes, setNotes] = useState("");
   const [depositTotal, setDepositTotal] = useState("");
-  const [paymentType, setPaymentType] = useState<"UNPAID" | "PAID">("UNPAID");
-  const [paymentMethod, setPaymentMethod] = useState<"CASH" | "TRANSFER" | "QRIS" | "EWALLET" | "CARD">("CASH");
+  const [paymentMethod, setPaymentMethod] = useState<"CASH" | "TRANSFER">("CASH");
   const [paymentRef, setPaymentRef] = useState("");
   const proofInputRef = useRef<HTMLInputElement>(null);
   const [proofFile, setProofFile] = useState<File | null>(null);
@@ -305,7 +304,7 @@ export default function NewBookingPage() {
       return;
     }
 
-    const payAmount = paymentType === "PAID" ? estimatedTotal : 0;
+    const payAmount = estimatedTotal;
 
     setLoading(true);
 
@@ -752,100 +751,76 @@ export default function NewBookingPage() {
         </div>
 
         {/* Step 3: Financial Summary, Payment Method & Notes */}
-        {/* Step 3: Financial Summary, Payment Method & Notes */}
         <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#e2e8f0] shadow-xs space-y-5">
           <div>
             <h2 className="text-sm font-bold text-[#0b1c30]">3. Pembayaran &amp; Catatan Transaksi</h2>
             <p className="text-xs text-[#64748b]">
-              Pilih apakah pelanggan membayar langsung atau bayar nanti saat pengambilan unit
+              Pilih metode penerimaan pembayaran transaksi booking (Bayar Tunai atau Transfer Bank)
             </p>
           </div>
 
-          {/* Payment Status Switcher (2 choices: Bayar Nanti vs Bayar Langsung) */}
+          {/* Payment Method Switcher (2 choices: Bayar Tunai vs Transfer) */}
           <div className="space-y-3 bg-[#f8f9ff] p-4 rounded-xl border border-slate-200">
             <label className="block text-xs font-bold text-[#0b1c30]">
-              Pilihan Pembayaran:
+              Pilihan Metode Pembayaran:
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Option 1: Bayar Tunai */}
               <button
                 type="button"
-                onClick={() => setPaymentType("UNPAID")}
-                className={`py-3 px-4 rounded-xl text-xs font-semibold border transition text-left flex items-center justify-between ${
-                  paymentType === "UNPAID"
-                    ? "bg-[#131b2e] text-white border-[#131b2e] shadow-xs"
+                onClick={() => setPaymentMethod("CASH")}
+                className={`py-3 px-4 rounded-xl text-xs font-semibold border transition text-left flex items-center justify-between cursor-pointer ${
+                  paymentMethod === "CASH"
+                    ? "bg-[#0051d5] text-white border-[#0051d5] shadow-xs"
                     : "bg-white text-[#64748b] border-[#e2e8f0] hover:bg-slate-50"
                 }`}
               >
-                <div>
-                  <p className="font-bold text-xs">Bayar Nanti</p>
-                  <p className={`text-[11px] mt-0.5 ${paymentType === "UNPAID" ? "text-slate-300" : "text-[#64748b]"}`}>
-                    Pembayaran saat pengambilan barang (Pickup)
-                  </p>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`p-2 rounded-lg shrink-0 ${paymentMethod === "CASH" ? "bg-white/20 text-white" : "bg-slate-100 text-[#64748b]"}`}>
+                    <Banknote className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-xs">Bayar Tunai</p>
+                    <p className={`text-[11px] mt-0.5 ${paymentMethod === "CASH" ? "text-blue-100" : "text-[#64748b]"}`}>
+                      Pembayaran tunai / cash langsung di tempat
+                    </p>
+                  </div>
                 </div>
-                {paymentType === "UNPAID" && <Check className="w-4 h-4 text-white shrink-0" />}
+                {paymentMethod === "CASH" && <Check className="w-4 h-4 text-white shrink-0" />}
               </button>
 
+              {/* Option 2: Transfer Bank */}
               <button
                 type="button"
-                onClick={() => setPaymentType("PAID")}
-                className={`py-3 px-4 rounded-xl text-xs font-semibold border transition text-left flex items-center justify-between ${
-                  paymentType === "PAID"
-                    ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                onClick={() => setPaymentMethod("TRANSFER")}
+                className={`py-3 px-4 rounded-xl text-xs font-semibold border transition text-left flex items-center justify-between cursor-pointer ${
+                  paymentMethod === "TRANSFER"
+                    ? "bg-[#0051d5] text-white border-[#0051d5] shadow-xs"
                     : "bg-white text-[#64748b] border-[#e2e8f0] hover:bg-slate-50"
                 }`}
               >
-                <div>
-                  <p className="font-bold text-xs">Bayar Langsung</p>
-                  <p className={`text-[11px] mt-0.5 ${paymentType === "PAID" ? "text-emerald-100" : "text-[#64748b]"}`}>
-                    Pelunasan sekarang (Tunai / Transfer / QRIS)
-                  </p>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`p-2 rounded-lg shrink-0 ${paymentMethod === "TRANSFER" ? "bg-white/20 text-white" : "bg-slate-100 text-[#64748b]"}`}>
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-xs">Transfer Bank</p>
+                    <p className={`text-[11px] mt-0.5 ${paymentMethod === "TRANSFER" ? "text-blue-100" : "text-[#64748b]"}`}>
+                      Pembayaran via transfer rekening bank
+                    </p>
+                  </div>
                 </div>
-                {paymentType === "PAID" && <Check className="w-4 h-4 text-white shrink-0" />}
+                {paymentMethod === "TRANSFER" && <Check className="w-4 h-4 text-white shrink-0" />}
               </button>
             </div>
 
-            {/* If Bayar Langsung: Select Payment Method & Proof Photo */}
-            {paymentType === "PAID" && (
+            {/* If Transfer: Upload Proof Photo & Optional Reference */}
+            {paymentMethod === "TRANSFER" && (
               <div className="pt-3 border-t border-slate-200/80 space-y-3 animate-fade-up">
                 <div>
                   <label className="block text-xs font-medium text-[#0b1c30] mb-1.5">
-                    Metode Pembayaran:
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                    {[
-                      { id: "CASH", label: "Tunai / Cash", icon: Banknote },
-                      { id: "TRANSFER", label: "Transfer Bank", icon: CreditCard },
-                      { id: "QRIS", label: "QRIS", icon: QrCode },
-                      { id: "EWALLET", label: "E-Wallet", icon: Wallet },
-                      { id: "CARD", label: "Kartu Debit", icon: CreditCard },
-                    ].map((m) => {
-                      const Icon = m.icon;
-                      const isSelected = paymentMethod === m.id;
-
-                      return (
-                        <button
-                          key={m.id}
-                          type="button"
-                          onClick={() => setPaymentMethod(m.id as any)}
-                          className={`p-2.5 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${
-                            isSelected
-                              ? "bg-blue-50 border-[#0051d5] text-[#0051d5] shadow-xs font-bold"
-                              : "bg-white border-[#e2e8f0] text-[#64748b] hover:bg-slate-50 font-medium"
-                          }`}
-                        >
-                          <Icon className="w-4 h-4" />
-                          <span className="text-[11px]">{m.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Payment Proof Photo Upload */}
-                <div>
-                  <label className="block text-xs font-medium text-[#0b1c30] mb-1.5">
-                    Bukti Pembayaran / Transfer (Foto / Screenshot, Opsional)
+                    Bukti Transfer (Foto / Screenshot, Opsional)
                   </label>
 
                   <input
@@ -866,7 +841,7 @@ export default function NewBookingPage() {
                         />
                         <div className="min-w-0 flex-1">
                           <p className="text-xs font-bold text-[#0b1c30] truncate">
-                            {proofFile?.name || "Bukti_Pembayaran.jpg"}
+                            {proofFile?.name || "Bukti_Transfer.jpg"}
                           </p>
                           <p className="text-[10px] text-emerald-600 font-medium">
                             Foto bukti siap diunggah
@@ -889,9 +864,22 @@ export default function NewBookingPage() {
                       className="cursor-pointer border-2 border-dashed border-[#cbd5e1] hover:border-[#0051d5] rounded-xl p-3 text-center bg-white hover:bg-slate-50/70 transition flex items-center justify-center gap-2 text-xs font-medium text-[#64748b]"
                     >
                       <ImagePlus className="w-4 h-4 text-[#0051d5]" />
-                      <span>Upload / Ambil Foto Bukti Transfer (Screenshot/Struk)</span>
+                      <span>Upload / Ambil Foto Bukti Transfer Bank</span>
                     </div>
                   )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-[#0b1c30] mb-1">
+                    Nomor Referensi / Catatan Transfer (Opsional)
+                  </label>
+                  <input
+                    type="text"
+                    value={paymentRef}
+                    onChange={(e) => setPaymentRef(e.target.value)}
+                    placeholder="cth. BCA-TRX-12345"
+                    className="w-full px-3.5 py-2 text-xs rounded-lg border border-[#e2e8f0] bg-white focus:outline-none focus:ring-2 focus:ring-[#0051d5]/20 focus:border-[#0051d5]"
+                  />
                 </div>
               </div>
             )}
@@ -930,19 +918,13 @@ export default function NewBookingPage() {
           {/* Bottom Bar: Total & Submit */}
           <div className="pt-4 border-t border-[#e2e8f0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-xs text-[#64748b]">Total Estimasi Biaya Sewa:</span>
+              <span className="text-xs text-[#64748b]">Total Biaya Sewa:</span>
               <p className="text-2xl font-bold text-[#0051d5]">
                 Rp {estimatedTotal.toLocaleString("id-ID")}
               </p>
-              {paymentType === "PAID" ? (
-                <p className="text-[11px] text-emerald-600 font-semibold mt-0.5">
-                  Langsung Lunas: Rp {estimatedTotal.toLocaleString("id-ID")} ({paymentMethod})
-                </p>
-              ) : (
-                <p className="text-[11px] text-slate-500 font-medium mt-0.5">
-                  Status: Bayar Nanti (Sisa Tagihan: Rp {estimatedTotal.toLocaleString("id-ID")})
-                </p>
-              )}
+              <p className="text-[11px] text-emerald-600 font-semibold mt-0.5">
+                Metode: {paymentMethod === "CASH" ? "Bayar Tunai (Lunas)" : "Transfer Bank (Lunas)"}
+              </p>
             </div>
 
             <div className="flex items-center gap-3">
