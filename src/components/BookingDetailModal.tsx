@@ -406,7 +406,7 @@ export function BookingDetailModal({
             <div className="flex justify-between text-xs pt-1.5 border-t border-slate-100">
               <span className="font-bold text-[#0b1c30]">Sisa Tagihan:</span>
               <span className={`font-extrabold ${isPaidOff ? "text-emerald-600" : "text-amber-600"}`}>
-                {isPaidOff ? "LUNAS ✅" : `Rp ${amountDue.toLocaleString("id-ID")}`}
+                {isPaidOff ? "LUNAS" : `Rp ${amountDue.toLocaleString("id-ID")}`}
               </span>
             </div>
           </div>
@@ -440,9 +440,9 @@ export function BookingDetailModal({
                     onChange={(e) => setStorePayMethod(e.target.value)}
                     className="w-full px-3 py-2 text-xs rounded-xl border border-amber-200 bg-white outline-none focus:ring-2 focus:ring-[#0051d5]/20 font-medium"
                   >
-                    <option value="CASH">💵 Tunai / Cash</option>
-                    <option value="QRIS">📱 QRIS Toko</option>
-                    <option value="TRANSFER">🏦 Transfer di Tempat</option>
+                    <option value="CASH">Tunai / Cash</option>
+                    <option value="QRIS">QRIS Toko</option>
+                    <option value="TRANSFER">Transfer di Tempat</option>
                   </select>
                 </div>
                 <div>

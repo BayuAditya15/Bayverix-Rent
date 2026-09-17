@@ -358,15 +358,15 @@ export async function POST(request: Request, { params }: Params) {
       .join("\n");
 
     const waMessage = `Halo ${business.name}, saya telah mengirim pesanan sewa online:\n\n` +
-      `📌 *No. Booking:* ${booking.booking_number}\n` +
-      `👤 *Nama:* ${customer_name.trim()} (${cleanPhone})\n` +
-      `📅 *Tanggal:* ${startDateFmt} s/d ${endDateFmt} (${durationDays} Hari)\n\n` +
-      `🎒 *Rincian Barang:*\n${itemLines}\n\n` +
-      `💰 *Total Estimasi:* Rp ${rentalTotal.toLocaleString("id-ID")}\n` +
-      `💳 *Metode Bayar:* ${methodLabel}\n` +
-      (payment_proof_url ? `📎 *Bukti Transfer:* Sudah diunggah di sistem\n` : "") +
-      (notes?.trim() ? `📝 *Catatan:* ${notes.trim()}\n\n` : "\n") +
-      `Mohon konfirmasi pesanan saya ya kak. Terima kasih!`;
+      `*No. Booking:* ${booking.booking_number}\n` +
+      `*Nama:* ${customer_name.trim()} (${cleanPhone})\n` +
+      `*Tanggal:* ${startDateFmt} s/d ${endDateFmt} (${durationDays} Hari)\n\n` +
+      `*Rincian Barang:*\n${itemLines}\n\n` +
+      `*Total Estimasi:* Rp ${rentalTotal.toLocaleString("id-ID")}\n` +
+      `*Metode Bayar:* ${methodLabel}\n` +
+      (payment_proof_url ? `*Bukti Transfer:* Sudah diunggah di sistem\n` : "") +
+      (notes?.trim() ? `*Catatan:* ${notes.trim()}\n\n` : "\n") +
+      `Mohon konfirmasi pesanan saya. Terima kasih!`;
 
     const waUrl = targetPhone
       ? `https://wa.me/${targetPhone}?text=${encodeURIComponent(waMessage)}`

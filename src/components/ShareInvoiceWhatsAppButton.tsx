@@ -50,20 +50,20 @@ export function ShareInvoiceWhatsAppButton({
     .join("\n");
 
   const invoiceMessage =
-    `🧾 *INVOICE SEWA — ${storeName.toUpperCase()}*\n` +
+    `*INVOICE SEWA — ${storeName.toUpperCase()}*\n` +
     `----------------------------------------\n` +
-    `📌 *No. Invoice:* ${bookingNumber}\n` +
-    `👤 *Nama Penyewa:* ${customerName}\n` +
-    `📅 *Periode Sewa:*\n` +
+    `*No. Invoice:* ${bookingNumber}\n` +
+    `*Nama Penyewa:* ${customerName}\n` +
+    `*Periode Sewa:*\n` +
     `   Ambil: ${startDate}\n` +
     `   Kembali: ${endDate}\n\n` +
-    `🎒 *Rincian Barang:*\n${itemLines}\n\n` +
-    `💰 *Total Biaya Sewa:* Rp ${Number(rentalTotal).toLocaleString("id-ID")}\n` +
-    (depositTotal > 0 ? `🛡️ *Jaminan/Deposit:* Rp ${Number(depositTotal).toLocaleString("id-ID")}\n` : "") +
-    `💳 *Terbayar:* Rp ${Number(amountPaid).toLocaleString("id-ID")}\n` +
-    `⚠️ *Sisa Tagihan:* ${amountDue > 0 ? `Rp ${Number(amountDue).toLocaleString("id-ID")}` : "LUNAS ✅"}\n` +
-    `📊 *Status:* ${status}\n` +
-    (notes ? `\n📝 *Catatan:* ${notes}\n` : "") +
+    `*Rincian Barang:*\n${itemLines}\n\n` +
+    `*Total Biaya Sewa:* Rp ${Number(rentalTotal).toLocaleString("id-ID")}\n` +
+    (depositTotal > 0 ? `*Jaminan/Deposit:* Rp ${Number(depositTotal).toLocaleString("id-ID")}\n` : "") +
+    `*Terbayar:* Rp ${Number(amountPaid).toLocaleString("id-ID")}\n` +
+    `*Sisa Tagihan:* ${amountDue > 0 ? `Rp ${Number(amountDue).toLocaleString("id-ID")}` : "LUNAS"}\n` +
+    `*Status:* ${status}\n` +
+    (notes ? `\n*Catatan:* ${notes}\n` : "") +
     `----------------------------------------\n` +
     `Terima kasih telah menyewa di *${storeName}*!`;
 

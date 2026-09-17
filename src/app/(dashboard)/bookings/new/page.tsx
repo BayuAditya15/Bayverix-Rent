@@ -431,7 +431,7 @@ export default function NewBookingPage() {
                       className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs px-1"
                       title="Reset Nama"
                     >
-                      ✕
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -480,7 +480,7 @@ export default function NewBookingPage() {
             {/* Hint Badge */}
             {!selectedCustomerId && customerName.trim() && (
               <p className="text-[11px] text-[#64748b] bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                💡 Pelanggan baru ini akan otomatis tersimpan ke daftar kontak pelanggan.
+                Pelanggan baru ini akan otomatis tersimpan ke daftar kontak pelanggan.
               </p>
             )}
           </div>
@@ -551,8 +551,9 @@ export default function NewBookingPage() {
                     type="button"
                     onClick={() => setItemSearch("")}
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs px-1"
+                    title="Reset Pencarian"
                   >
-                    ✕
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
@@ -877,7 +878,7 @@ export default function NewBookingPage() {
                             {proofFile?.name || "Bukti_Pembayaran.jpg"}
                           </p>
                           <p className="text-[10px] text-emerald-600 font-medium">
-                            ✓ Foto bukti siap diunggah
+                            Foto bukti siap diunggah
                           </p>
                         </div>
                       </div>
@@ -949,7 +950,7 @@ export default function NewBookingPage() {
               )}
               {paymentType === "PAID" && (
                 <p className="text-[11px] text-emerald-600 font-semibold mt-0.5">
-                  ✓ Langsung Lunas: Rp {estimatedTotal.toLocaleString("id-ID")} ({paymentMethod})
+                  Langsung Lunas: Rp {estimatedTotal.toLocaleString("id-ID")} ({paymentMethod})
                 </p>
               )}
             </div>

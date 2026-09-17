@@ -99,7 +99,7 @@ export function CopyStoreLinkCard({
 
         {!phone && (
           <p className="text-[11px] text-amber-600 font-medium">
-            ⚠️ Nomor WhatsApp toko belum diisi di profil. Pelanggan tidak akan bisa kirim pesan WA otomatis sampai nomor diisi.
+            Perhatian: Nomor WhatsApp toko belum diisi di profil. Pelanggan tidak akan bisa kirim pesan WA otomatis sampai nomor diisi.
           </p>
         )}
       </div>

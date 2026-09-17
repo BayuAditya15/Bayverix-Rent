@@ -2,7 +2,7 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/database.types";
 
 /**
- * ⚠️ CRITICAL SECURITY WARNING:
+ * CRITICAL SECURITY WARNING:
  * 
  * This admin client uses the SUPABASE_SERVICE_ROLE_KEY and completely BYPASSES all
  * Row Level Security (RLS) policies and tenant isolation rules.
